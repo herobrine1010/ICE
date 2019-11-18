@@ -1,4 +1,4 @@
-# ice_client
+# vue_shop
 
 ## Project setup
 ```
