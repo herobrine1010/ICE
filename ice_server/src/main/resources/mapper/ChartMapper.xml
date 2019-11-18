@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.ChartMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.Chart">
+    <id column="GAME_ID" jdbcType="INTEGER" property="gameId" />
+    <id column="USER_ID" jdbcType="INTEGER" property="userId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from chart
+    where GAME_ID = #{gameId,jdbcType=INTEGER}
+      and USER_ID = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.entity.Chart">
+    insert into chart (GAME_ID, USER_ID)
+    values (#{gameId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.entity.Chart">
+    insert into chart
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="gameId != null">
+        GAME_ID,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="gameId != null">
+        #{gameId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

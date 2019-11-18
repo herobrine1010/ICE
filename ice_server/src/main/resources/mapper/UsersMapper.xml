@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.UsersMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.Users">
+    <id column="USER_ID" jdbcType="INTEGER" property="userId" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="GENDER" jdbcType="BIT" property="gender" />
+    <result column="BIRTHDAY" jdbcType="DATE" property="birthday" />
+    <result column="TEL" jdbcType="CHAR" property="tel" />
+    <result column="AVATAR_PATH" jdbcType="VARCHAR" property="avatarPath" />
+    <result column="PWD" jdbcType="VARCHAR" property="pwd" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.demo.entity.Users">
+    <result column="ADDRESS" jdbcType="LONGVARCHAR" property="address" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    USER_ID, USER_NAME, GENDER, BIRTHDAY, TEL, AVATAR_PATH, PWD
+  </sql>
+  <sql id="Blob_Column_List">
+    ADDRESS
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from users
+    where USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from users
+    where USER_ID = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.entity.Users">
+    insert into users (USER_ID, USER_NAME, GENDER, 
+      BIRTHDAY, TEL, AVATAR_PATH, 
+      PWD, ADDRESS)
+    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{gender,jdbcType=BIT}, 
+      #{birthday,jdbcType=DATE}, #{tel,jdbcType=CHAR}, #{avatarPath,jdbcType=VARCHAR}, 
+      #{pwd,jdbcType=VARCHAR}, #{address,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.entity.Users">
+    insert into users
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="userName != null">
+        USER_NAME,
+      </if>
+      <if test="gender != null">
+        GENDER,
+      </if>
+      <if test="birthday != null">
+        BIRTHDAY,
+      </if>
+      <if test="tel != null">
+        TEL,
+      </if>
+      <if test="avatarPath != null">
+        AVATAR_PATH,
+      </if>
+      <if test="pwd != null">
+        PWD,
+      </if>
+      <if test="address != null">
+        ADDRESS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=BIT},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=CHAR},
+      </if>
+      <if test="avatarPath != null">
+        #{avatarPath,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.entity.Users">
+    update users
+    <set>
+      <if test="userName != null">
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        GENDER = #{gender,jdbcType=BIT},
+      </if>
+      <if test="birthday != null">
+        BIRTHDAY = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="tel != null">
+        TEL = #{tel,jdbcType=CHAR},
+      </if>
+      <if test="avatarPath != null">
+        AVATAR_PATH = #{avatarPath,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        PWD = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where USER_ID = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.demo.entity.Users">
+    update users
+    set USER_NAME = #{userName,jdbcType=VARCHAR},
+      GENDER = #{gender,jdbcType=BIT},
+      BIRTHDAY = #{birthday,jdbcType=DATE},
+      TEL = #{tel,jdbcType=CHAR},
+      AVATAR_PATH = #{avatarPath,jdbcType=VARCHAR},
+      PWD = #{pwd,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=LONGVARCHAR}
+    where USER_ID = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Users">
+    update users
+    set USER_NAME = #{userName,jdbcType=VARCHAR},
+      GENDER = #{gender,jdbcType=BIT},
+      BIRTHDAY = #{birthday,jdbcType=DATE},
+      TEL = #{tel,jdbcType=CHAR},
+      AVATAR_PATH = #{avatarPath,jdbcType=VARCHAR},
+      PWD = #{pwd,jdbcType=VARCHAR}
+    where USER_ID = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.SaleGameMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.SaleGame">
+    <id column="PUBLISHER_ID" jdbcType="INTEGER" property="publisherId" />
+    <id column="GAME_ID" jdbcType="INTEGER" property="gameId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from sale_game
+    where PUBLISHER_ID = #{publisherId,jdbcType=INTEGER}
+      and GAME_ID = #{gameId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.entity.SaleGame">
+    insert into sale_game (PUBLISHER_ID, GAME_ID)
+    values (#{publisherId,jdbcType=INTEGER}, #{gameId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.entity.SaleGame">
+    insert into sale_game
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="publisherId != null">
+        PUBLISHER_ID,
+      </if>
+      <if test="gameId != null">
+        GAME_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="publisherId != null">
+        #{publisherId,jdbcType=INTEGER},
+      </if>
+      <if test="gameId != null">
+        #{gameId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

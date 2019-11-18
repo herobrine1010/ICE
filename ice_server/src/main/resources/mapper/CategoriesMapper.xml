@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.CategoriesMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.Categories">
+    <id column="CATE_ID" jdbcType="INTEGER" property="cateId" />
+    <result column="CATE_NAME" jdbcType="VARCHAR" property="cateName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    CATE_ID, CATE_NAME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from categories
+    where CATE_ID = #{cateId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from categories
+    where CATE_ID = #{cateId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.entity.Categories">
+    insert into categories (CATE_ID, CATE_NAME)
+    values (#{cateId,jdbcType=INTEGER}, #{cateName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.entity.Categories">
+    insert into categories
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cateId != null">
+        CATE_ID,
+      </if>
+      <if test="cateName != null">
+        CATE_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cateId != null">
+        #{cateId,jdbcType=INTEGER},
+      </if>
+      <if test="cateName != null">
+        #{cateName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.entity.Categories">
+    update categories
+    <set>
+      <if test="cateName != null">
+        CATE_NAME = #{cateName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CATE_ID = #{cateId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Categories">
+    update categories
+    set CATE_NAME = #{cateName,jdbcType=VARCHAR}
+    where CATE_ID = #{cateId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.PublishersMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.Publishers">
+    <id column="PUBLISHER_ID" jdbcType="INTEGER" property="publisherId" />
+    <result column="PUBLISHER_NAME" jdbcType="VARCHAR" property="publisherName" />
+    <result column="LOGO_PATH" jdbcType="VARCHAR" property="logoPath" />
+    <result column="PWD" jdbcType="VARCHAR" property="pwd" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.demo.entity.Publishers">
+    <result column="DISCRIPTION" jdbcType="LONGVARCHAR" property="discription" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    PUBLISHER_ID, PUBLISHER_NAME, LOGO_PATH, PWD
+  </sql>
+  <sql id="Blob_Column_List">
+    DISCRIPTION
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from publishers
+    where PUBLISHER_ID = #{publisherId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from publishers
+    where PUBLISHER_ID = #{publisherId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.entity.Publishers">
+    insert into publishers (PUBLISHER_ID, PUBLISHER_NAME, LOGO_PATH, 
+      PWD, DISCRIPTION)
+    values (#{publisherId,jdbcType=INTEGER}, #{publisherName,jdbcType=VARCHAR}, #{logoPath,jdbcType=VARCHAR}, 
+      #{pwd,jdbcType=VARCHAR}, #{discription,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.entity.Publishers">
+    insert into publishers
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="publisherId != null">
+        PUBLISHER_ID,
+      </if>
+      <if test="publisherName != null">
+        PUBLISHER_NAME,
+      </if>
+      <if test="logoPath != null">
+        LOGO_PATH,
+      </if>
+      <if test="pwd != null">
+        PWD,
+      </if>
+      <if test="discription != null">
+        DISCRIPTION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="publisherId != null">
+        #{publisherId,jdbcType=INTEGER},
+      </if>
+      <if test="publisherName != null">
+        #{publisherName,jdbcType=VARCHAR},
+      </if>
+      <if test="logoPath != null">
+        #{logoPath,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="discription != null">
+        #{discription,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.entity.Publishers">
+    update publishers
+    <set>
+      <if test="publisherName != null">
+        PUBLISHER_NAME = #{publisherName,jdbcType=VARCHAR},
+      </if>
+      <if test="logoPath != null">
+        LOGO_PATH = #{logoPath,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        PWD = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="discription != null">
+        DISCRIPTION = #{discription,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where PUBLISHER_ID = #{publisherId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.demo.entity.Publishers">
+    update publishers
+    set PUBLISHER_NAME = #{publisherName,jdbcType=VARCHAR},
+      LOGO_PATH = #{logoPath,jdbcType=VARCHAR},
+      PWD = #{pwd,jdbcType=VARCHAR},
+      DISCRIPTION = #{discription,jdbcType=LONGVARCHAR}
+    where PUBLISHER_ID = #{publisherId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Publishers">
+    update publishers
+    set PUBLISHER_NAME = #{publisherName,jdbcType=VARCHAR},
+      LOGO_PATH = #{logoPath,jdbcType=VARCHAR},
+      PWD = #{pwd,jdbcType=VARCHAR}
+    where PUBLISHER_ID = #{publisherId,jdbcType=INTEGER}
+  </update>
+</mapper>

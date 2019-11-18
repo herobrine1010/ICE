@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.TagsMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.Tags">
+    <id column="TAG_ID" jdbcType="INTEGER" property="tagId" />
+    <result column="TAG_NAME" jdbcType="VARCHAR" property="tagName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    TAG_ID, TAG_NAME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tags
+    where TAG_ID = #{tagId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tags
+    where TAG_ID = #{tagId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.entity.Tags">
+    insert into tags (TAG_ID, TAG_NAME)
+    values (#{tagId,jdbcType=INTEGER}, #{tagName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.entity.Tags">
+    insert into tags
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tagId != null">
+        TAG_ID,
+      </if>
+      <if test="tagName != null">
+        TAG_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tagId != null">
+        #{tagId,jdbcType=INTEGER},
+      </if>
+      <if test="tagName != null">
+        #{tagName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.entity.Tags">
+    update tags
+    <set>
+      <if test="tagName != null">
+        TAG_NAME = #{tagName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where TAG_ID = #{tagId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Tags">
+    update tags
+    set TAG_NAME = #{tagName,jdbcType=VARCHAR}
+    where TAG_ID = #{tagId,jdbcType=INTEGER}
+  </update>
+</mapper>

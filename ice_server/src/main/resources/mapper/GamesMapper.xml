@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.GamesMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.Games">
+    <id column="GAME_ID" jdbcType="INTEGER" property="gameId" />
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+    <result column="PRICE" jdbcType="REAL" property="price" />
+    <result column="COVER_PATH" jdbcType="VARCHAR" property="coverPath" />
+    <result column="DISCOUNT" jdbcType="BIT" property="discount" />
+    <result column="AVERAGE_RATE" jdbcType="REAL" property="averageRate" />
+    <result column="RELEASE_DATE" jdbcType="DATE" property="releaseDate" />
+    <result column="PRE_ORDER" jdbcType="BIT" property="preOrder" />
+    <result column="RATE_COUNT" jdbcType="INTEGER" property="rateCount" />
+    <result column="ON_SALE" jdbcType="BIT" property="onSale" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.demo.entity.Games">
+    <result column="DISCRIPTION" jdbcType="LONGVARCHAR" property="discription" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    GAME_ID, TITLE, PRICE, COVER_PATH, DISCOUNT, AVERAGE_RATE, RELEASE_DATE, PRE_ORDER, 
+    RATE_COUNT, ON_SALE
+  </sql>
+  <sql id="Blob_Column_List">
+    DISCRIPTION
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from games
+    where GAME_ID = #{gameId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from games
+    where GAME_ID = #{gameId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.entity.Games">
+    insert into games (GAME_ID, TITLE, PRICE, 
+      COVER_PATH, DISCOUNT, AVERAGE_RATE, 
+      RELEASE_DATE, PRE_ORDER, RATE_COUNT, 
+      ON_SALE, DISCRIPTION)
+    values (#{gameId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{price,jdbcType=REAL}, 
+      #{coverPath,jdbcType=VARCHAR}, #{discount,jdbcType=BIT}, #{averageRate,jdbcType=REAL}, 
+      #{releaseDate,jdbcType=DATE}, #{preOrder,jdbcType=BIT}, #{rateCount,jdbcType=INTEGER}, 
+      #{onSale,jdbcType=BIT}, #{discription,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.entity.Games">
+    insert into games
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="gameId != null">
+        GAME_ID,
+      </if>
+      <if test="title != null">
+        TITLE,
+      </if>
+      <if test="price != null">
+        PRICE,
+      </if>
+      <if test="coverPath != null">
+        COVER_PATH,
+      </if>
+      <if test="discount != null">
+        DISCOUNT,
+      </if>
+      <if test="averageRate != null">
+        AVERAGE_RATE,
+      </if>
+      <if test="releaseDate != null">
+        RELEASE_DATE,
+      </if>
+      <if test="preOrder != null">
+        PRE_ORDER,
+      </if>
+      <if test="rateCount != null">
+        RATE_COUNT,
+      </if>
+      <if test="onSale != null">
+        ON_SALE,
+      </if>
+      <if test="discription != null">
+        DISCRIPTION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="gameId != null">
+        #{gameId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=REAL},
+      </if>
+      <if test="coverPath != null">
+        #{coverPath,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null">
+        #{discount,jdbcType=BIT},
+      </if>
+      <if test="averageRate != null">
+        #{averageRate,jdbcType=REAL},
+      </if>
+      <if test="releaseDate != null">
+        #{releaseDate,jdbcType=DATE},
+      </if>
+      <if test="preOrder != null">
+        #{preOrder,jdbcType=BIT},
+      </if>
+      <if test="rateCount != null">
+        #{rateCount,jdbcType=INTEGER},
+      </if>
+      <if test="onSale != null">
+        #{onSale,jdbcType=BIT},
+      </if>
+      <if test="discription != null">
+        #{discription,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.entity.Games">
+    update games
+    <set>
+      <if test="title != null">
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        PRICE = #{price,jdbcType=REAL},
+      </if>
+      <if test="coverPath != null">
+        COVER_PATH = #{coverPath,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null">
+        DISCOUNT = #{discount,jdbcType=BIT},
+      </if>
+      <if test="averageRate != null">
+        AVERAGE_RATE = #{averageRate,jdbcType=REAL},
+      </if>
+      <if test="releaseDate != null">
+        RELEASE_DATE = #{releaseDate,jdbcType=DATE},
+      </if>
+      <if test="preOrder != null">
+        PRE_ORDER = #{preOrder,jdbcType=BIT},
+      </if>
+      <if test="rateCount != null">
+        RATE_COUNT = #{rateCount,jdbcType=INTEGER},
+      </if>
+      <if test="onSale != null">
+        ON_SALE = #{onSale,jdbcType=BIT},
+      </if>
+      <if test="discription != null">
+        DISCRIPTION = #{discription,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where GAME_ID = #{gameId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.demo.entity.Games">
+    update games
+    set TITLE = #{title,jdbcType=VARCHAR},
+      PRICE = #{price,jdbcType=REAL},
+      COVER_PATH = #{coverPath,jdbcType=VARCHAR},
+      DISCOUNT = #{discount,jdbcType=BIT},
+      AVERAGE_RATE = #{averageRate,jdbcType=REAL},
+      RELEASE_DATE = #{releaseDate,jdbcType=DATE},
+      PRE_ORDER = #{preOrder,jdbcType=BIT},
+      RATE_COUNT = #{rateCount,jdbcType=INTEGER},
+      ON_SALE = #{onSale,jdbcType=BIT},
+      DISCRIPTION = #{discription,jdbcType=LONGVARCHAR}
+    where GAME_ID = #{gameId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Games">
+    update games
+    set TITLE = #{title,jdbcType=VARCHAR},
+      PRICE = #{price,jdbcType=REAL},
+      COVER_PATH = #{coverPath,jdbcType=VARCHAR},
+      DISCOUNT = #{discount,jdbcType=BIT},
+      AVERAGE_RATE = #{averageRate,jdbcType=REAL},
+      RELEASE_DATE = #{releaseDate,jdbcType=DATE},
+      PRE_ORDER = #{preOrder,jdbcType=BIT},
+      RATE_COUNT = #{rateCount,jdbcType=INTEGER},
+      ON_SALE = #{onSale,jdbcType=BIT}
+    where GAME_ID = #{gameId,jdbcType=INTEGER}
+  </update>
+</mapper>
