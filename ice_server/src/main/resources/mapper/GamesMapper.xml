@@ -14,14 +14,14 @@
     <result column="ON_SALE" jdbcType="BIT" property="onSale" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.demo.entity.Games">
-    <result column="DISCRIPTION" jdbcType="LONGVARCHAR" property="discription" />
+    <result column="DESCRIPTION" jdbcType="LONGVARCHAR" property="description" />
   </resultMap>
   <sql id="Base_Column_List">
     GAME_ID, TITLE, PRICE, COVER_PATH, DISCOUNT, AVERAGE_RATE, RELEASE_DATE, PRE_ORDER, 
     RATE_COUNT, ON_SALE
   </sql>
   <sql id="Blob_Column_List">
-    DISCRIPTION
+    DESCRIPTION
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 
@@ -39,11 +39,11 @@
     insert into games (GAME_ID, TITLE, PRICE, 
       COVER_PATH, DISCOUNT, AVERAGE_RATE, 
       RELEASE_DATE, PRE_ORDER, RATE_COUNT, 
-      ON_SALE, DISCRIPTION)
+      ON_SALE, DESCRIPTION)
     values (#{gameId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{price,jdbcType=REAL}, 
       #{coverPath,jdbcType=VARCHAR}, #{discount,jdbcType=BIT}, #{averageRate,jdbcType=REAL}, 
       #{releaseDate,jdbcType=DATE}, #{preOrder,jdbcType=BIT}, #{rateCount,jdbcType=INTEGER}, 
-      #{onSale,jdbcType=BIT}, #{discription,jdbcType=LONGVARCHAR})
+      #{onSale,jdbcType=BIT}, #{description,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.entity.Games">
     insert into games
@@ -78,8 +78,8 @@
       <if test="onSale != null">
         ON_SALE,
       </if>
-      <if test="discription != null">
-        DISCRIPTION,
+      <if test="description != null">
+        DESCRIPTION,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -113,8 +113,8 @@
       <if test="onSale != null">
         #{onSale,jdbcType=BIT},
       </if>
-      <if test="discription != null">
-        #{discription,jdbcType=LONGVARCHAR},
+      <if test="description != null">
+        #{description,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -148,8 +148,8 @@
       <if test="onSale != null">
         ON_SALE = #{onSale,jdbcType=BIT},
       </if>
-      <if test="discription != null">
-        DISCRIPTION = #{discription,jdbcType=LONGVARCHAR},
+      <if test="description != null">
+        DESCRIPTION = #{description,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where GAME_ID = #{gameId,jdbcType=INTEGER}
@@ -165,7 +165,7 @@
       PRE_ORDER = #{preOrder,jdbcType=BIT},
       RATE_COUNT = #{rateCount,jdbcType=INTEGER},
       ON_SALE = #{onSale,jdbcType=BIT},
-      DISCRIPTION = #{discription,jdbcType=LONGVARCHAR}
+      DESCRIPTION = #{description,jdbcType=LONGVARCHAR}
     where GAME_ID = #{gameId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Games">

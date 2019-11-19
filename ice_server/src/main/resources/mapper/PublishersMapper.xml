@@ -8,13 +8,13 @@
     <result column="PWD" jdbcType="VARCHAR" property="pwd" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.demo.entity.Publishers">
-    <result column="DISCRIPTION" jdbcType="LONGVARCHAR" property="discription" />
+    <result column="DESCRIPTION" jdbcType="LONGVARCHAR" property="description" />
   </resultMap>
   <sql id="Base_Column_List">
     PUBLISHER_ID, PUBLISHER_NAME, LOGO_PATH, PWD
   </sql>
   <sql id="Blob_Column_List">
-    DISCRIPTION
+    DESCRIPTION
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 
@@ -30,9 +30,9 @@
   </delete>
   <insert id="insert" parameterType="com.example.demo.entity.Publishers">
     insert into publishers (PUBLISHER_ID, PUBLISHER_NAME, LOGO_PATH, 
-      PWD, DISCRIPTION)
+      PWD, DESCRIPTION)
     values (#{publisherId,jdbcType=INTEGER}, #{publisherName,jdbcType=VARCHAR}, #{logoPath,jdbcType=VARCHAR}, 
-      #{pwd,jdbcType=VARCHAR}, #{discription,jdbcType=LONGVARCHAR})
+      #{pwd,jdbcType=VARCHAR}, #{description,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.entity.Publishers">
     insert into publishers
@@ -49,8 +49,8 @@
       <if test="pwd != null">
         PWD,
       </if>
-      <if test="discription != null">
-        DISCRIPTION,
+      <if test="description != null">
+        DESCRIPTION,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -66,8 +66,8 @@
       <if test="pwd != null">
         #{pwd,jdbcType=VARCHAR},
       </if>
-      <if test="discription != null">
-        #{discription,jdbcType=LONGVARCHAR},
+      <if test="description != null">
+        #{description,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -83,8 +83,8 @@
       <if test="pwd != null">
         PWD = #{pwd,jdbcType=VARCHAR},
       </if>
-      <if test="discription != null">
-        DISCRIPTION = #{discription,jdbcType=LONGVARCHAR},
+      <if test="description != null">
+        DESCRIPTION = #{description,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where PUBLISHER_ID = #{publisherId,jdbcType=INTEGER}
@@ -94,7 +94,7 @@
     set PUBLISHER_NAME = #{publisherName,jdbcType=VARCHAR},
       LOGO_PATH = #{logoPath,jdbcType=VARCHAR},
       PWD = #{pwd,jdbcType=VARCHAR},
-      DISCRIPTION = #{discription,jdbcType=LONGVARCHAR}
+      DESCRIPTION = #{description,jdbcType=LONGVARCHAR}
     where PUBLISHER_ID = #{publisherId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Publishers">

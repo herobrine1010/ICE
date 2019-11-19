@@ -23,7 +23,7 @@ public class Games {
 
     private Boolean onSale;
 
-    private String discription;
+    private String description;
 
     public Integer getGameId() {
         return gameId;
@@ -105,11 +105,11 @@ public class Games {
         this.onSale = onSale;
     }
 
-    public String getDiscription() {
-        return discription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDiscription(String discription) {
-        this.discription = discription == null ? null : discription.trim();
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
     }
 }

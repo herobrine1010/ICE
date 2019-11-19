@@ -9,7 +9,7 @@ public class Publishers {
 
     private String pwd;
 
-    private String discription;
+    private String description;
 
     public Integer getPublisherId() {
         return publisherId;
@@ -43,11 +43,11 @@ public class Publishers {
         this.pwd = pwd == null ? null : pwd.trim();
     }
 
-    public String getDiscription() {
-        return discription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDiscription(String discription) {
-        this.discription = discription == null ? null : discription.trim();
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
     }
 }
