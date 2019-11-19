@@ -32,12 +32,12 @@
     where USER_ID = #{userId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.example.demo.entity.Users">
-    insert into users (USER_ID, USER_NAME, GENDER, 
-      BIRTHDAY, TEL, AVATAR_PATH, 
-      PWD, ADDRESS)
-    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{gender,jdbcType=BIT}, 
-      #{birthday,jdbcType=DATE}, #{tel,jdbcType=CHAR}, #{avatarPath,jdbcType=VARCHAR}, 
-      #{pwd,jdbcType=VARCHAR}, #{address,jdbcType=LONGVARCHAR})
+      insert into users (USER_ID, USER_NAME, GENDER,
+          BIRTHDAY, TEL, AVATAR_PATH,
+          PWD, ADDRESS)
+      values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{gender,jdbcType=BIT},
+          #{birthday,jdbcType=DATE}, #{tel,jdbcType=CHAR}, #{avatarPath,jdbcType=VARCHAR},
+          #{pwd,jdbcType=VARCHAR}, #{address,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.entity.Users">
     insert into users
@@ -142,4 +142,98 @@
       PWD = #{pwd,jdbcType=VARCHAR}
     where USER_ID = #{userId,jdbcType=INTEGER}
   </update>
+
+  <insert id="addUser" parameterType="com.example.demo.entity.Users" >
+    insert into Users
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userName != null" >
+        userName,
+      </if>
+      <if test="pwd != null" >
+        pwd,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="tel!= null" >
+        tel,
+      </if>
+
+      <if test="birthday != null" >
+        birthday,
+      </if>
+
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="avatarPath != null" >
+        avatarPath,
+      </if>
+
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="phoneNum != null" >
+        #{phoneNum,jdbcType=CHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=CHAR},
+      </if>
+      <if test="birth != null" >
+        #{birth,jdbcType=TIMESTAMP},
+      </if>
+      <if test="introduction != null" >
+        #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="avator != null" >
+        #{avator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+
+  <update id="updateUserInfo" parameterType="com.example.demo.entity.Users">
+      update users
+      <trim>
+          <if test="userName !=null">
+              USER_NAME=#{userName,jdbcType=VARCHAR},
+          </if>
+          <if test="gender !=null">
+              GENDER=#{gender,jdbcType=TINYINT},
+          </if>
+          <if test="birthday !=null">
+              BIRTHDAY=#{birthday,jdbcType=DATE},
+          </if>
+          <if test="tel !=null">
+              TEL=#{tel,jdbcType=CHAR},
+          </if>
+          <if test="avatarPath!=null">
+              AVATAR_PATH=#{avatarPath,jdbcType=VARCHAR},
+          </if>
+          <if test="address!=null">
+              ADDRESS=#{address,jdbcType=CLOB}
+              //jdbcType中CLOB对应MySql的TEXT
+          </if>
+      </trim>
+      where USER_ID=#{userId,jdbcType=INT};
+  </update>
+
+
 </mapper>
