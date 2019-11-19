@@ -89,7 +89,7 @@ create table GAMES
    RELEASE_DATE         date,
    PRE_ORDER            bool,
    RATE_COUNT           int,
-   DISCRIPTION          text,
+   DESCRIPTION          text,
    ON_SALE              bool,
    primary key (GAME_ID)
 );
@@ -129,7 +129,7 @@ create table PUBLISHERS
    PUBLISHER_NAME       varchar(50),
    LOGO_PATH            varchar(100),
    PWD                  varchar(20),
-   DISCRIPTION          text,
+   DESCRIPTION          text,
    primary key (PUBLISHER_ID)
 );
 
