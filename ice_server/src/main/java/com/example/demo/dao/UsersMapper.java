@@ -1,10 +1,11 @@
 package com.example.demo.dao;
 
 import com.example.demo.entity.Users;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Mapper
 @Repository
 //@Component(value="UsersMapper")
 public interface UsersMapper {
@@ -21,25 +22,16 @@ public interface UsersMapper {
     int updateByPrimaryKeyWithBLOBs(Users record);
 
     int updateByPrimaryKey(Users record);
+//----------新增函数
+    List<Users> selectUser(Users user);
+    //任意字段精确查找
+    void deleteUser(Users user);
 
-    //新建用户
-    boolean addUser(Users users);
-    //用户修改个人信息
-    boolean updateUserInfo(Users users);
+    void insertUser(Users user);
 
-    boolean updateUserAvatar(Users users);
+    void updateUser(Users user);
 
-    boolean logOut(String userName);
+    List<Users> selectUsers(Users user);
+    //任意字段模糊查找
 
-    boolean checkPassword(String userName,String password);
-
-    boolean ifAdd(Users users);
-
-    boolean deleteUser(Integer userId);
-
-    List<Users> getAllUser();
-
-    List<Users> commentUser(Integer userId);
-
-    List<Users> userLists(String userName);
 }

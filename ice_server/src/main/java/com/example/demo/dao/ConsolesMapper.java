@@ -1,7 +1,9 @@
 package com.example.demo.dao;
 
 import com.example.demo.entity.Consoles;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ConsolesMapper {
     int deleteByPrimaryKey(Integer consoleId);
 

@@ -2,7 +2,9 @@ package com.example.demo.dao;
 
 import com.example.demo.entity.HasReview;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface HasReviewMapper {
     int deleteByPrimaryKey(@Param("reviewId") Integer reviewId, @Param("gameId") Integer gameId);
 

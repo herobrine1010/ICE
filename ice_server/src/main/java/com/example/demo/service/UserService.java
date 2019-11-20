@@ -1,29 +1,29 @@
 package com.example.demo.service;
 
+import com.example.demo.dao.UsersMapper;
+import com.example.demo.entity.Response;
 import com.example.demo.entity.Users;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
+import org.springframework.stereotype.Service;
 
-public interface UserService {
+@Service
+public class UserService {
+    @Autowired
+    UsersMapper usersMapper;
 
-    //新建用户
-    boolean addUser(Users users);
-    //用户修改个人信息
-    boolean updateUserInfo(Users users);
+    public Response Exist(String userName){
+        Response response=new Response();
+        Users user=new Users();
+        user.setUserName(userName);
+        if(usersMapper.selectUser(user).size()==0){
+            response.setStatus("false");
+            response.setError("用户不存在");
+            return response;
+        }
+        response.setStatus("OK");
+        return response;
 
-    boolean updateUserAvatar(Users users);
-
-    boolean logOut(String userName);
-
-    boolean checkPassword(String userName,String password);
-
-    boolean ifAdd(Users users);
-
-    boolean deleteUser(Integer userId);
-
-    List<Users> getAllUser();
-
-    List<Users> commentUser(Integer userId);
-
-    List<Users> userLists(String userName);
+    }
 
 }
