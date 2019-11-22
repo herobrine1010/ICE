@@ -125,4 +125,9 @@
       GAME_ID = #{gameId,jdbcType=INTEGER}
     where ORDER_ID = #{orderId,jdbcType=INTEGER}
   </update>
+  <select id="orderNumOf" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(ORDER_ID)
+    from orders
+    where USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
 </mapper>

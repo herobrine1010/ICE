@@ -4,6 +4,9 @@ import com.example.demo.entity.Consoles;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+
 @Mapper
 @Repository
 public interface ConsolesMapper {
@@ -18,4 +21,6 @@ public interface ConsolesMapper {
     int updateByPrimaryKeySelective(Consoles record);
 
     int updateByPrimaryKey(Consoles record);
+
+    List<Consoles> selectAll();
 }

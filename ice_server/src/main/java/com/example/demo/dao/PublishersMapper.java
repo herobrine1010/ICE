@@ -3,6 +3,9 @@ package com.example.demo.dao;
 import com.example.demo.entity.Publishers;
 import org.springframework.stereotype.Repository;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+
 @Mapper
 @Repository
 public interface PublishersMapper {
@@ -19,4 +22,6 @@ public interface PublishersMapper {
     int updateByPrimaryKeyWithBLOBs(Publishers record);
 
     int updateByPrimaryKey(Publishers record);
+
+    List<Publishers> selectAll();
 }

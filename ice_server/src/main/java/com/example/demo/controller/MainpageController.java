@@ -6,11 +6,14 @@ import com.example.demo.entity.Consoles;
 import com.example.demo.entity.Publishers;
 import com.example.demo.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.entity.Response;
 
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,6 +30,10 @@ public class MainpageController {
     private HasTagMapper hasTagMapper;
     @Autowired
     private TagsMapper tagsMapper;
+    @Autowired
+    private SessionService sessionService;
+    @Autowired
+    private OrdersMapper ordersMapper;
 
     @RequestMapping(value = "/getCategories", method = RequestMethod.GET)
     public Response getCategories(){
@@ -55,5 +62,34 @@ public class MainpageController {
         return response;
     }
 
+    @RequestMapping(value = "/getOrderNum", method = RequestMethod.GET)
+    public Response getOderNum(HttpSession session){
+        Response response = new Response();
+
+        if(sessionService.auth(session).getStatus()!="200") {
+            return sessionService.auth(session);
+        }
+        int thisUserId = Integer.parseInt(session.getAttribute("id").toString());
+        Integer num = ordersMapper.orderNumOf(thisUserId);
+        List<Integer> result = new ArrayList<Integer>();
+        result.add(num);
+        response.setResult(result);
+
+        return response;
+    }
+
+    @RequestMapping(value = "/getChartNum", method = RequestMethod.GET)
+    public Response getChartNum(HttpSession session){
+        Response response = new Response();
+
+        return response;
+    }
+
+    @RequestMapping(value = "/getGames", method = RequestMethod.GET)
+    public Response getGames(@RequestBody Integer sortType, Integer Times){
+        Response response = new Response();
+
+        return response;
+    }
 
 }
