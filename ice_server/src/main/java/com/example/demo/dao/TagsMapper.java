@@ -1,8 +1,10 @@
 package com.example.demo.dao;
 
 import com.example.demo.entity.Tags;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+@Mapper
 @Repository
 public interface TagsMapper {
     int deleteByPrimaryKey(Integer tagId);

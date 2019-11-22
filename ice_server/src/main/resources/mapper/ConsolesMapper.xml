@@ -55,4 +55,9 @@
     set CONSOLE_NAME = #{consoleName,jdbcType=VARCHAR}
     where CONSOLE_ID = #{consoleId,jdbcType=INTEGER}
   </update>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from consoles
+  </select>
 </mapper>

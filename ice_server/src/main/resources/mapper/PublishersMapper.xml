@@ -104,4 +104,8 @@
       PWD = #{pwd,jdbcType=VARCHAR}
     where PUBLISHER_ID = #{publisherId,jdbcType=INTEGER}
   </update>
+  <select id="selectAll" resultMap="ResultMapWithBLOBs">
+    select *
+    from publishers
+  </select>
 </mapper>

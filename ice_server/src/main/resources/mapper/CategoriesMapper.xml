@@ -55,4 +55,8 @@
     set CATE_NAME = #{cateName,jdbcType=VARCHAR}
     where CATE_ID = #{cateId,jdbcType=INTEGER}
   </update>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select *
+    from categories
+  </select>
 </mapper>
