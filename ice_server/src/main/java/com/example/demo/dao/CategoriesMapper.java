@@ -1,8 +1,10 @@
 package com.example.demo.dao;
 
 import com.example.demo.entity.Categories;
-import org.springframework.stereotype.Repository;
 
+import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
+@Mapper
 @Repository
 public interface CategoriesMapper {
     int deleteByPrimaryKey(Integer cateId);

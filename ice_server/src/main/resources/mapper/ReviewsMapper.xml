@@ -48,6 +48,9 @@
       </if>
     </trim>
   </insert>
+  <select id="getLastInsertReviewId" resultType="Integer">
+    select MAX(REVIEW_ID) FROM REVIEWS;
+  </select>
   <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.entity.Reviews">
     update reviews
     <set>

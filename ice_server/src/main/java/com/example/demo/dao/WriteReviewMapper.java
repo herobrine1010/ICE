@@ -1,8 +1,9 @@
 package com.example.demo.dao;
 
 import com.example.demo.entity.WriteReview;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-
+@Mapper
 @Repository
 public interface WriteReviewMapper {
     int deleteByPrimaryKey(Integer reviewId);
@@ -16,4 +17,6 @@ public interface WriteReviewMapper {
     int updateByPrimaryKeySelective(WriteReview record);
 
     int updateByPrimaryKey(WriteReview record);
+
+    int getWhetherCommented(int USER_ID,int GAME_ID);
 }

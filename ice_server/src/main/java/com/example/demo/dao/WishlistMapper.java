@@ -3,7 +3,8 @@ package com.example.demo.dao;
 import com.example.demo.entity.Wishlist;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-
+import org.apache.ibatis.annotations.Mapper;
+@Mapper
 @Repository
 public interface WishlistMapper {
     int deleteByPrimaryKey(@Param("gameId") Integer gameId, @Param("userId") Integer userId);
