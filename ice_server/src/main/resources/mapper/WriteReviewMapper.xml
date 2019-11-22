@@ -55,4 +55,10 @@
     set USER_ID = #{userId,jdbcType=INTEGER}
     where REVIEW_ID = #{reviewId,jdbcType=INTEGER}
   </update>
+
+  <select id="getWhetherCommented" resultType="Integer">
+  select count(*) from write_review inner join has_review
+      on write_review.review_id=has_review.review_id
+    where user_id=#{0} and game_id =#{1}
+  </select>
 </mapper>

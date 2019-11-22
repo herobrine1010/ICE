@@ -1,9 +1,8 @@
 package com.example.demo.dao;
 
 import com.example.demo.entity.Orders;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-
+import org.apache.ibatis.annotations.Mapper;
 @Mapper
 @Repository
 public interface OrdersMapper {

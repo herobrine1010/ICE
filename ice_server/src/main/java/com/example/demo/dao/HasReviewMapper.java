@@ -4,7 +4,6 @@ import com.example.demo.entity.HasReview;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-
 @Mapper
 @Repository
 public interface HasReviewMapper {

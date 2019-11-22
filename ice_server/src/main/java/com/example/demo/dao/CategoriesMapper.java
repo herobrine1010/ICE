@@ -1,11 +1,9 @@
 package com.example.demo.dao;
 
 import com.example.demo.entity.Categories;
-import org.apache.ibatis.annotations.Mapper;
+
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-
+import org.apache.ibatis.annotations.Mapper;
 @Mapper
 @Repository
 public interface CategoriesMapper {
@@ -20,6 +18,4 @@ public interface CategoriesMapper {
     int updateByPrimaryKeySelective(Categories record);
 
     int updateByPrimaryKey(Categories record);
-
-    List<Categories> selectAll();
 }
