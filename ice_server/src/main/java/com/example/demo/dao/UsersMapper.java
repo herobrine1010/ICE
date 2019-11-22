@@ -31,6 +31,8 @@ public interface UsersMapper {
 
     void updateUser(Users user);
 
+    List<Users> SELECT();
+
     List<Users> selectUsers(Users user);
     //任意字段模糊查找
 

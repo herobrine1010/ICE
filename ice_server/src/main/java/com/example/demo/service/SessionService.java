@@ -10,15 +10,13 @@ import java.util.concurrent.TimeUnit;
 public class SessionService {
 
     public Response auth(HttpSession session){
-        Users users =new Users();
+//        Users users =new Users();
         Response response =new Response();
         if(session.getAttribute("id")==null){
             response.setStatus("401");
             response.setError("请先登录");
             return response;
         }
-
-
 
         response.setStatus("200");
         return response;

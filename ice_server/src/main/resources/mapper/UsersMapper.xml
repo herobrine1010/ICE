@@ -144,6 +144,11 @@
   </update>
  <!--新增函数-->
 
+
+    <select id="SELECT" resultType="com.example.demo.entity.Users">
+      select * from USERS
+    </select>
+
     <!--精确查找-->
     <select id="selectUser" resultType="com.example.demo.entity.Users">
         select * from Users
@@ -159,8 +164,8 @@
     </select>
     <!--插入用户-->
     <insert id="insertUser">
-        insert into USERS(USER_NAME, GENDER, BIRTHDAY, TEL, ADDRESS, PWD)
-        VALUES(
+        insert into USERS(USER_ID,USER_NAME, GENDER, BIRTHDAY, TEL, ADDRESS, PWD)
+        VALUES(null ,
             #{userName},#{gender},#{birthday},#{tel},#{address},#{pwd});
     </insert>
     <!--模糊查找-->
@@ -184,15 +189,16 @@
     <update id="updateUser">
         update USERS
         <set>
-            <if test="userId != null and userId!=''">and USER_ID like #{userId}</if>
-            <if test="userName != null and userName!=''">and USER_NAME like #{userName}</if>
-            <if test="pwd != null and pwd!=''">and PWD like #{pwd}</if>
-            <if test="gender != null and gender!=''">and GENDER like #{gender}</if>
-            <if test="birthday != null and birthday!=''">and BIRTHDAY like #{birthday}</if>
-            <if test="tel != null and tel!=''">and TEL like #{tel}</if>
-            <if test="address != null and address!=''">and ADDRESS like #{address}</if>
-            <if test="avatarPath!=null and avatarPath!=''">and AVATAR_PATH like #{avatarPath}</if>
+            <if test="userId != null and userId!=''">USER_ID=#{userId},</if>
+            <if test="userName != null and userName!=''">USER_NAME=#{userName},</if>
+            <if test="pwd != null and pwd!=''">PWD=#{pwd},</if>
+            <if test="gender != null and gender!=''">GENDER=#{gender},</if>
+            <if test="birthday != null and birthday!=''">BIRTHDAY=#{birthday},</if>
+            <if test="tel != null and tel!=''">TEL#={tel},</if>
+            <if test="address != null and address!=''">ADDRESS=#{address},</if>
+            <if test="avatarPath!=null and avatarPath!=''">AVATAR_PATH=#{avatarPath},</if>
         </set>
+        where USER_ID=#{userId}
     </update>
 
 </mapper>
