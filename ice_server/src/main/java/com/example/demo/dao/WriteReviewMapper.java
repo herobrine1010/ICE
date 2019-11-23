@@ -2,7 +2,12 @@ package com.example.demo.dao;
 
 import com.example.demo.entity.WriteReview;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import com.example.demo.entity.ReviewsDetailed;
+
+import java.util.List;
+
 @Mapper
 @Repository
 public interface WriteReviewMapper {
@@ -18,5 +23,7 @@ public interface WriteReviewMapper {
 
     int updateByPrimaryKey(WriteReview record);
 
-    int getWhetherCommented(int USER_ID,int GAME_ID);
+    int getWhetherCommented(@Param("userId") int userId, @Param("gameId") int gameId);
+
+    List<ReviewsDetailed> selectAllComment(@Param("gameId") int gameId,@Param("number")int number,@Param("reverse")int reverse);
 }

@@ -59,6 +59,19 @@
   <select id="getWhetherCommented" resultType="Integer">
   select count(*) from write_review inner join has_review
       on write_review.review_id=has_review.review_id
-    where user_id=#{0} and game_id =#{1}
+    where user_id = #{userId} and game_id = #{gameId}
   </select>
+
+    <select id="selectAllComment" resultType="com.example.demo.entity.ReviewsDetailed">
+        select user_id,content
+        from reviews inner join write_review inner join has_review
+                on reviews.REVIEW_ID=write_review.review_id
+                   and write_review.REVIEW_ID=has_review.review_id
+        where  GAME_ID=#{gameId}
+        order by reviews.REVIEW_ID
+        <if test="reverse>0">desc</if>
+        <if test="!reverse>0">asc</if>
+        limit #{number}
+
+    </select>
 </mapper>

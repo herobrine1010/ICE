@@ -24,6 +24,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import com.example.demo.dao.UsersMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class LoginController {
     public Response login(@RequestBody Users user, HttpSession session) {
         Response response = new Response();
 
-        if (userService.Exist(user.getUserName()).getStatus() != "OK") {
+        if (!Objects.equals(userService.Exist(user.getUserName()).getStatus(), "OK")) {
             return userService.Exist(user.getUserName());
         }
         //List <Users> users= usersMapper.SELECT();
@@ -80,7 +81,7 @@ public class LoginController {
     public Response register(@RequestBody Users user){
         Response response = new Response();
         //もしユーザー名は他人に使ってしまた
-        if (userService.Exist(user.getUserName()).getStatus() == "OK") {
+        if (Objects.equals(userService.Exist(user.getUserName()).getStatus(), "OK")) {
             response.setStatus("200");
             response.setError("The name you submitted was already registered. Please use a different one!");
             return response;
@@ -104,8 +105,8 @@ public class LoginController {
     public Response updateInfo(@RequestBody Users user,HttpSession session){
 
         Response response = new Response();
-        System.out.println(session.getAttribute("id"));
-        if(sessionService.auth(session).getStatus()!="200") {
+        //System.out.println(session.getAttribute("id"));
+        if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
             return sessionService.auth(session);
         }
         user.setUserId(Integer.parseInt(session.getAttribute("id").toString()));
@@ -138,8 +139,8 @@ public class LoginController {
     @RequestMapping(value="/updateAvatar",method = RequestMethod.POST)
     public Response updateAvatar(@RequestParam("file") MultipartFile avatarFile,HttpSession session){
         Response response = new Response();
-        System.out.println(session.getAttribute("id"));
-        if(sessionService.auth(session).getStatus()!="200") {
+        //System.out.println(session.getAttribute("id"));
+        if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
             return sessionService.auth(session);
         }
 

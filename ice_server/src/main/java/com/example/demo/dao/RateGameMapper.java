@@ -18,4 +18,12 @@ public interface RateGameMapper {
     int updateByPrimaryKeySelective(RateGame record);
 
     int updateByPrimaryKey(RateGame record);
+
+    int submitRate(@Param("userId")int userId,@Param("gameId")int gameId,@Param("rate")int rate);
+
+    double getAverage(@Param("gameId")int gameId);
+
+    int whetherRated(@Param("gameId") int gameId);
+
+    int myRate(@Param("gameId") int gameId,@Param("userId") int userId);
 }
