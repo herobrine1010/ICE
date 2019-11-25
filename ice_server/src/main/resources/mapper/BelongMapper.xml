@@ -55,4 +55,9 @@
     set CATE_ID = #{cateId,jdbcType=INTEGER}
     where GAME_ID = #{gameId,jdbcType=INTEGER}
   </update>
+  <select id="selectByCateId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select *
+    from belong
+    where CATE_ID = #{cateId,jdbcType=INTEGER}
+  </select>
 </mapper>

@@ -33,4 +33,9 @@
       </if>
     </trim>
   </insert>
+  <select id="selectByGameId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select *
+    from has_tag
+    where game_id = #{gameId,jdbcType=INTEGER}
+  </select>
 </mapper>

@@ -33,4 +33,9 @@
       </if>
     </trim>
   </insert>
+  <select id="chartNumOf" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(USER_ID)
+    from CHART
+    where USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
 </mapper>

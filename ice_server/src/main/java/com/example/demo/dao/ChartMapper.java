@@ -13,4 +13,6 @@ public interface ChartMapper {
     int insert(Chart record);
 
     int insertSelective(Chart record);
+
+    Integer chartNumOf(Integer userId);
 }

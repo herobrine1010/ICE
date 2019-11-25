@@ -33,4 +33,15 @@
       </if>
     </trim>
   </insert>
+  <select id="selectByPublisherId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select *
+    from sale_game
+    where publisher_id=#{publisherId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select *
+    from sale_game
+    where PUBLISHER_ID = #{publisherId,jdbcType=INTEGER}
+      and GAME_ID = #{gameId,jdbcType=INTEGER}
+  </select>
 </mapper>
