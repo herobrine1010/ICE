@@ -14,7 +14,7 @@ public class SessionService {
         Response response =new Response();
         if(session.getAttribute("id")==null){
             response.setStatus("401");
-            response.setError("请先登录");
+            response.setError("Please log in!");
             return response;
         }
 

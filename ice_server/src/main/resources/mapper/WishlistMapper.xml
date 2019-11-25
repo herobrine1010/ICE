@@ -68,4 +68,11 @@
     where GAME_ID = #{gameId,jdbcType=INTEGER}
       and USER_ID = #{userId,jdbcType=INTEGER}
   </update>
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        select * from wishlist where USER_ID like #{userId};
+    </select>
+
+    <select id="selectByGameId" resultType="Integer">
+        select count(*) from wishlist where GAME_ID like #{gameId};
+    </select>
 </mapper>

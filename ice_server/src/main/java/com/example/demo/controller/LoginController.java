@@ -43,7 +43,7 @@ public class LoginController {
     public Response login(@RequestBody Users user, HttpSession session) {
         Response response = new Response();
 
-        if (!Objects.equals(userService.Exist(user.getUserName()).getStatus(), "OK")) {
+        if (!Objects.equals(userService.Exist(user.getUserName()).getStatus(), "200")) {
             return userService.Exist(user.getUserName());
         }
         //List <Users> users= usersMapper.SELECT();
@@ -82,7 +82,7 @@ public class LoginController {
         Response response = new Response();
         //もしユーザー名は他人に使ってしまた
         if (Objects.equals(userService.Exist(user.getUserName()).getStatus(), "OK")) {
-            response.setStatus("200");
+            response.setStatus("403");
             response.setError("The name you submitted was already registered. Please use a different one!");
             return response;
         }

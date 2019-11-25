@@ -17,11 +17,11 @@ public class UserService {
         Users user=new Users();
         user.setUserName(userName);
         if(usersMapper.selectUser(user).size()==0){
-            response.setStatus("false");
+            response.setStatus("404");
             response.setError("用户不存在");
             return response;
         }
-        response.setStatus("OK");
+        response.setStatus("200");
         return response;
 
     }

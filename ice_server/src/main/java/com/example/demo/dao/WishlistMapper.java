@@ -4,6 +4,9 @@ import com.example.demo.entity.Wishlist;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+
 @Mapper
 @Repository
 public interface WishlistMapper {
@@ -18,4 +21,8 @@ public interface WishlistMapper {
     int updateByPrimaryKeySelective(Wishlist record);
 
     int updateByPrimaryKey(Wishlist record);
+
+    List<Wishlist> selectByUserId(@Param("userId")Integer userId);
+
+    int selectByGameId(@Param("gameId") Integer gameId);
 }

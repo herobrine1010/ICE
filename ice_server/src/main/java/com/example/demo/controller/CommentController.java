@@ -35,7 +35,7 @@ public class CommentController {
 
     //gameIdがurlの中に在る原因は、gameIdと評価内容が同時に含まれるクラスはありません。
     //それで、元々にgameIdが商品ページのurlから取られ得るはず。
-    @RequestMapping(value = "/addComment",method =RequestMethod.POST)
+    @RequestMapping(value = "/addComment",method =RequestMethod.PUT)
     public Response addComment(@RequestParam("gameId") int gameId,@RequestBody Reviews review, HttpSession session) {
         Response response = new Response();
 
@@ -84,7 +84,7 @@ public class CommentController {
             //write_review{review_id,user_id(√)}
         }
         catch(Exception e){
-            response.setError("Comment failed!");
+            response.setError("SQL Error!");
             response.setStatus("403");
             return response;
         }
