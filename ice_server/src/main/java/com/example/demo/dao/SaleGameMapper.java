@@ -4,6 +4,9 @@ import com.example.demo.entity.SaleGame;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+
 @Mapper
 @Repository
 public interface SaleGameMapper {
@@ -12,4 +15,6 @@ public interface SaleGameMapper {
     int insert(SaleGame record);
 
     int insertSelective(SaleGame record);
+
+    List<SaleGame> selectByPublisherId(Integer publisherId);
 }

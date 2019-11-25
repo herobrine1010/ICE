@@ -33,4 +33,9 @@
       </if>
     </trim>
   </insert>
+  <select id="selectByConsoleId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select *
+    from played_on
+    where console_id=#{consoleId,jdbcType=INTEGER}
+  </select>
 </mapper>

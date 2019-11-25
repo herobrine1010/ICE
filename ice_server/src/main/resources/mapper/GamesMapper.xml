@@ -181,4 +181,13 @@
       ON_SALE = #{onSale,jdbcType=BIT}
     where GAME_ID = #{gameId,jdbcType=INTEGER}
   </update>
+  <select id="getAll" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select *
+    from games
+  </select>
+  <select id="searchByTitle" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select *
+    from games
+    where title like CONCAT(CONCAT('%', #{keyWords, jdbcType=VARCHAR}), '%')
+  </select>
 </mapper>
