@@ -17,4 +17,6 @@ public interface SaleGameMapper {
     int insertSelective(SaleGame record);
 
     List<SaleGame> selectByPublisherId(Integer publisherId);
+
+    SaleGame selectByPrimaryKey(@Param("publisherId") Integer publisherId, @Param("gameId") Integer gameId);
 }

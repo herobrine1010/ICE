@@ -38,4 +38,10 @@
     from played_on
     where console_id=#{consoleId,jdbcType=INTEGER}
   </select>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select *
+    from played_on
+    where GAME_ID = #{gameId,jdbcType=INTEGER}
+      and CONSOLE_ID = #{consoleId,jdbcType=INTEGER}
+  </select>
 </mapper>

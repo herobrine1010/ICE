@@ -46,7 +46,7 @@ public class MainpageController {
     @Autowired
     private static List<Games> gamesList = new ArrayList<Games>();
 
-
+    //Header Part
     @RequestMapping(value = "/getCategories", method = RequestMethod.GET)
     public Response getCategories(){
         Response response = new Response();
@@ -106,11 +106,12 @@ public class MainpageController {
         return response;
     }
 
+    //Game Part
     @RequestMapping(value = "/getGames", method = RequestMethod.GET)
-    public Response getGames(@RequestParam(value = "reSet") boolean reSet){
+    public Response getGames(@RequestParam(value = "reset") boolean reset){
 
         Response response = new Response();
-        if(gamesList.size()==0||reSet==true){
+        if(reset==true){
             AskTimes=0;
             gamesList = gamesMapper.getAll();
         }
@@ -160,8 +161,8 @@ public class MainpageController {
         return response;
     }
 
-    @RequestMapping(value = "/searchGamesByTitle", method = RequestMethod.GET)
-    public Response searchGamesByTitle(@RequestParam(value = "keyWords") String keyWords){
+    @RequestMapping(value = "/resetGamesByTitle", method = RequestMethod.GET)
+    public Response resetGamesByTitle(String keyWords){
 
         Response response = new Response();
         AskTimes = 0;
@@ -183,8 +184,8 @@ public class MainpageController {
         return response;
     }
 
-    @RequestMapping(value = "/searchGamesByCate", method = RequestMethod.GET)
-    public Response searchGamesByCate(@RequestParam(value = "cateId") Integer cateId){
+    @RequestMapping(value = "/resetGamesByCate", method = RequestMethod.GET)
+    public Response resetGamesByCate(Integer cateId){
         Response response=new Response();
         AskTimes=0;
         List<Belong> belongList=belongMapper.selectByCateId(cateId);
@@ -210,8 +211,8 @@ public class MainpageController {
         return response;
     }
 
-    @RequestMapping(value = "/searchGamesByConsole", method = RequestMethod.GET)
-    public Response searchGamesByConsole(@RequestParam(value = "consoleId") Integer consoleId){
+    @RequestMapping(value = "/resetGamesByConsole", method = RequestMethod.GET)
+    public Response resetGamesByConsole(Integer consoleId){
         Response response=new Response();
         AskTimes=0;
         List<PlayedOn> playedOns=playedOnMapper.selectByConsoleId(consoleId);
@@ -237,8 +238,8 @@ public class MainpageController {
         return response;
     }
 
-    @RequestMapping(value = "/searchGamesByPublisher", method = RequestMethod.GET)
-    public Response searchGamesByPublisher(@RequestParam(value = "publisherId") Integer publisherId){
+    @RequestMapping(value = "/resetGamesByPublisher", method = RequestMethod.GET)
+    public Response resetGamesByPublisher(Integer publisherId){
         Response response=new Response();
         AskTimes=0;
         List<SaleGame> saleGameList=saleGameMapper.selectByPublisherId(publisherId);
@@ -264,5 +265,91 @@ public class MainpageController {
         return response;
     }
 
+    //Search Part
+    @RequestMapping(value = "/searchGamesByTitle", method = RequestMethod.GET)
+    public Response searchGamesByTitle(@RequestParam(value = "keyWords") String keyWords,
+                                       @RequestParam(value = "reset") boolean reset){
+        if(reset){
+            return resetGamesByTitle(keyWords);
+        }
 
+        AskTimes=0;
+        List<Games> tempGamesList=new ArrayList<>();
+        for(int i=0;i<gamesList.size();i+=1){
+            if(gamesList.get(i).getTitle().contains(keyWords)){
+                tempGamesList.add(gamesList.get(i));
+            }
+        }
+        gamesList=tempGamesList;
+
+        return getGames(false);
+    }
+
+    @RequestMapping(value = "/searchGamesByCate", method = RequestMethod.GET)
+    public Response searchGamesByCate(@RequestParam(value = "cateId") Integer cateId,
+                                       @RequestParam(value = "reset") boolean reset){
+        if(reset){
+            return resetGamesByCate(cateId);
+        }
+
+        AskTimes=0;
+        List<Games> tempGamesList=new ArrayList<>();
+        for(int i=0;i<gamesList.size();i+=1){
+            Belong belong = belongMapper.selectByPrimaryKey(gamesList.get(i).getGameId());
+            if(belong.getCateId()==cateId){
+                tempGamesList.add(gamesList.get(i));
+            }
+        }
+        gamesList=tempGamesList;
+
+        return getGames(false);
+    }
+
+    @RequestMapping(value = "/searchGamesByConsole", method = RequestMethod.GET)
+    public Response searchGamesByConsole(@RequestParam(value = "consoleId") Integer consoleId,
+                                      @RequestParam(value = "reset") boolean reset){
+        if(reset){
+            return resetGamesByConsole(consoleId);
+        }
+
+        AskTimes=0;
+        List<Games> tempGamesList=new ArrayList<>();
+        for(int i=0;i<gamesList.size();i+=1){
+            if(playedOnMapper.selectByPrimaryKey(gamesList.get(i).getGameId(),consoleId)!=null){
+                tempGamesList.add(gamesList.get(i));
+            }
+        }
+        gamesList=tempGamesList;
+
+        return getGames(false);
+    }
+
+    @RequestMapping(value = "/searchGamesByPublisher", method = RequestMethod.GET)
+    public Response searchGamesByPublisher(@RequestParam(value = "publisherId") Integer publisherId,
+                                         @RequestParam(value = "reset") boolean reset){
+        if(reset){
+            return resetGamesByPublisher(publisherId);
+        }
+
+        AskTimes=0;
+        List<Games> tempGamesList=new ArrayList<>();
+        for(int i=0;i<gamesList.size();i+=1){
+            if(saleGameMapper.selectByPrimaryKey(publisherId, gamesList.get(i).getGameId())!=null){
+                tempGamesList.add(gamesList.get(i));
+            }
+        }
+        gamesList=tempGamesList;
+
+        return getGames(false);
+    }
+
+    //Publisher information
+    public Response getPublisherInfo(@RequestParam(value = "publisherId") Integer publisherId){
+        Response response=new Response();
+        Publishers publisher=publishersMapper.selectByPrimaryKey(publisherId);
+        List<Publishers> result=new ArrayList<>();
+        result.add(publisher);
+        response.setResult(result);
+        return response;
+    }
 }

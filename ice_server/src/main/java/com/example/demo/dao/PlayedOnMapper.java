@@ -17,4 +17,6 @@ public interface PlayedOnMapper {
     int insertSelective(PlayedOn record);
 
     List<PlayedOn> selectByConsoleId(Integer consoleId);
+
+    PlayedOn selectByPrimaryKey(@Param("gameId") Integer gameId, @Param("consoleId") Integer consoleId);
 }
