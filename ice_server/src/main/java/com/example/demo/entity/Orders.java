@@ -19,6 +19,8 @@ public class Orders {
 
     private Integer gameId;
 
+    private Float price;
+
     public Integer getOrderId() {
         return orderId;
     }
@@ -81,5 +83,13 @@ public class Orders {
 
     public void setGameId(Integer gameId) {
         this.gameId = gameId;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
     }
 }

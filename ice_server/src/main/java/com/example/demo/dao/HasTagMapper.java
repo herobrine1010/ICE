@@ -2,8 +2,8 @@ package com.example.demo.dao;
 
 import com.example.demo.entity.HasTag;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

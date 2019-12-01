@@ -4,6 +4,7 @@ import com.example.demo.dao.*;
 import com.example.demo.entity.*;
 import com.example.demo.service.GameService;
 import com.example.demo.service.GameService.GameInfo;
+import com.example.demo.service.PublisherService;
 import com.example.demo.service.SessionService;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class MainpageController {
+public class MainPageController {
     @Autowired
     private CategoriesMapper categoriesMapper;
     @Autowired
@@ -44,7 +45,11 @@ public class MainpageController {
     @Autowired
     private static int AskTimes = 0;
     @Autowired
+    private PublisherService publisherService;
+    @Autowired
     private static List<Games> gamesList = new ArrayList<Games>();
+
+
 
     //Header Part
     @RequestMapping(value = "/getCategories", method = RequestMethod.GET)
@@ -53,6 +58,7 @@ public class MainpageController {
         List<Categories> AllCate = categoriesMapper.selectAll();
         response.setResult(AllCate);
 
+        response.setStatus("200");
         return response;
     }
 
@@ -62,6 +68,7 @@ public class MainpageController {
         List<Consoles> AllConsoles = consolesMapper.selectAll();
         response.setResult(AllConsoles);
 
+        response.setStatus("200");
         return response;
     }
 
@@ -71,6 +78,7 @@ public class MainpageController {
         List<Publishers> AllPubs = publishersMapper.selectAll();
         response.setResult(AllPubs);
 
+        response.setStatus("200");
         return response;
     }
 
@@ -87,6 +95,7 @@ public class MainpageController {
         result.add(num);
         response.setResult(result);
 
+        response.setStatus("200");
         return response;
     }
 
@@ -103,8 +112,10 @@ public class MainpageController {
         result.add(num);
         response.setResult(result);
 
+        response.setStatus("200");
         return response;
     }
+
 
     //Game Part
     @RequestMapping(value = "/getGames", method = RequestMethod.GET)
@@ -130,6 +141,7 @@ public class MainpageController {
         response.setResult(result);
         AskTimes += 1;
 
+        response.setStatus("200");
         return response;
     }
 
@@ -158,10 +170,11 @@ public class MainpageController {
         response.setResult(result);
         AskTimes += 1;
 
+        response.setStatus("200");
         return response;
     }
 
-    @RequestMapping(value = "/resetGamesByTitle", method = RequestMethod.GET)
+
     public Response resetGamesByTitle(String keyWords){
 
         Response response = new Response();
@@ -181,10 +194,10 @@ public class MainpageController {
         AskTimes+=1;
 
         response.setResult(result);
+        response.setStatus("200");
         return response;
     }
 
-    @RequestMapping(value = "/resetGamesByCate", method = RequestMethod.GET)
     public Response resetGamesByCate(Integer cateId){
         Response response=new Response();
         AskTimes=0;
@@ -208,10 +221,10 @@ public class MainpageController {
         response.setResult(result);
         AskTimes+=1;
 
+        response.setStatus("200");
         return response;
     }
 
-    @RequestMapping(value = "/resetGamesByConsole", method = RequestMethod.GET)
     public Response resetGamesByConsole(Integer consoleId){
         Response response=new Response();
         AskTimes=0;
@@ -235,10 +248,10 @@ public class MainpageController {
         response.setResult(result);
         AskTimes+=1;
 
+        response.setStatus("200");
         return response;
     }
 
-    @RequestMapping(value = "/resetGamesByPublisher", method = RequestMethod.GET)
     public Response resetGamesByPublisher(Integer publisherId){
         Response response=new Response();
         AskTimes=0;
@@ -262,6 +275,7 @@ public class MainpageController {
         response.setResult(result);
         AskTimes+=1;
 
+        response.setStatus("200");
         return response;
     }
 
@@ -276,7 +290,7 @@ public class MainpageController {
         AskTimes=0;
         List<Games> tempGamesList=new ArrayList<>();
         for(int i=0;i<gamesList.size();i+=1){
-            if(gamesList.get(i).getTitle().contains(keyWords)){
+            if(gamesList.get(i).getTitle().toLowerCase().contains(keyWords.toLowerCase())){
                 tempGamesList.add(gamesList.get(i));
             }
         }
@@ -344,12 +358,14 @@ public class MainpageController {
     }
 
     //Publisher information
+    @RequestMapping(value = "/getPublisherInfo", method = RequestMethod.GET)
     public Response getPublisherInfo(@RequestParam(value = "publisherId") Integer publisherId){
         Response response=new Response();
         Publishers publisher=publishersMapper.selectByPrimaryKey(publisherId);
-        List<Publishers> result=new ArrayList<>();
-        result.add(publisher);
+        List<PublisherService.PublishersInfo> result=new ArrayList<>();
+        result.add(publisherService.convertToPublisherInfo(publisher));
         response.setResult(result);
+        response.setStatus("200");
         return response;
     }
 }

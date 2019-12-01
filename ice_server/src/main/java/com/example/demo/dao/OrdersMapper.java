@@ -1,8 +1,11 @@
 package com.example.demo.dao;
 
 import com.example.demo.entity.Orders;
-import org.springframework.stereotype.Repository;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
 @Mapper
 @Repository
 public interface OrdersMapper {
@@ -19,4 +22,6 @@ public interface OrdersMapper {
     int updateByPrimaryKey(Orders record);
 
     Integer orderNumOf(Integer userId);
+
+    List<Orders> selectByPublisherId(Integer publisherId);
 }

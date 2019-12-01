@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.demo.dao.PublishersMapper;
+import com.example.demo.entity.Publishers;
 import com.example.demo.entity.Response;
 import com.example.demo.entity.Users;
+import com.example.demo.service.PublisherService;
 import com.example.demo.service.SessionService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,10 @@ public class LoginController {
     private UserService userService;
     @Autowired
     private SessionService sessionService;
+    @Autowired
+    private PublishersMapper publishersMapper;
+    @Autowired
+    private PublisherService publisherService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Response login(@RequestBody Users user, HttpSession session) {
@@ -65,6 +72,34 @@ public class LoginController {
         response.setError(session.getId());
         return response;
     }
+
+    @RequestMapping(value = "/publisherLogin", method = RequestMethod.POST)
+    public Response publisherLogin(@RequestBody Publishers publisher, HttpSession session) {
+        Response response = new Response();
+
+        if (!Objects.equals(publisherService.Exist(publisher.getPublisherName()).getStatus(), "200")) {
+            return publisherService.Exist(publisher.getPublisherName());
+        }
+        //List <Users> users= usersMapper.SELECT();
+        Publishers publisherRecord=publishersMapper.selectByName(publisher.getPublisherName()).get(0);
+        if (!publisher.getPwd().equals(publisherRecord.getPwd())) {
+            response.setStatus("403");
+            response.setError("Wrong password !");
+            return response;
+        }
+
+        session.setMaxInactiveInterval(-1);
+
+        session.setAttribute("id", publisherRecord.getPublisherId());
+
+        //System.out.println(session.getAttribute("id"));
+
+        response.setStatus("200");
+
+        response.setError(session.getId());
+        return response;
+    }
+
 
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
@@ -137,7 +172,7 @@ public class LoginController {
     }
 
     @RequestMapping(value="/updateAvatar",method = RequestMethod.POST)
-    public Response updateAvatar(@RequestParam("file") MultipartFile avatarFile,HttpSession session){
+    public Response updateAvatar(@RequestParam("file") MultipartFile avatarFile, HttpSession session){
         Response response = new Response();
         //System.out.println(session.getAttribute("id"));
         if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
