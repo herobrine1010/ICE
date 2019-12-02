@@ -83,7 +83,7 @@ public class MainPageController {
     }
 
     @RequestMapping(value = "/getOrderNum", method = RequestMethod.GET)
-    public Response getOderNum(HttpSession session){
+    public Response getOrderNum(HttpSession session){
         Response response = new Response();
 
         if(sessionService.auth(session).getStatus()!="200") {

@@ -24,4 +24,6 @@ public interface OrdersMapper {
     Integer orderNumOf(Integer userId);
 
     List<Orders> selectByPublisherId(Integer publisherId);
+
+    List<Orders> selectByUserId(Integer userId);
 }

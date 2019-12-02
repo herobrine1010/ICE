@@ -484,7 +484,9 @@ public class PublisherPageController {
         Orders orders=new Orders();
         orders.setOrderId(order_id);
         if(status!=null){
-            orders.setStatus(status);
+            if(status>=0&&status<=4){
+                orders.setStatus(status);
+            }
         }
         if(price!=null){
             orders.setPrice(price);
