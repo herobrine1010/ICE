@@ -2,8 +2,8 @@ package com.example.demo.dao;
 
 import com.example.demo.entity.PlayedOn;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -19,4 +19,6 @@ public interface PlayedOnMapper {
     List<PlayedOn> selectByConsoleId(Integer consoleId);
 
     PlayedOn selectByPrimaryKey(@Param("gameId") Integer gameId, @Param("consoleId") Integer consoleId);
+
+    List<PlayedOn> selectByGameId(Integer gameId);
 }

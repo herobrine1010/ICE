@@ -44,4 +44,9 @@
     where PUBLISHER_ID = #{publisherId,jdbcType=INTEGER}
       and GAME_ID = #{gameId,jdbcType=INTEGER}
   </select>
+  <select id="selectByGameId" parameterType="map" resultMap="BaseResultMap">
+    select *
+    from sale_game
+    where GAME_ID = #{gameId,jdbcType=INTEGER}
+  </select>
 </mapper>

@@ -148,7 +148,7 @@ insert into has_tag values(2, 47);
 /*GAME 3*/
 insert into games(GAME_ID, TITLE, PRICE, DISCOUNT, RELEASE_DATE, PRE_ORDER, RATE_COUNT, ON_SALE) values(0, 'The Last Of Us Remastered', 19.99, false, '2014-07-29', false, 0, true);
 insert into sale_game values(2, 3);
-insert into played_on values(2, 2);
+insert into played_on values(3, 2);
 insert into belong values(3, 2);
 insert into has_tag values(3, 2);
 insert into has_tag values(3, 3);

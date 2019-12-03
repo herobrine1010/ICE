@@ -108,6 +108,7 @@ create table ORDERS
    STATUS               int,
    USER_ID              int not null,
    GAME_ID              int not null,
+   price                float
    primary key (ORDER_ID),
    index (GAME_ID),
    index (USER_ID),
@@ -141,6 +142,7 @@ create table REVIEWS
 (
    REVIEW_ID            int not null,
    CONTENT              text,
+   REVIEW_DATE          date
    primary key (REVIEW_ID)
 );
 
