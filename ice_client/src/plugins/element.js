@@ -27,7 +27,20 @@ import {
   Tag,
   Alert,
   Steps,
-  Step
+  Step,
+  Radio,
+  RadioButton,
+  RadioGroup,
+  Checkbox,
+  CheckboxButton,
+  CheckboxGroup,
+  TabPane,
+  Tabs,
+  Upload,
+  Cascader,
+  Select,
+  Option,
+  DatePicker
 } from 'element-ui'
 
 Vue.use(Button)
@@ -56,6 +69,19 @@ Vue.use(Tag)
 Vue.use(Alert)
 Vue.use(Steps)
 Vue.use(Step)
+Vue.use(Radio)
+Vue.use(RadioButton)
+Vue.use(RadioGroup)
+Vue.use(Checkbox)
+Vue.use(CheckboxButton)
+Vue.use(CheckboxGroup)
+Vue.use(TabPane)
+Vue.use(Tabs)
+Vue.use(Upload)
+Vue.use(Cascader)
+Vue.use(Select)
+Vue.use(Option)
+Vue.use(DatePicker)
 Vue.component(MessageBox.name, MessageBox)
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
