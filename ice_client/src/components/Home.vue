@@ -4,7 +4,7 @@
     <el-header>
       <div>
         <img src="../assets/heima.png" alt />
-        <span>电商后台管理系统</span>
+        <span>ICE商家管理系统</span>
       </div>
       <el-button type="info" @click="logout">退出</el-button>
     </el-header>
@@ -69,7 +69,9 @@ export default {
           id: '1',
           authName: '用户管理',
           icon: 'el-icon-s-custom',
-          children: [{ id: 11, authName: '用户列表', path: 'users' }]
+          children: [
+            { id: 11, authName: '用户列表', path: 'users' },
+            { id: 12, authName: '个人信息', path: 'infor' }]
         },
         {
           id: '2',
@@ -86,8 +88,8 @@ export default {
           icon: 'el-icon-s-goods',
           children: [
             { id: 31, authName: '商品列表', path: 'goods' },
-            { id: 32, authName: '分类参数', path: 'dududu' },
-            { id: 33, authName: '商品分类', path: 'categories' }
+            { id: 32, authName: '上架商品', path: 'add' },
+            { id: 33, authName: '标签管理', path: 'tags' }
           ]
         },
         {
