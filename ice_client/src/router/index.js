@@ -9,11 +9,14 @@ import Roles from '../components/power/Roles.vue'
 import Cate from '../components/goods/Cate.vue'
 import GoodsList from '../components/goods/List.vue'
 import Add from '../components/goods/Add.vue'
+import Main from '../components/Main.vue'
+import GoodsDetail from '../components/common/GoodsDetail'
+import MainIndex from '../components/MainIndex'
 
 Vue.use(VueRouter)
 
 const originalPush = VueRouter.prototype.push
-VueRouter.prototype.push = function push(location) {
+VueRouter.prototype.push = function push (location) {
   return originalPush.call(this, location).catch(err => err)
 }
 
@@ -32,6 +35,15 @@ const routes = [
       { path: '/categories', component: Cate },
       { path: '/goods', component: GoodsList },
       { path: '/goods/add', component: Add }
+    ]
+  },
+  {
+    path: '/main',
+    component: Main,
+    redirect: '/MainIndex',
+    children: [
+      { path: '/MainIndex', component: MainIndex },
+      { path: '/GoodsDetail/:id', component: GoodsDetail }
     ]
   }
 ]

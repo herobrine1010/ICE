@@ -23,6 +23,7 @@
         </el-form-item>
         <!-- 按钮区域 -->
         <el-form-item class="btns">
+          <el-button type="primary" plain  @click="enterUserInterface">用户界面</el-button>
           <el-button type="primary" @click="login">登录</el-button>
           <el-button type="info" @click="resetLoginForm">重置</el-button>
         </el-form-item>
@@ -33,7 +34,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       // 这是登录表单的数据绑定对象
       loginForm: {
@@ -57,15 +58,18 @@ export default {
   },
   methods: {
     // 点击重置按钮，重置登录表单
-    resetLoginForm() {
+    resetLoginForm () {
       this.$refs.loginFormRef.resetFields()
     },
-    login() {
+    login () {
       this.$refs.loginFormRef.validate(valid => {
         if (!valid) return this.$message.error('登录失败')
         this.$message.success('登录成功')
         this.$router.push('/home')
       })
+    },
+    enterUserInterface () {
+      this.$router.push('/main')
     }
   }
 }

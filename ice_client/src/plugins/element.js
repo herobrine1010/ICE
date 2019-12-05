@@ -27,7 +27,14 @@ import {
   Tag,
   Alert,
   Steps,
-  Step
+  Step,
+  Image,
+  Carousel,
+  CarouselItem,
+  InfiniteScroll,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu
 } from 'element-ui'
 
 Vue.use(Button)
@@ -56,6 +63,13 @@ Vue.use(Tag)
 Vue.use(Alert)
 Vue.use(Steps)
 Vue.use(Step)
+Vue.use(Image)
+Vue.use(Carousel)
+Vue.use(CarouselItem)
+Vue.use(InfiniteScroll)
+Vue.use(Dropdown)
+Vue.use(DropdownItem)
+Vue.use(DropdownMenu)
 Vue.component(MessageBox.name, MessageBox)
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
