@@ -47,7 +47,11 @@ import {
   InfiniteScroll,
   Dropdown,
   DropdownItem,
-  DropdownMenu
+  DropdownMenu,
+  InputNumber,
+  Divider,
+  Avatar,
+  Rate
 } from 'element-ui'
 
 Vue.use(Button)
@@ -96,6 +100,10 @@ Vue.use(InfiniteScroll)
 Vue.use(Dropdown)
 Vue.use(DropdownItem)
 Vue.use(DropdownMenu)
+Vue.use(InputNumber)
+Vue.use(Divider)
+Vue.use(Avatar)
+Vue.use(Rate)
 Vue.component(MessageBox.name, MessageBox)
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

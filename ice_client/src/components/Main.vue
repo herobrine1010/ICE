@@ -15,36 +15,29 @@
     :default-active="activeIndex2"
     :class="headerFixed?'isFixed':''"
     mode="horizontal"
-    @select="handleSelect"
     background-color="#545c64"
     text-color="#fff"
     active-text-color="#409EFE">
     <!-- 一级菜单 -->
-    <el-submenu :index="item.id+''" v-for="item in menuList" :key="item.id">
-      <!-- 一级菜单的模版区域 -->
+    <el-submenu :index="item.id" v-for="(item, i) in menuList" :key="i">
+      <!-- 一级菜单 -->
       <template slot="title">
-        <!-- 图标 -->
-<!--        <i :class="item.icon"></i>-->
-        <!-- 文本 -->
         <span>{{ item.authName }}</span>
       </template>
       <!-- 二级菜单 -->
       <el-menu-item
-        :index="'/'+subItem.path+''"
-        v-for="subItem in item.children"
-        :key="subItem.id"
+        :index="subItem.id"
+        v-for="(subItem, i) in item.children"
+        :key="i"
       >
         <template slot="title">
-          <!-- 图标 -->
-<!--          <i class="el-icon-menu"></i>-->
-          <!-- 文本 -->
           <span>{{ subItem.authName }}</span>
         </template>
       </el-menu-item>
     </el-submenu>
-    <el-menu-item index="4">
-    <el-input placeholder="请输入内容">
-      <el-button slot="append" icon="el-icon-search"></el-button>
+    <el-menu-item class="search-menu" index="4" >
+    <el-input class="search-input" placeholder="请输入内容">
+      <el-button  @click="search" class="search-button" slot="append" icon="el-icon-search"></el-button>
     </el-input>
     </el-menu-item>
     <el-menu-item index="5">用户</el-menu-item>
@@ -80,9 +73,9 @@ export default {
           authName: '游戏分类',
           // TODO 获取分类列表
           children: [
-            { id: 11, authName: '类别1', path: '' },
-            { id: 12, authName: '类别2', path: '' },
-            { id: 13, authName: '类别3', path: '' }
+            { id: '1-1', authName: '类别1', path: '类别1' },
+            { id: '1-2', authName: '类别2', path: '类别2' },
+            { id: '1-3', authName: '类别3', path: '类别3' }
           ]
         },
         {
@@ -90,9 +83,9 @@ export default {
           authName: '游戏平台',
           // TODO 获取平台列表
           children: [
-            { id: 21, authName: '平台1', path: '' },
-            { id: 22, authName: '平台2', path: '' },
-            { id: 23, authName: '平台3', path: '' }
+            { id: '2-1', authName: '平台1', path: '' },
+            { id: '2-2', authName: '平台2', path: '' },
+            { id: '2-3', authName: '平台3', path: '' }
           ]
         },
         {
@@ -100,23 +93,23 @@ export default {
           authName: '发行商',
           // TODO 获取发行商列表
           children: [
-            { id: 31, authName: '发行商1', path: '' },
-            { id: 32, authName: '发行商2', path: '' },
-            { id: 33, authName: '发行商3', path: '' }
+            { id: '3-1', authName: '发行商1', path: '' },
+            { id: '3-2', authName: '发行商2', path: '' },
+            { id: '3-3', authName: '发行商3', path: '' }
           ]
         }
       ]
     }
   },
   methods: {
-    handleSelect (key, keyPath) {
-      console.log(key, keyPath)
-    },
     handleScroll () {
       // 兼容性，获取页面滚动距离
       var scrollTop = window.pageYOffset || document.getElementById('main').scrollTop || document.body.scrollTop
       // 判断页面滚动的距离是否大于吸顶元素的位置
       this.headerFixed = scrollTop > this.offsetTop
+    },
+    search () {
+      console.log('search')
     }
   },
   mounted () {
@@ -180,5 +173,18 @@ export default {
   }
   .infiniteScroll{
     display: none;
+  }
+  .search-menu{
+    border-bottom: 0 !important;
+  }
+  .search-menu:hover{
+    background-color: #545c64 !important;
+    border-bottom: 0 !important;
+  }
+  .search-input{
+    height: 40px !important;
+  }
+  .search-button{
+    height: 45px;
   }
 </style>
