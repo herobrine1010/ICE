@@ -14,6 +14,7 @@ import Order from '../components/order/Order.vue'
 import Main from '../components/Main.vue'
 import GoodsDetail from '../components/common/GoodsDetail'
 import MainIndex from '../components/MainIndex'
+import Personpage from '../components/personpage/Personpage'
 
 Vue.use(VueRouter)
 
@@ -47,7 +48,8 @@ const routes = [
     redirect: '/MainIndex',
     children: [
       { path: '/MainIndex', component: MainIndex },
-      { path: '/GoodsDetail/:id', component: GoodsDetail }
+      { path: '/GoodsDetail/:id', component: GoodsDetail },
+      { path: '/personpage', component: Personpage }
     ]
   }
 ]

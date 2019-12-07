@@ -41,7 +41,7 @@
       <el-button  @click="search" class="search-button" slot="append" icon="el-icon-search"></el-button>
     </el-input>
     </el-menu-item>
-    <el-menu-item index="5">用户</el-menu-item>
+    <el-menu-item index="5" >用户</el-menu-item>
     <el-menu-item index="6">订单</el-menu-item>
     <el-menu-item index="7">购物车</el-menu-item>
   </el-menu>
@@ -67,7 +67,7 @@ export default {
       offsetTop: 0,
       offsetHeight: 0,
       headerFixed: false,
-      isMainIndex: true,
+      isMainIndex: false,
       menuList: [
         {
           id: '1',
@@ -104,7 +104,12 @@ export default {
   },
   methods: {
     handleSelect (key, keyPath) {
-      console.log(key, keyPath)
+      console.log(key)
+      switch (key) {
+        case '5': {
+          this.$router.push('/personpage')
+        }
+      }
     },
     handleScroll () {
       // 兼容性，获取页面滚动距离
@@ -130,6 +135,7 @@ export default {
   },
   // 每次更新组件，检查路由变化
   updated () {
+    console.log(this.isMainIndex)
     if (this.$route.path.indexOf('MainIndex') === -1) {
       this.isMainIndex = false
     } else {
@@ -142,9 +148,9 @@ export default {
   },
   watch: {
     $route (newRouter, oldRouter) {
-      console.log(this.$route.path)
-      console.log(newRouter.path)
-      console.log(newRouter.path.indexOf('MainIndex'))
+      // console.log(this.$route.path)
+      // console.log(newRouter.path)
+      // console.log(newRouter.path.indexOf('MainIndex'))
       if (newRouter.path.indexOf('MainIndex') === -1) {
         this.isMainIndex = false
         console.log(this.isMainIndex)
