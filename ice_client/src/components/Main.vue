@@ -15,6 +15,7 @@
     :default-active="activeIndex2"
     :class="headerFixed?'isFixed':''"
     mode="horizontal"
+    @select="handleSelect"
     background-color="#545c64"
     text-color="#fff"
     active-text-color="#409EFE">
@@ -40,7 +41,7 @@
       <el-button  @click="search" class="search-button" slot="append" icon="el-icon-search"></el-button>
     </el-input>
     </el-menu-item>
-    <el-menu-item index="5">用户</el-menu-item>
+    <el-menu-item index="5" >用户</el-menu-item>
     <el-menu-item index="6">订单</el-menu-item>
     <el-menu-item index="7">购物车</el-menu-item>
   </el-menu>
@@ -50,15 +51,15 @@
     <!-- 路由占位符 -->
     <router-view></router-view>
   </el-main>
-  <InfiniteScroll :class="{'infiniteScroll':!isMainIndex}"></InfiniteScroll>
+  <!-- <InfiniteScroll :class="{'infiniteScroll':!isMainIndex}"></InfiniteScroll> -->
   </div>
 </template>
 
 <script>
-import InfiniteScroll from './common/InfiniteScroll'
+// import InfiniteScroll from './common/InfiniteScroll'
 export default {
   name: 'Main',
-  components: { InfiniteScroll },
+  // components: { InfiniteScroll },
   data () {
     return {
       activeIndex: '1',
@@ -66,7 +67,7 @@ export default {
       offsetTop: 0,
       offsetHeight: 0,
       headerFixed: false,
-      isMainIndex: true,
+      isMainIndex: false,
       menuList: [
         {
           id: '1',
@@ -102,6 +103,23 @@ export default {
     }
   },
   methods: {
+    handleSelect (key, keyPath) {
+      console.log(key)
+      switch (key) {
+        case '5':
+          console.log(55555555)
+          this.$router.push('/PersonPage')
+          break
+        case '6':
+          console.log(66666666)
+          this.$router.push('/PersonOrder')
+          break
+        case '7':
+          console.log(77777777)
+          this.$router.push('/ShoppingCart')
+          break
+      }
+    },
     handleScroll () {
       // 兼容性，获取页面滚动距离
       var scrollTop = window.pageYOffset || document.getElementById('main').scrollTop || document.body.scrollTop
@@ -126,6 +144,7 @@ export default {
   },
   // 每次更新组件，检查路由变化
   updated () {
+    console.log(this.isMainIndex)
     if (this.$route.path.indexOf('MainIndex') === -1) {
       this.isMainIndex = false
     } else {
@@ -138,9 +157,9 @@ export default {
   },
   watch: {
     $route (newRouter, oldRouter) {
-      console.log(this.$route.path)
-      console.log(newRouter.path)
-      console.log(newRouter.path.indexOf('MainIndex'))
+      // console.log(this.$route.path)
+      // console.log(newRouter.path)
+      // console.log(newRouter.path.indexOf('MainIndex'))
       if (newRouter.path.indexOf('MainIndex') === -1) {
         this.isMainIndex = false
         console.log(this.isMainIndex)
