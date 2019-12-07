@@ -51,15 +51,15 @@
     <!-- 路由占位符 -->
     <router-view></router-view>
   </el-main>
-  <InfiniteScroll :class="{'infiniteScroll':!isMainIndex}"></InfiniteScroll>
+  <!-- <InfiniteScroll :class="{'infiniteScroll':!isMainIndex}"></InfiniteScroll> -->
   </div>
 </template>
 
 <script>
-import InfiniteScroll from './common/InfiniteScroll'
+// import InfiniteScroll from './common/InfiniteScroll'
 export default {
   name: 'Main',
-  components: { InfiniteScroll },
+  // components: { InfiniteScroll },
   data () {
     return {
       activeIndex: '1',
@@ -106,9 +106,18 @@ export default {
     handleSelect (key, keyPath) {
       console.log(key)
       switch (key) {
-        case '5': {
-          this.$router.push('/personpage')
-        }
+        case '5':
+          console.log(55555555)
+          this.$router.push('/PersonPage')
+          break
+        case '6':
+          console.log(66666666)
+          this.$router.push('/PersonOrder')
+          break
+        case '7':
+          console.log(77777777)
+          this.$router.push('/ShoppingCart')
+          break
       }
     },
     handleScroll () {

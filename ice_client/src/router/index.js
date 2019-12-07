@@ -14,7 +14,9 @@ import Order from '../components/order/Order.vue'
 import Main from '../components/Main.vue'
 import GoodsDetail from '../components/common/GoodsDetail'
 import MainIndex from '../components/MainIndex'
-import Personpage from '../components/personpage/Personpage'
+import PersonPage from '../components/personpage/PersonPage'
+import PersonOrder from '../components/personorder/PersonOrder.vue'
+import ShoppingCart from '../components/shoppingcart/ShoppingCart.vue'
 
 Vue.use(VueRouter)
 
@@ -49,7 +51,9 @@ const routes = [
     children: [
       { path: '/MainIndex', component: MainIndex },
       { path: '/GoodsDetail/:id', component: GoodsDetail },
-      { path: '/personpage', component: Personpage }
+      { path: '/PersonPage', component: PersonPage },
+      { path: '/PersonOrder', component: PersonOrder },
+      { path: '/ShoppingCart', component: ShoppingCart }
     ]
   }
 ]
