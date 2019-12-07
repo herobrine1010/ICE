@@ -24,7 +24,7 @@
         <!-- 按钮区域 -->
         <el-form-item class="btns">
           <el-button type="primary" plain  @click="enterUserInterface">用户界面</el-button>
-          <el-button type="primary" @click="login">登录</el-button>
+          <el-button type="primary" @click="publisherLogin">登录</el-button>
           <el-button type="info" @click="resetLoginForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -33,7 +33,10 @@
 </template>
 
 <script>
+import { mixin } from '../mixins'
+
 export default {
+  mixins: [mixin],
   data () {
     return {
       // 这是登录表单的数据绑定对象
@@ -61,10 +64,27 @@ export default {
     resetLoginForm () {
       this.$refs.loginFormRef.resetFields()
     },
-    login () {
+    publisherLogin () {
       this.$refs.loginFormRef.validate(valid => {
+        console.log(valid)
         if (!valid) return this.$message.error('登录失败')
-        this.$message.success('登录成功')
+        this.$axios.post(this.HOST + 'login', this.loginForm)
+          .then(response => {
+            switch (response.status) {
+              case '200':
+                this.$message.success('登录成功')
+                break
+              case '404':
+                this.$message.error('用户不存在')
+                break
+              default:
+                this.$message.error('密码错误')
+                break
+            }
+          })
+          .catch(response => {
+            this.$message.error('登陆失败')
+          })
         this.$router.push('/home')
       })
     },
