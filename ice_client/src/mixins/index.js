@@ -2,14 +2,17 @@ import axios from 'axios'
 export const mixin = {
   data () {
     return {
-      HOST: 'http://localhost:8080'
+      HOST: 'http://localhost:8011'
     }
   },
   methods: {
-    login (userInfo) {
-      axios.get(this.HOST + 'login')
+    publisherLogin (userInfo) {
+      axios.post(this.HOST + 'login', userInfo)
         .then(response => {
-          console.log(response)
+          return response.status
+        })
+        .catch(response => {
+          this.$message.error('登陆失败')
         })
     }
   }
