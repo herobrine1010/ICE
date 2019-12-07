@@ -67,7 +67,7 @@ export default {
       offsetTop: 0,
       offsetHeight: 0,
       headerFixed: false,
-      isMainIndex: false,
+      isMainIndex: true,
       menuList: [
         {
           id: '1',
@@ -134,7 +134,7 @@ export default {
     })
   },
   // 每次更新组件，检查路由变化
-  updated () {
+  created () {
     console.log(this.isMainIndex)
     if (this.$route.path.indexOf('MainIndex') === -1) {
       this.isMainIndex = false

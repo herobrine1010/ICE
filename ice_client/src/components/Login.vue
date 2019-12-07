@@ -63,6 +63,7 @@ export default {
     },
     login () {
       this.$refs.loginFormRef.validate(valid => {
+        console.log(valid)
         if (!valid) return this.$message.error('登录失败')
         this.$message.success('登录成功')
         this.$router.push('/home')
