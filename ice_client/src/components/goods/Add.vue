@@ -105,7 +105,7 @@
               :on-remove="handleRemove"
               list-type="picture"
               :on-success="handleSuccess"
-              limit="1"
+              :limit="1"
             >
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
@@ -119,7 +119,7 @@
               :on-remove="handleRemove"
               list-type="picture"
               :on-success="handleSuccess"
-              limit="5"
+              :limit="5"
             >
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>

@@ -22,17 +22,6 @@
               {{ scope.row.price }}
             </template>
           </el-table-column>
-          <el-table-column label="Count">
-            <template slot-scope="scope">
-              <el-input-number
-                v-model="scope.row.count"
-                @change="handleChange(scope.row.price, scope.row.count, scope.row.total_price)"
-                :min="1"
-                :max="5"
-              ></el-input-number>
-            </template>
-          </el-table-column>
-          <el-table-column prop="total_price" label="Total"></el-table-column>
         </el-table>
       </template>
     </el-card>
@@ -44,39 +33,33 @@ export default {
     return {
       shoppingCartList: [{
         gamename: 'SuperMario',
-        price: '19.90',
-        count: 3,
-        total_price: '19.90'
+        consolename: 'PS4',
+        category: 'Adventure',
+        price: '19.90'
       },
       {
         gamename: 'SuperMario',
-        price: '19.90',
-        count: 1,
-        total_price: '19.90'
+        consolename: 'PS4',
+        category: 'Adventure',
+        price: '19.90'
       },
       {
         gamename: 'SuperMario',
-        price: '19.90',
-        count: 1,
-        total_price: '19.90'
+        consolename: 'PS4',
+        category: 'Adventure',
+        price: '19.90'
       },
       {
         gamename: 'SuperMario',
-        price: '19.90',
-        count: 1,
-        total_price: '19.90'
+        consolename: 'PS4',
+        category: 'Adventure',
+        price: '19.90'
       },
       {
         gamename: 'SuperMario',
-        price: '19.90',
-        count: 1,
-        total_price: '19.90'
-      },
-      {
-        gamename: 'SuperMario',
-        price: '19.90',
-        count: 1,
-        total_price: '19.90'
+        consolename: 'PS4',
+        category: 'Adventure',
+        price: '19.90'
       }],
       multipleSelection: []
     }

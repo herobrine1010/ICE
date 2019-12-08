@@ -116,7 +116,7 @@ export default {
     getPublisherList () { },
     // 监听修改游戏对话框的关闭事件
     editDialogClosed () {
-      this.$refs.editFormRef.resetFields()
+      // this.$refs.editFormRef.resetFields()
     },
     // 取消对个人信息的修改
     cancelEditPublisherInfo () {
@@ -150,8 +150,9 @@ export default {
       //   // 提示修改成功
       //   this.$message.success('更新用户信息成功！')
       // })
+      console.log(this.editForm)
       // 关闭对话框
-      this.editDialogVisible = false
+      // this.editDialogVisible = false
       // 刷新数据列表
       this.getPublisherList()
       // 提示修改成功

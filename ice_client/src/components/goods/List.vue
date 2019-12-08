@@ -336,6 +336,7 @@ export default {
       }
       // 删除函数----------------------------------------
       // 提示删除成功
+      console.log(gameid)
       this.$message.success('delete game successful')
       this.getGameList()
     }
