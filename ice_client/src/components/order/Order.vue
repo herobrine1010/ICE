@@ -11,8 +11,8 @@
     <el-card>
       <el-row>
         <el-col :span="8">
-          <el-input placeholder="请输入内容">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable>
+            <el-button slot="append" icon="el-icon-search" @click="searchOrders(queryInfo.query)"></el-button>
           </el-input>
         </el-col>
       </el-row>
@@ -181,15 +181,15 @@ export default {
       ],
       editDialogVisible: false,
       editForm: {
-        orderid: '47',
-        gamename: 'SuperMario',
-        consolename: 'PS4',
-        price: '19.90',
-        status: 0,
-        username: 'budi',
-        address: 'Tongji University',
-        contacttel: '17717924664',
-        date: '2019-11-28'
+        orderid: '',
+        gamename: '',
+        consolename: '',
+        price: '',
+        status: null,
+        username: '',
+        address: '',
+        contacttel: '',
+        date: ''
       },
       // 修改表单的验证规则对象
       editFormRules: {
@@ -217,38 +217,80 @@ export default {
           this.total = response.data.result[0]
         })
     },
+    // 向orderList中放入数据
+    putDataIntoOrderList (response) {
+      let result = response.data.result
+      for (let index in result) {
+        this.orderList.push({})
+        this.orderList[index].orderid = result[index].order_id
+        this.orderList[index].gamename = result[index].game_name
+        this.orderList[index].consolename = result[index].console_name
+        this.orderList[index].price = result[index].price
+        this.orderList[index].status = result[index].status
+        this.orderList[index].username = result[index].user_name
+        this.orderList[index].address = result[index].address
+        this.orderList[index].contacttel = result[index].contact_tel
+        this.orderList[index].date = result[index].order_date.split('T')[0]
+      }
+    },
     // 根据分页获取对应的商品列表
     getOrderList () {
+      this.orderList = []
       this.$axios.get('/api//initOrderList', { params: { pageSize: this.queryInfo.pagesize } })
         .then(response => {
+          // console.log(response)
+          this.putDataIntoOrderList(response)
+        })
+    },
+    jumpPage (targetPage) {
+      this.orderList = []
+      this.$axios.get('/api/jumpToOrderPage', { params: { targetPage: targetPage, pageSize: this.queryInfo.pagesize } })
+        .then(response => {
           console.log(response)
-          let result = response.data.result
-          for (let index in result) {
-            this.orderList.push({})
-            this.orderList[index].orderid = result[index].order_id
-            this.orderList[index].gamename = result[index].game_name
-            this.orderList[index].consolename = result[index].console_name
-            this.orderList[index].price = result[index].price
-            this.orderList[index].status = result[index].status
-            this.orderList[index].username = result[index].user_name
-            this.orderList[index].address = result[index].address
-            this.orderList[index].contacttel = result[index].contacttel
-            this.orderList[index].date = result[index].order_date.split('T')[0]
-          }
+          this.putDataIntoOrderList(response)
+        })
+    },
+    searchOrders (query) {
+      this.orderList = []
+      this.$axios.get('/api/searchOrder', { params: { query: query, currentPage: 0, pageSize: this.queryInfo.pagesize } })
+        .then(response => {
+          console.log(response)
+          this.getOrdersNumber()
+          this.putDataIntoOrderList(response)
         })
     },
     // 监听 pagesize 改变的事件
     handleSizeChange (newSize) {
       this.queryInfo.pagesize = newSize
-      this.getOrderList()
+      if (this.queryInfo.query === '') {
+        this.getOrderList()
+      } else {
+        this.searchOrders(this.queryInfo.query)
+      }
     },
     // 监听 页码值 改变的事件
     handleCurrentChange (newPage) {
       this.queryInfo.pagenum = newPage
-      this.getOrderList()
+      this.jumpPage(newPage - 1)
     },
     // 展示编辑订单的对话框
     showEditDialog (orderid) {
+      for (let index in this.orderList) {
+        if (orderid === this.orderList[index].orderid) {
+          console.log(this.orderList[index])
+          this.editForm.orderid = this.orderList[index].orderid
+          this.editForm.gamename = this.orderList[index].gamename
+          this.editForm.consolename = this.orderList[index].consolename
+          this.editForm.price = this.orderList[index].price
+          this.editForm.status = this.orderList[index].status
+          this.editForm.username = this.orderList[index].username
+          this.editForm.address = this.orderList[index].address
+          this.editForm.contacttel = this.orderList[index].contacttel
+          this.editForm.date = this.orderList[index].date
+          console.log(this.editForm)
+          break
+        }
+      }
       // 调用 API 接口，获取选中订单的信息，存储到修改表格 editForm 中
       // // console.log(id)
       // const { data: res } = await this.$http.get('orders/' + id)
@@ -271,37 +313,37 @@ export default {
     },
     // 修改订单信息并提交
     editOrderInfo () {
-      // 调用 API 接口，发起修改订单信息的请求，根据返回的 response 进行对应的操作
-      // this.$refs.editFormRef.validate(async valid => {
-      //   if (!valid) return
-      //   // 发起修改订单信息的数据请求
-      //   const { data: res } = await this.$http.put(
-      //     'users/' + this.editForm.id,
-      //     {
-      //       email: this.editForm.email,
-      //       mobile: this.editForm.mobile
-      //     }
-      //   )
-
-      //   if (res.meta.status !== 200) {
-      //     return this.$message.error('更新用户信息失败！')
-      //   }
-
-      //   // 关闭对话框
-      //   this.editDialogVisible = false
-      //   // 刷新数据列表
-      //   this.getUserList()
-      //   // 提示修改成功
-      //   this.$message.success('更新用户信息成功！')
-      // })
+      this.$axios.get('/api/alterOrder', { params: { order_id: this.editForm.orderid, price: this.editForm.price, address: this.editForm.address, contact_tel: this.editForm.contacttel } })
+        .then(response => {
+          // 刷新数据列表
+          this.getOrderList()
+          if (response.data.status === '200') {
+            // 提示修改成功
+            this.$message.success('Edit order info success')
+          } else {
+            this.$message.error('Edit order info fail')
+          }
+        })
+        .catch(() => {
+          this.$message.error('Edit order info fail')
+        })
       // 关闭对话框
       this.editDialogVisible = false
-      // 刷新数据列表
-      this.getOrderList()
-      // 提示修改成功
-      this.$message.success('Edit order info success')
     },
     deliver (orderid) {
+      console.log(orderid)
+      this.$axios.get('/api/deliverOrder', { params: { order_id: orderid } })
+        .then(response => {
+          if (response.data.status === '200') {
+            this.getOrderList()
+            this.$message.success('Deliver order success')
+          } else {
+            this.$message.error('Deliver order fail')
+          }
+        }).catch(() => {
+          this.$message.error('Deliver order fail')
+        })
+
       // 调用 API 接口，获取选中订单的信息
       // // console.log(id)
       // const { data: res } = await this.$http.get('orders/' + id)
@@ -311,7 +353,6 @@ export default {
       // }
       // res.data.status = 1
       // this.getOrderList()
-      this.$message.success('Deliver order success')
     }
   }
 }

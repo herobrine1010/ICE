@@ -54,8 +54,8 @@
             <el-form-item label="游戏分类" prop="category">
               <el-select v-model="addForm.category" clearable placeholder="请选择">
                 <el-option
-                  v-for="item in catelist"
-                  :key="item.value"
+                  v-for="(item, index) in catelist"
+                  :key="index"
                   :label="item.label"
                   :value="item.value"
                 ></el-option>
@@ -77,7 +77,7 @@
             </el-form-item>
             <el-form-item label="游戏标签">
               <el-checkbox-group v-model="addForm.tags">
-                <el-checkbox-button v-for="tag in tagOptions" :label="tag" :key="tag">{{tag}}</el-checkbox-button>
+                <el-checkbox-button v-for="(tag, index) in tagOptions" :label="tag.tagId" :key="index">{{tag.tagName}}</el-checkbox-button>
               </el-checkbox-group>
             </el-form-item>
           </el-tab-pane>
@@ -105,7 +105,7 @@
               :on-remove="handleRemove"
               list-type="picture"
               :on-success="handleSuccess"
-              limit="1"
+              :limit="1"
             >
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
@@ -119,7 +119,7 @@
               :on-remove="handleRemove"
               list-type="picture"
               :on-success="handleSuccess"
-              limit="5"
+              :limit="5"
             >
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
@@ -193,9 +193,9 @@ export default {
       },
       // 日期选择数据
       pickerOptions: {
-        disabledDate (time) {
-          return time.getTime() > Date.now()
-        },
+        // disabledDate (time) {
+        //   return time.getTime() > Date.now()
+        // },
         shortcuts: [{
           text: '今天',
           onClick (picker) {
@@ -254,7 +254,7 @@ export default {
       // 游戏平台选项
       consoleOptions,
       // 游戏标签选项
-      tagOptions: ['标签1', '标签2', '标签3', '标签4', '标签5', '标签6', '标签7', '标签8'],
+      tagOptions: [],
       // 上传图片的URL地址
       uploadURL: 'https://jsonplaceholder.typicode.com/posts/',
       previewPath: '',
@@ -262,6 +262,7 @@ export default {
     }
   },
   created () {
+    this.getTagsList()
     this.getCateList()
   },
   methods: {
@@ -273,6 +274,14 @@ export default {
       // }
       // this.catelist = res.data
       // console.log(this.catelist)
+    },
+    // 获取所有的tags
+    getTagsList () {
+      this.$axios.get('/api/getAllTags')
+        .then(response => {
+          console.log(response)
+          this.tagOptions = response.data.result
+        })
     },
     beforeTabLeave (activeName, oldActiveName) {
       // console.log('即将离开的标签页名字是:' + oldActiveName)
@@ -353,11 +362,14 @@ export default {
         }
         // 得到分类ID
         let cateID = null
+        console.log('cate', this.addForm.category)
         for (let item in this.catelist) {
-          if (this.addForm.category === this.catelist[item].label) {
-            cateID = item + 1
+          if (this.addForm.category === this.catelist[item].value) {
+            cateID = parseInt(item) + 1
+            break
           }
         }
+        console.log(cateID)
         // 得到平台ID
         let consoleIDList = []
         for (let index in this.addForm.consoles) {
@@ -390,22 +402,41 @@ export default {
               break
           }
         }
+        // 是否打折
+        let isDiscount = null
+        if (this.addForm.discount === 'Off') {
+          isDiscount = 0
+        } else {
+          isDiscount = 1
+        }
+        // 是否预定
+        let isPreOrder = null
+        if (this.addForm.pre_order === 'Off') {
+          isPreOrder = 0
+        } else {
+          isPreOrder = 1
+        }
         let gameAdder = {
           title: this.addForm.game_name,
           price: this.addForm.price,
-          discount: this.addForm.discount,
+          discount: isDiscount,
           release_date: this.addForm.release_date,
-          pre_order: this.addForm.pre_order,
+          pre_order: isPreOrder,
           description: this.addForm.goods_introduce,
           cate_id: cateID,
-          list_console_id: consoleIDList
+          list_console_id: consoleIDList,
+          list_tag_id: this.addForm.tags
         }
+        console.log(this.addForm.tags)
+        console.log(gameAdder)
         this.$axios.post('/api/addGame', gameAdder)
           .then(response => {
             console.log(response)
+            this.$message.success('上架游戏成功')
           })
-
-        this.$message.success('上架游戏成功')
+          .catch(() => {
+            this.$message.error('上架游戏失败')
+          })
         // 执行添加的业务逻辑
         // lodash cloneDeep(obj)
         // const form = _.cloneDeep(this.addForm)

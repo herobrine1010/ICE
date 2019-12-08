@@ -150,7 +150,6 @@ public class PublisherPageController {
     @RequestMapping(value = "/gameNumber", method = RequestMethod.GET)
     public Response gameNumber(HttpSession session){
         Response response=new Response();
-        allGamesList.clear();
         if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
             return sessionService.auth(session);
         }

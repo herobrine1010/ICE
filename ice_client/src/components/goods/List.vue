@@ -10,8 +10,8 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-input placeholder="Please enter content" v-model="queryInfo.query" clearable @click="getGameList">
-            <el-button slot="append" icon="el-icon-search" @click="getGameList"></el-button>
+          <el-input placeholder="Please enter content" v-model="queryInfo.query" clearable>
+            <el-button slot="append" icon="el-icon-search" @click="searchGames(queryInfo.query)"></el-button>
           </el-input>
         </el-col>
       </el-row>
@@ -236,58 +236,100 @@ export default {
     }
   },
   created () {
-    this.getGameList()
     this.getGamesNumber()
+    this.getGameList()
   },
   methods: {
     // 获取游戏总数
     getGamesNumber() {
-      this.$axios.get('/api//gameNumber')
+      this.$axios.get('/api/gameNumber')
         .then(response => {
           this.total = response.data.result[0]
         })
     },
+    //  向gamelist中放入数据
+    putDataIntoGameList(response) {
+      for (let item in response.data.result) {
+        this.gamelist.push({})
+        this.gamelist[item].gameid = response.data.result[item].game_id
+        this.gamelist[item].title = response.data.result[item].title
+        this.gamelist[item].price = response.data.result[item].price
+        if (response.data.result[item].discount === false) {
+          this.gamelist[item].discount = 'Off'
+        } else {
+          this.gamelist[item].discount = 'On'
+        }
+        if (response.data.result[item].average_rate === -1) {
+          this.gamelist[item].average_rate = '无评分'
+        } else {
+          this.gamelist[item].average_rate = response.data.result[item].average_rate
+        }
+        this.gamelist[item].release_date = response.data.result[item].release_date.split('T')[0]
+        if (response.data.result[item].pre_order === false) {
+          this.gamelist[item].pre_order = 'Off'
+        } else {
+          this.gamelist[item].pre_order = 'On'
+        }
+        this.gamelist[item].rate_count = response.data.result[item].rate_count
+        this.gamelist[item].discription = response.data.result[item].discription
+        this.gamelist[item].cover = response.data.result[item].cover
+        this.gamelist[item].picture = response.data.result[item].picture
+        this.gamelist[item].consoles = []
+        for (let consolesItem in response.data.result[item].consoles) {
+          this.gamelist[item].consoles.push('')
+          this.gamelist[item].consoles[consolesItem] = response.data.result[item].consoles[consolesItem].consoleName
+        }
+        this.gamelist[item].category = response.data.result[item].category.cateName
+        this.gamelist[item].tags = response.data.result[item].tags
+      }
+    },
     // 根据分页获取对应的商品列表
     getGameList () {
       this.gamelist = []
-      this.$axios.get('/api//initGamesList', { params: { pageSize: this.queryInfo.pagesize } })
+      this.$axios.get('/api/initGamesList', { params: { pageSize: this.queryInfo.pagesize } })
+        .then(response => {
+          // console.log(response)
+          this.putDataIntoGameList(response)
+          console.log(this.gamelist)
+        })
+    },
+    // 页面跳转请求数据
+    jumpPage (targetPage) {
+      this.gamelist = []
+      this.$axios.get('/api/jumpToGamePage', { params: { targetPage: targetPage, pageSize: this.queryInfo.pagesize } })
         .then(response => {
           console.log(response)
-          for (let item in response.data.result) {
-            this.gamelist.push({})
-            this.gamelist[item].gameid = response.data.result[item].gameid
-            this.gamelist[item].title = response.data.result[item].title
-            this.gamelist[item].price = response.data.result[item].discount
-            if (response.data.result[item].average_rate === -1) {
-              this.gamelist[item].average_rate = '无评分'
-            } else {
-              this.gamelist[item].average_rate = response.data.result[item].average_rate
-            }
-            this.gamelist[item].release_date = response.data.result[item].release_date.split('T')[0]
-            this.gamelist[item].pre_order = response.data.result[item].pre_order
-            this.gamelist[item].rate_count = response.data.result[item].rate_count
-            this.gamelist[item].discription = response.data.result[item].discription
-            this.gamelist[item].cover = response.data.result[item].cover
-            this.gamelist[item].picture = response.data.result[item].picture
-            this.gamelist[item].consoles = []
-            for (let consolesItem in response.data.result[item].consoles) {
-              this.gamelist[item].consoles.push('')
-              this.gamelist[item].consoles[consolesItem] = response.data.result[item].consoles[consolesItem].consoleName
-            }
-            this.gamelist[item].category = response.data.result[item].category.cateName
-            this.gamelist[item].tags = response.data.result[item].tags
-          }
+          this.putDataIntoGameList(response)
+        })
+    },
+    // 搜索商品
+    searchGames (query) {
+      this.gamelist = []
+      this.$axios.get('/api/searchPublishedGames', { params: { query: query, currentPage: 0, pageSize: this.queryInfo.pagesize } })
+        .then(response => {
+          console.log('search', response)
+          this.putDataIntoGameList(response)
+          this.getGamesNumber()
+          console.log(this.gamelist)
         })
     },
     // 监听 pagesize 改变的事件
     handleSizeChange (newSize) {
       this.queryInfo.pagesize = newSize
-      this.getGameList()
+      console.log(this.queryInfo.query)
+      if (this.queryInfo.query === '') {
+        this.getGamesNumber()
+        this.getGameList()
+      } else {
+        console.log(this.queryInfo.query)
+        this.searchGames(this.queryInfo.query)
+        this.getGamesNumber()
+      }
     },
     // 监听 页码值 改变的事件
     handleCurrentChange (newPage) {
       this.queryInfo.pagenum = newPage
-      this.getGameList()
+      this.jumpPage(newPage - 1)
     },
     // 展示编辑游戏的对话框
     showEditDialog (gameid) {
@@ -347,6 +389,7 @@ export default {
     },
     // 根据 Id 删除对应的用户信息
     async removeGameById (gameid) {
+      // console.log(this.gamelist)
       // 弹框询问用户是否删除数据
       const confirmResult = await this.$confirm(
         'This operation will permanently delete the item, whether to continue?',
@@ -363,9 +406,20 @@ export default {
         return this.$message.info('Already cancel the delete')
       }
       // 删除函数----------------------------------------
-      // 提示删除成功
-      this.$message.success('delete game successful')
-      this.getGameList()
+      // console.log(gameid)
+      this.$axios.delete('/api/deleteGame', { params: { gameId: gameid } })
+        .then(response => {
+          if (response.data.status === '204') {
+            this.$message.success('delete game successful')
+            this.getGameList()
+          } else {
+            this.$message.success('delete game fail')
+          }
+        }
+        )
+        .catch(() => {
+          this.$message.success('delete game fail')
+        })
     }
   }
 }
