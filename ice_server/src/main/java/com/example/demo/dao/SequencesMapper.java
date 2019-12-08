@@ -1,8 +1,9 @@
 package com.example.demo.dao;
 
 import com.example.demo.entity.Sequences;
-import org.springframework.stereotype.Repository;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
 @Mapper
 @Repository
 public interface SequencesMapper {

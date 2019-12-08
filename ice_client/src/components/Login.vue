@@ -15,15 +15,16 @@
       >
         <!-- 用户名 -->
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" prefix-icon="el-icon-user"></el-input>
+          <el-input v-model="loginForm.publisherName" prefix-icon="el-icon-user"></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
-          <el-input v-model="loginForm.password" prefix-icon="el-icon-lock" type="password"></el-input>
+          <el-input v-model="loginForm.pwd" prefix-icon="el-icon-lock" type="password"></el-input>
         </el-form-item>
         <!-- 按钮区域 -->
         <el-form-item class="btns">
-          <el-button type="primary" @click="login">登录</el-button>
+          <el-button type="primary" plain  @click="enterUserInterface">用户界面</el-button>
+          <el-button type="primary" @click="publisherLogin">登录</el-button>
           <el-button type="info" @click="resetLoginForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -32,23 +33,26 @@
 </template>
 
 <script>
+import { mixin } from '../mixins'
+// import qs from 'qs'
 export default {
-  data() {
+  mixins: [mixin],
+  data () {
     return {
       // 这是登录表单的数据绑定对象
       loginForm: {
-        username: 'budi',
-        password: '123456'
+        publisherName: 'budi',
+        pwd: '123456'
       },
       // 这是登录表单的验证规则对象
       loginFormRules: {
         // 验证用户名是否合法
-        username: [
+        publisherName: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
         ],
         // 验证密码是否合法
-        password: [
+        pwd: [
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
         ]
@@ -57,15 +61,37 @@ export default {
   },
   methods: {
     // 点击重置按钮，重置登录表单
-    resetLoginForm() {
+    resetLoginForm () {
       this.$refs.loginFormRef.resetFields()
     },
-    login() {
+    publisherLogin () {
+      this.$router.push('/home')
+      console.log('login')
       this.$refs.loginFormRef.validate(valid => {
         if (!valid) return this.$message.error('登录失败')
-        this.$message.success('登录成功')
-        this.$router.push('/home')
+        this.$axios.post('/api/publisherLogin', this.loginForm)
+          .then(response => {
+            console.log(response)
+            switch (response.status) {
+              case '200':
+                this.$message.success('登录成功')
+                this.$router.push('/home')
+                break
+              case '404':
+                this.$message.error('用户不存在')
+                break
+              default:
+                this.$message.error('密码错误')
+                break
+            }
+          })
+          .catch(response => {
+            this.$message.error('登陆失败')
+          })
       })
+    },
+    enterUserInterface () {
+      this.$router.push('/main')
     }
   }
 }

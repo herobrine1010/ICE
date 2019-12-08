@@ -4,11 +4,19 @@ import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
 import Welcome from '../components/Welcome.vue'
 import Users from '../components/user/Users.vue'
+import Infor from '../components/user/Infor.vue'
 import Rights from '../components/power/Rights.vue'
 import Roles from '../components/power/Roles.vue'
-import Cate from '../components/goods/Cate.vue'
+import Tag from '../components/goods/Tag.vue'
 import GoodsList from '../components/goods/List.vue'
 import Add from '../components/goods/Add.vue'
+import Order from '../components/order/Order.vue'
+import Main from '../components/Main.vue'
+import GoodsDetail from '../components/common/GoodsDetail'
+import MainIndex from '../components/MainIndex'
+import PersonPage from '../components/personpage/PersonPage'
+import PersonOrder from '../components/personorder/PersonOrder.vue'
+import ShoppingCart from '../components/shoppingcart/ShoppingCart.vue'
 
 Vue.use(VueRouter)
 
@@ -27,11 +35,25 @@ const routes = [
     children: [
       { path: '/welcome', component: Welcome },
       { path: '/users', component: Users },
+      { path: '/infor', component: Infor },
       { path: '/rights', component: Rights },
       { path: '/roles', component: Roles },
-      { path: '/categories', component: Cate },
+      { path: '/tags', component: Tag },
       { path: '/goods', component: GoodsList },
-      { path: '/goods/add', component: Add }
+      { path: '/add', component: Add },
+      { path: '/orders', component: Order }
+    ]
+  },
+  {
+    path: '/main',
+    component: Main,
+    redirect: '/MainIndex',
+    children: [
+      { path: '/MainIndex', component: MainIndex },
+      { path: '/GoodsDetail/:id', component: GoodsDetail },
+      { path: '/PersonPage', component: PersonPage },
+      { path: '/PersonOrder', component: PersonOrder },
+      { path: '/ShoppingCart', component: ShoppingCart }
     ]
   }
 ]

@@ -27,7 +27,31 @@ import {
   Tag,
   Alert,
   Steps,
-  Step
+  Step,
+  Radio,
+  RadioButton,
+  RadioGroup,
+  Checkbox,
+  CheckboxButton,
+  CheckboxGroup,
+  TabPane,
+  Tabs,
+  Upload,
+  Cascader,
+  Select,
+  Option,
+  DatePicker,
+  Image,
+  Carousel,
+  CarouselItem,
+  InfiniteScroll,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  InputNumber,
+  Divider,
+  Avatar,
+  Rate
 } from 'element-ui'
 
 Vue.use(Button)
@@ -56,6 +80,30 @@ Vue.use(Tag)
 Vue.use(Alert)
 Vue.use(Steps)
 Vue.use(Step)
+Vue.use(Radio)
+Vue.use(RadioButton)
+Vue.use(RadioGroup)
+Vue.use(Checkbox)
+Vue.use(CheckboxButton)
+Vue.use(CheckboxGroup)
+Vue.use(TabPane)
+Vue.use(Tabs)
+Vue.use(Upload)
+Vue.use(Cascader)
+Vue.use(Select)
+Vue.use(Option)
+Vue.use(DatePicker)
+Vue.use(Image)
+Vue.use(Carousel)
+Vue.use(CarouselItem)
+Vue.use(InfiniteScroll)
+Vue.use(Dropdown)
+Vue.use(DropdownItem)
+Vue.use(DropdownMenu)
+Vue.use(InputNumber)
+Vue.use(Divider)
+Vue.use(Avatar)
+Vue.use(Rate)
 Vue.component(MessageBox.name, MessageBox)
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

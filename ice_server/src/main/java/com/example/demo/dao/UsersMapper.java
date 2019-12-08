@@ -22,7 +22,7 @@ public interface UsersMapper {
     int updateByPrimaryKeyWithBLOBs(Users record);
 
     int updateByPrimaryKey(Users record);
-//----------新增函数
+    //----------新增函数
     List<Users> selectUser(Users user);
     //任意字段精确查找
     void deleteUser(Users user);
