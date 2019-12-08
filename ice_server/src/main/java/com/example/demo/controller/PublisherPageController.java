@@ -147,6 +147,27 @@ public class PublisherPageController {
         return response;
     }
 
+    @RequestMapping(value = "/gameNumber", method = RequestMethod.GET)
+    public Response gameNumber(HttpSession session){
+        Response response=new Response();
+        allGamesList.clear();
+        if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
+            return sessionService.auth(session);
+        }
+        Integer id = (Integer) session.getAttribute("id");
+        if(publishersMapper.selectByPrimaryKey(id)==null){
+            response.setStatus("403");
+            response.setError("");
+            return response;
+        }
+
+        List<Integer> result=new ArrayList<>();
+        result.add(presentGameList.size());
+        response.setStatus("200");
+        response.setResult(result);
+        return response;
+    }
+
     @RequestMapping(value = "/searchPublishedGames", method = RequestMethod.GET)
     public Response searchPublishedGames(@RequestParam(value = "query") String query,
                                          @RequestParam(value = "currentPage") Integer currentPage,
@@ -375,6 +396,27 @@ public class PublisherPageController {
         }
         response.setResult(result);
 
+        response.setStatus("200");
+        return response;
+    }
+
+    @RequestMapping(value = "/orderNumber", method = RequestMethod.GET)
+    public Response orderNumber(HttpSession session){
+        Response response=new Response();
+
+        if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
+            return sessionService.auth(session);
+        }
+        Integer pubId = (Integer) session.getAttribute("id");
+        if(publishersMapper.selectByPrimaryKey(pubId)==null){
+            response.setStatus("403");
+            response.setError("");
+            return response;
+        }
+
+        List<Integer> result=new ArrayList<>();
+        result.add(presentOrderList.size());
+        response.setResult(result);
         response.setStatus("200");
         return response;
     }

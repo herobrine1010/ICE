@@ -143,8 +143,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
-
 const consoleOptions = ['PS3', 'PS4', 'PS Vita', 'PSP', 'Nintendo Switch', 'Nintendo 3DS', 'Xbox 360', 'Xbox one']
 
 export default {
@@ -353,11 +351,65 @@ export default {
         if (!valid) {
           return this.$message.error('请填写必要的表单项')
         }
+        // 得到分类ID
+        let cateID = null
+        for (let item in this.catelist) {
+          if (this.addForm.category === this.catelist[item].label) {
+            cateID = item + 1
+          }
+        }
+        // 得到平台ID
+        let consoleIDList = []
+        for (let index in this.addForm.consoles) {
+          switch (this.addForm.consoles[index]) {
+            case 'PS3':
+              consoleIDList.push(1)
+              break
+            case 'PS4':
+              consoleIDList.push(2)
+              break
+            case 'PS Vita':
+              consoleIDList.push(3)
+              break
+            case 'PSP':
+              consoleIDList.push(4)
+              break
+            case 'Nintendo Switch':
+              consoleIDList.push(5)
+              break
+            case 'Nintendo 3DS':
+              consoleIDList.push(6)
+              break
+            case 'xbox 360':
+              consoleIDList.push(7)
+              break
+            case 'xbox one':
+              consoleIDList.push(8)
+              break
+            default:
+              break
+          }
+        }
+        let gameAdder = {
+          title: this.addForm.game_name,
+          price: this.addForm.price,
+          discount: this.addForm.discount,
+          release_date: this.addForm.release_date,
+          pre_order: this.addForm.pre_order,
+          description: this.addForm.goods_introduce,
+          cate_id: cateID,
+          list_console_id: consoleIDList
+        }
+        this.$axios.post('/api/addGame', gameAdder)
+          .then(response => {
+            console.log(response)
+          })
+
         this.$message.success('上架游戏成功')
         // 执行添加的业务逻辑
         // lodash cloneDeep(obj)
-        const form = _.cloneDeep(this.addForm)
-        form.goods_cat = form.goods_cat.join(',')
+        // const form = _.cloneDeep(this.addForm)
+        // form.goods_cat = form.goods_cat.join(',')
         // console.log(form)
         // // 处理动态参数
         // this.manyTableData.forEach(item => {

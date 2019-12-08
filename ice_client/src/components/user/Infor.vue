@@ -26,7 +26,7 @@
       <!-- 编辑区域 -->
       <el-row>
         <el-col :span="4">
-          <el-button type="primary" @click="editDialogVisible = true">Edit</el-button>
+          <el-button type="primary" @click="showEditDialog">Edit</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -41,10 +41,10 @@
       <!-- 内容主体区域 -->
       <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="100px">
         <el-form-item label="Publisher ID">
-          <el-input v-model="editForm.publisher_id" disabled></el-input>
+          <el-input v-model="editForm.publisherId" disabled></el-input>
         </el-form-item>
-        <el-form-item label="Name" prop="publisher_name">
-          <el-input v-model="editForm.publisher_name"></el-input>
+        <el-form-item label="Name" prop="publisherName">
+          <el-input v-model="editForm.publisherName"></el-input>
         </el-form-item>
         <el-form-item label="Password" prop="pwd">
           <el-input v-model="editForm.pwd"></el-input>
@@ -82,23 +82,22 @@ export default {
     return {
       // 商家个人信息
       publisherInfo: [{
-        publisher_id: '123',
-        publisher_name: 'Nintendo',
-        pwd: '456',
-        description: 'Nintendo is a Japanese company mainly engaged in the development of software and hardware for electronic games. It is one of the three giants of the electronic game industry and the pioneer of the modern electronic game industry. Nintendo was founded on September 23, 1889. It first started as a production of flower sticks, entered the video game industry in the late 1970s, and launched the first-generation home game console FC in 1983.'
-      }],
+        publisher_id: '',
+        publisher_name: '',
+        pwd: '',
+        description: '' }],
       // 控制修改个人信息对话框的显示与隐藏
       editDialogVisible: false,
       // 查询到的商家信息对象
       editForm: {
-        publisher_id: '123',
-        publisher_name: 'Nintendo',
-        pwd: '456',
-        description: 'Nintendo is a Japanese company mainly engaged in the development of software and hardware for electronic games. It is one of the three giants of the electronic game industry and the pioneer of the modern electronic game industry. Nintendo was founded on September 23, 1889. It first started as a production of flower sticks, entered the video game industry in the late 1970s, and launched the first-generation home game console FC in 1983.'
+        publisherId: '',
+        publisherName: '',
+        pwd: '',
+        description: ''
       },
       // 修改表单的验证规则对象
       editFormRules: {
-        publisher_name: [
+        publisherName: [
           { required: true, message: '请输入商家名称', trigger: 'blur' }
         ],
         pwd: [
@@ -118,13 +117,17 @@ export default {
     getPublisherList () {
       this.$axios.get('/api/publisherInfo')
         .then(response => {
-          console.log(response)
+          // console.log(response)
+          this.publisherInfo[0].publisher_id = response.data.result[0].publisher_id
+          this.publisherInfo[0].publisher_name = response.data.result[0].publisher_name
+          this.publisherInfo[0].pwd = response.data.result[0].pwd
+          this.publisherInfo[0].description = response.data.result[0].description
           // this.publisherInfo = response.data.result[0].
         })
     },
     // 监听修改游戏对话框的关闭事件
     editDialogClosed () {
-      this.$refs.editFormRef.resetFields()
+      // this.$refs.editFormRef.resetFields()
     },
     // 取消对个人信息的修改
     cancelEditPublisherInfo () {
@@ -133,37 +136,38 @@ export default {
       // 提示取消修改
       this.$message('Cancel edit publisher info')
     },
+    showEditDialog () {
+      this.editDialogVisible = true
+      this.editForm.publisherId = this.publisherInfo[0].publisher_id
+      this.editForm.publisherName = this.publisherInfo[0].publisher_name
+      this.editForm.pwd = this.publisherInfo[0].pwd
+      this.editForm.description = this.publisherInfo[0].description
+    },
     // 修改个人信息并提交
     editPublisherInfo () {
+      console.log('确认修改')
       // 调用 API 接口，发起修改游戏信息的请求，根据返回的 response 进行对应的操作
-      // this.$refs.editFormRef.validate(async valid => {
-      //   if (!valid) return
-      //   // 发起修改用户信息的数据请求
-      //   const { data: res } = await this.$http.put(
-      //     'users/' + this.editForm.id,
-      //     {
-      //       email: this.editForm.email,
-      //       mobile: this.editForm.mobile
-      //     }
-      //   )
-
-      //   if (res.meta.status !== 200) {
-      //     return this.$message.error('更新用户信息失败！')
-      //   }
-
-      //   // 关闭对话框
-      //   this.editDialogVisible = false
-      //   // 刷新数据列表
-      //   this.getUserList()
-      //   // 提示修改成功
-      //   this.$message.success('更新用户信息成功！')
-      // })
-      // 关闭对话框
-      this.editDialogVisible = false
-      // 刷新数据列表
-      this.getPublisherList()
-      // 提示修改成功
-      this.$message.success('Edit publisher info success')
+      this.$axios.post('/api/updatePublisherInfo', this.editForm)
+        .then(response => {
+          console.log(response)
+          if (response.data.status === '200') {
+            // 关闭对话框
+            this.editDialogVisible = false
+            // 刷新数据列表
+            this.getPublisherList()
+            // 提示修改成功
+            this.$message.success('Edit publisher info success')
+          } else {
+            this.$message.error('Edit publisher info fail')
+            // 关闭对话框
+            this.editDialogVisible = false
+          }
+        })
+        .catch(() => {
+          this.$message.error('Edit publisher info fail')
+          // 关闭对话框
+          this.editDialogVisible = false
+        })
     }
   }
 }

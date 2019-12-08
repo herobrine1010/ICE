@@ -41,8 +41,8 @@ export default {
     return {
       // 这是登录表单的数据绑定对象
       loginForm: {
-        publisherName: 'budi',
-        pwd: '123456'
+        publisherName: 'Naughty Dog',
+        pwd: ''
       },
       // 这是登录表单的验证规则对象
       loginFormRules: {
@@ -65,14 +65,14 @@ export default {
       this.$refs.loginFormRef.resetFields()
     },
     publisherLogin () {
-      this.$router.push('/home')
       console.log('login')
       this.$refs.loginFormRef.validate(valid => {
         if (!valid) return this.$message.error('登录失败')
         this.$axios.post('/api/publisherLogin', this.loginForm)
           .then(response => {
             console.log(response)
-            switch (response.status) {
+            console.log(response.data.status)
+            switch (response.data.status) {
               case '200':
                 this.$message.success('登录成功')
                 this.$router.push('/home')

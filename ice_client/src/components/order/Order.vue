@@ -167,17 +167,17 @@ export default {
       },
       total: 1,
       orderList: [
-        {
-          orderid: '47',
-          gamename: 'SuperMario',
-          consolename: 'PS4',
-          price: '19.90',
-          status: 0,
-          username: 'budi',
-          address: 'Tongji University',
-          contacttel: '17717924664',
-          date: '2019-11-28'
-        }
+        // {
+        //   orderid: '47',
+        //   gamename: 'SuperMario',
+        //   consolename: 'PS4',
+        //   price: '19.90',
+        //   status: 0,
+        //   username: 'budi',
+        //   address: 'Tongji University',
+        //   contacttel: '17717924664',
+        //   date: '2019-11-28'
+        // }
       ],
       editDialogVisible: false,
       editForm: {
@@ -206,10 +206,37 @@ export default {
   },
   created () {
     this.getOrderList()
+    this.getOrdersNumber()
   },
   methods: {
+    // 获取订单总数
+    getOrdersNumber () {
+      this.$axios.get('/api//orderNumber')
+        .then(response => {
+          console.log(response)
+          this.total = response.data.result[0]
+        })
+    },
     // 根据分页获取对应的商品列表
-    getOrderList () { },
+    getOrderList () {
+      this.$axios.get('/api//initOrderList', { params: { pageSize: this.queryInfo.pagesize } })
+        .then(response => {
+          console.log(response)
+          let result = response.data.result
+          for (let index in result) {
+            this.orderList.push({})
+            this.orderList[index].orderid = result[index].order_id
+            this.orderList[index].gamename = result[index].game_name
+            this.orderList[index].consolename = result[index].console_name
+            this.orderList[index].price = result[index].price
+            this.orderList[index].status = result[index].status
+            this.orderList[index].username = result[index].user_name
+            this.orderList[index].address = result[index].address
+            this.orderList[index].contacttel = result[index].contacttel
+            this.orderList[index].date = result[index].order_date.split('T')[0]
+          }
+        })
+    },
     // 监听 pagesize 改变的事件
     handleSizeChange (newSize) {
       this.queryInfo.pagesize = newSize

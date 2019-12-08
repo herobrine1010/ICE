@@ -128,6 +128,7 @@
 </template>
 
 <script>
+// import qs from 'qs'
 export default {
   data () {
     const consoleOptions = ['PS3', 'PS4', 'PS Vita', 'PSP', 'Nintendo Switch', 'Nintendo 3DS', 'Xbox 360', 'Xbox one']
@@ -214,43 +215,70 @@ export default {
       },
       // 游戏商品列表
       gamelist: [
-        {
-          gameid: '12345',
-          title: 'SUPERMARIO',
-          price: '19.90',
-          discount: 'On',
-          average_rate: '4.8',
-          release_date: '1985-09-13',
-          pre_order: 'Off',
-          rate_count: '100',
-          discription: 'The game takes place in the Mushroom Kingdom, and Mario begins his new adventure in order to rescue Princess Peach, kidnapped by Kuba.',
-          cover: '/tmp_uploads/30f08d52c551ecb447277eae232304b8',
-          pictures: [
-            '/tmp_uploads/30f08d52c551ecb447277eae232304b1',
-            '/tmp_uploads/30f08d52c551ecb447277eae232304b2',
-            '/tmp_uploads/30f08d52c551ecb447277eae232304b3'
-          ],
-          consoles: [
-            'PS4',
-            'PS Vita',
-            'Xbox one'
-          ],
-          category: 'Adventure',
-          tags: [
-            'CARTOON',
-            'POPULAR'
-          ]
-        }
+        // {
+        //   gameid: '',
+        //   title: '',
+        //   price: '',
+        //   discount: '',
+        //   average_rate: '',
+        //   release_date: '',
+        //   pre_order: '',
+        //   rate_count: '',
+        //   discription: '',
+        //   cover: '',
+        //   pictures: [],
+        //   consoles: [],
+        //   category: 'Adventure',
+        //   tags: []
+        // }
       ],
       consoleOptions
     }
   },
   created () {
     this.getGameList()
+    this.getGamesNumber()
   },
   methods: {
+    // 获取游戏总数
+    getGamesNumber() {
+      this.$axios.get('/api//gameNumber')
+        .then(response => {
+          this.total = response.data.result[0]
+        })
+    },
     // 根据分页获取对应的商品列表
-    getGameList () { },
+    getGameList () {
+      this.gamelist = []
+      this.$axios.get('/api//initGamesList', { params: { pageSize: this.queryInfo.pagesize } })
+        .then(response => {
+          console.log(response)
+          for (let item in response.data.result) {
+            this.gamelist.push({})
+            this.gamelist[item].gameid = response.data.result[item].gameid
+            this.gamelist[item].title = response.data.result[item].title
+            this.gamelist[item].price = response.data.result[item].discount
+            if (response.data.result[item].average_rate === -1) {
+              this.gamelist[item].average_rate = '无评分'
+            } else {
+              this.gamelist[item].average_rate = response.data.result[item].average_rate
+            }
+            this.gamelist[item].release_date = response.data.result[item].release_date.split('T')[0]
+            this.gamelist[item].pre_order = response.data.result[item].pre_order
+            this.gamelist[item].rate_count = response.data.result[item].rate_count
+            this.gamelist[item].discription = response.data.result[item].discription
+            this.gamelist[item].cover = response.data.result[item].cover
+            this.gamelist[item].picture = response.data.result[item].picture
+            this.gamelist[item].consoles = []
+            for (let consolesItem in response.data.result[item].consoles) {
+              this.gamelist[item].consoles.push('')
+              this.gamelist[item].consoles[consolesItem] = response.data.result[item].consoles[consolesItem].consoleName
+            }
+            this.gamelist[item].category = response.data.result[item].category.cateName
+            this.gamelist[item].tags = response.data.result[item].tags
+          }
+        })
+    },
     // 监听 pagesize 改变的事件
     handleSizeChange (newSize) {
       this.queryInfo.pagesize = newSize
