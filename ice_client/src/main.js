@@ -22,6 +22,7 @@ axios.interceptors.request.use(config => {
   return config
 })
 Vue.prototype.$axios = axios
+axios.defaults.baseURL = ''
 
 Vue.config.productionTip = false
 

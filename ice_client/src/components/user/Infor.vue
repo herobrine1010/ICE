@@ -63,7 +63,9 @@
 </template>
 
 <script>
+import { mixin } from '../../mixins'
 export default {
+  mixins: [mixin],
   data () {
     // 验证简介长度的规则
     var checkDiscription = (rule, value, cb) => {
@@ -113,7 +115,13 @@ export default {
   },
   methods: {
     // 获取商家个人信息列表
-    getPublisherList () { },
+    getPublisherList () {
+      this.$axios.get('/api/publisherInfo')
+        .then(response => {
+          console.log(response)
+          // this.publisherInfo = response.data.result[0].
+        })
+    },
     // 监听修改游戏对话框的关闭事件
     editDialogClosed () {
       // this.$refs.editFormRef.resetFields()

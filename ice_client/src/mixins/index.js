@@ -2,7 +2,7 @@ import axios from 'axios'
 export const mixin = {
   data () {
     return {
-      HOST: 'http://localhost:8011'
+      HOST: 'http://localhost:8021'
     }
   },
   methods: {

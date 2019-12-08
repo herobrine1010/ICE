@@ -15,11 +15,11 @@
       >
         <!-- 用户名 -->
         <el-form-item prop="username">
-          <el-input v-model="loginForm.username" prefix-icon="el-icon-user"></el-input>
+          <el-input v-model="loginForm.publisherName" prefix-icon="el-icon-user"></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
-          <el-input v-model="loginForm.password" prefix-icon="el-icon-lock" type="password"></el-input>
+          <el-input v-model="loginForm.pwd" prefix-icon="el-icon-lock" type="password"></el-input>
         </el-form-item>
         <!-- 按钮区域 -->
         <el-form-item class="btns">
@@ -34,25 +34,25 @@
 
 <script>
 import { mixin } from '../mixins'
-
+// import qs from 'qs'
 export default {
   mixins: [mixin],
   data () {
     return {
       // 这是登录表单的数据绑定对象
       loginForm: {
-        username: 'budi',
-        password: '123456'
+        publisherName: 'budi',
+        pwd: '123456'
       },
       // 这是登录表单的验证规则对象
       loginFormRules: {
         // 验证用户名是否合法
-        username: [
+        publisherName: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
         ],
         // 验证密码是否合法
-        password: [
+        pwd: [
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
         ]
@@ -65,14 +65,17 @@ export default {
       this.$refs.loginFormRef.resetFields()
     },
     publisherLogin () {
+      this.$router.push('/home')
+      console.log('login')
       this.$refs.loginFormRef.validate(valid => {
-        console.log(valid)
         if (!valid) return this.$message.error('登录失败')
-        this.$axios.post(this.HOST + 'login', this.loginForm)
+        this.$axios.post('/api/publisherLogin', this.loginForm)
           .then(response => {
+            console.log(response)
             switch (response.status) {
               case '200':
                 this.$message.success('登录成功')
+                this.$router.push('/home')
                 break
               case '404':
                 this.$message.error('用户不存在')
@@ -85,7 +88,6 @@ export default {
           .catch(response => {
             this.$message.error('登陆失败')
           })
-        this.$router.push('/home')
       })
     },
     enterUserInterface () {
