@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-
+import java.util.ArrayList;
 import com.example.demo.dao.HasReviewMapper;
 import com.example.demo.dao.ReviewsMapper;
 import com.example.demo.dao.UsersMapper;
@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import com.example.demo.entity.ReviewsDetailed;
@@ -35,7 +36,7 @@ public class CommentController {
 
     //gameIdがurlの中に在る原因は、gameIdと評価内容が同時に含まれるクラスはありません。
     //それで、元々にgameIdが商品ページのurlから取られ得るはず。
-    @RequestMapping(value = "/addComment",method =RequestMethod.PUT)
+    @RequestMapping(value = "/addComment",method =RequestMethod.GET)
     public Response addComment(@RequestParam("gameId") int gameId,@RequestBody Reviews review, HttpSession session) {
         Response response = new Response();
 
@@ -94,24 +95,36 @@ public class CommentController {
     }
 
     @RequestMapping(value="/allComment",method=RequestMethod.GET,params={"gameId"})
-    public Response<ReviewsDetailed> allComment
+    public Response<ReviewWithUser> allComment
             (@RequestParam("gameId") int gameId,
-             @RequestParam(value="count",required = false,defaultValue = "10") int commentCount, //the number of comments obtained each time
+             @RequestParam(value="from",required = false,defaultValue = "0")int from,
+             @RequestParam("to")int to,
              @RequestParam(value="reverse",required = false,defaultValue = "1") int reversed,             //whether the result is arranged by time-reverse order(default) or not
              HttpSession session){
-        Response<ReviewsDetailed> response = new Response<>();
+        Response<ReviewWithUser> response = new Response<>();
 
         //System.out.println(session.getAttribute("id"));
         if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
             return sessionService.auth(session);
         }
         try{
-            List<ReviewsDetailed> resultList=writeReviewMapper.selectAllComment(gameId,commentCount,reversed);
-            if (resultList.isEmpty()){
+            List<ReviewsDetailed> commentList=writeReviewMapper.selectAllComment(gameId,from,to-from,reversed);
+            if (commentList.isEmpty()){
                 response.setError("No comment yet!");
                 response.setStatus("404");
             }
             else{
+                List<ReviewWithUser> resultList=new ArrayList<>();
+                for(int i=0;i<commentList.size();i++){
+                    int uid=commentList.get(i).getUserId();
+                    Users u=usersMapper.selectByPrimaryKey(uid);
+                    ReviewWithUser reviewWithUser=new ReviewWithUser();
+                    reviewWithUser.setAvatarPath(u.getAvatarPath());
+                    reviewWithUser.setUserId(uid);
+                    reviewWithUser.setUsername(u.getUserName());
+                    reviewWithUser.setContent(commentList.get(i).getContent());
+                    reviewWithUser.setReviewDate(commentList.get(i).getReviewDate());
+                }
                 response.setResult(resultList);
                 response.setStatus("200");
             }
@@ -147,5 +160,25 @@ public class CommentController {
 
     }
 
+    @RequestMapping(value="/commentsNumber",method = RequestMethod.GET,params={"gameId"})
+    public Response<Integer> commentsNumber(@RequestParam("gameId")int gameId, HttpSession session){
+        Response<Integer> response = new Response<>();
+        //System.out.println(session.getAttribute("id"));
+        if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
+            return sessionService.auth(session);
+        }
+        try{
+            Integer cCount=writeReviewMapper.commentsCount(gameId);
+            List<Integer> l=new ArrayList<>();
+            l.add(cCount);
+            response.setResult(l);
+            response.setStatus("200");
+        }catch(Exception e){
+            response.setError("SQL Error!");
+            response.setStatus("403");
+            return response;
+        }
+        return response;
+    }
 
 }

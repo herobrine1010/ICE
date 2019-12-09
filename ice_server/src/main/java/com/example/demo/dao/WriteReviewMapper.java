@@ -25,6 +25,7 @@ public interface WriteReviewMapper {
 
     int getWhetherCommented(@Param("userId") int userId, @Param("gameId") int gameId);
 
-    List<ReviewsDetailed> selectAllComment(@Param("gameId") int gameId, @Param("number")int number, @Param("reverse")int reverse);
+    List<ReviewsDetailed> selectAllComment(@Param("gameId") int gameId, @Param("startWith")int startWith,@Param("endWith")int endWith, @Param("reverse")int reverse);
 
+    int commentsCount (@Param("gameId") int gameId);
 }

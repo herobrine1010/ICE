@@ -42,6 +42,8 @@ public class PublisherService {
         publisherInfo.setPublisher_name(publishers.getPublisherName());
         publisherInfo.setLogo_path(publishers.getLogoPath());
         publisherInfo.setDescription(publishers.getDescription());
+        publisherInfo.setPwd(publishers.getPwd());
+
 
         return publisherInfo;
     }
