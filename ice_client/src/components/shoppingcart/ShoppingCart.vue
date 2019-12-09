@@ -6,24 +6,19 @@
       <el-breadcrumb-item>我的购物车</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
-      <template>
-        <el-table
-          ref="multipleTable"
-          :data="shoppingCartList"
-          tooltip-effect="dark"
-          style="width: 100%"
-          show-summary
-          @selection-change="handleSelectionChange"
-        >
-          <el-table-column type="selection"></el-table-column>
-          <el-table-column prop="gamename" label="Game"></el-table-column>
-          <el-table-column label="Price">
-            <template slot-scope="scope">
-              {{ scope.row.price }}
-            </template>
-          </el-table-column>
-        </el-table>
-      </template>
+      <el-table
+        ref="multipleTable"
+        :data="shoppingCartList"
+        tooltip-effect="dark"
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column type="selection"></el-table-column>
+        <el-table-column label="Game" prop="gamename"></el-table-column>
+        <el-table-column label="Console" prop="consolename"></el-table-column>
+        <el-table-column label="Category" prop="category"></el-table-column>
+        <el-table-column label="Price" prop="price"></el-table-column>
+      </el-table>
     </el-card>
   </div>
 </template>

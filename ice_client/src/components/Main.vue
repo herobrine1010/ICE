@@ -51,15 +51,15 @@
     <!-- 路由占位符 -->
     <router-view></router-view>
   </el-main>
-  <!-- <InfiniteScroll :class="{'infiniteScroll':!isMainIndex}"></InfiniteScroll> -->
+  <InfiniteScroll :class="{'infiniteScroll':!isMainIndex}"></InfiniteScroll>
   </div>
 </template>
 
 <script>
-// import InfiniteScroll from './common/InfiniteScroll'
+import InfiniteScroll from './common/InfiniteScroll'
 export default {
   name: 'Main',
-  // components: { InfiniteScroll },
+  components: { InfiniteScroll },
   data () {
     return {
       activeIndex: '1',
