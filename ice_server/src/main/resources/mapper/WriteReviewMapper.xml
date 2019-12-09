@@ -71,7 +71,7 @@
   </select>
 
   <select id="selectAllComment" resultType="com.example.demo.entity.ReviewsDetailed">
-        select user_id,content
+        select user_id,content,review_date
         from reviews inner join write_review inner join has_review
                 on reviews.REVIEW_ID=write_review.review_id
                    and write_review.REVIEW_ID=has_review.review_id
