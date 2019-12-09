@@ -192,7 +192,7 @@ export default {
 
 <style lang="less" scoped>
 .registerDialog {
-  margin-top: 10%;
+  margin-top: 15%;
 }
 
 .login-container {

@@ -33,9 +33,8 @@
     <el-dialog
       title="Register"
       :visible.sync="registerDialogVisible"
-      width="30%"
+      width="50%"
       @close="registerDialogClosed"
-      class="registerDialog"
     >
       <!-- 内容主体区域 -->
       <el-form
@@ -44,12 +43,35 @@
         ref="registerFormRef"
         label-width="100px"
       >
-        <el-form-item label="Username" prop="username">
-          <el-input v-model="registerForm.username"></el-input>
+        <!-- <el-form-item label="Game ID">
+          <el-input v-model="editForm.gameid" disabled></el-input>
         </el-form-item>
-        <el-form-item label="Password" prop="password">
-          <el-input v-model="registerForm.password"></el-input>
+        <el-form-item label="Title" prop="title">
+          <el-input v-model="editForm.title"></el-input>
         </el-form-item>
+        <el-form-item label="Price" prop="price">
+          <el-input v-model="editForm.price"></el-input>
+        </el-form-item>
+        <el-form-item label="Discount">
+          <el-radio-group v-model="editForm.discount" size="small">
+            <el-radio-button label="On"></el-radio-button>
+            <el-radio-button label="Off"></el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="Pre Order">
+          <el-radio-group v-model="editForm.pre_order" size="small">
+            <el-radio-button label="On"></el-radio-button>
+            <el-radio-button label="Off"></el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="Consoles">
+          <el-checkbox-group v-model="editForm.consoles" size="small">
+            <el-checkbox-button v-for="con in consoleOptions" :label="con" :key="con">{{con}}</el-checkbox-button>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="Discription" prop="discription">
+          <el-input v-model="editForm.discription"></el-input>
+        </el-form-item>-->
       </el-form>
       <!-- 对话框底部确定取消按钮 -->
       <span slot="footer" class="dialog-footer">
@@ -191,10 +213,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.registerDialog {
-  margin-top: 10%;
-}
-
 .login-container {
   background-color: #bd2c00;
   height: 100%;

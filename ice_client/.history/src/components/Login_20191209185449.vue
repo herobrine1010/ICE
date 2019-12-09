@@ -23,40 +23,12 @@
         </el-form-item>
         <!-- 按钮区域 -->
         <el-form-item class="btns">
-          <el-button type="warning" plain @click="showRegisterDialog()">注册</el-button>
-          <el-button type="primary" plain @click="userLogin()">用户登录</el-button>
-          <el-button type="success" plain @click="publisherLogin()">商家登录</el-button>
+          <el-button type="primary" plain  @click="userLogin">用户登录</el-button>
+          <el-button type="primary" plain @click="publisherLogin">商家登录</el-button>
+          <el-button type="info" plain @click="resetLoginForm">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <!-- 注册的对话框 -->
-    <el-dialog
-      title="Register"
-      :visible.sync="registerDialogVisible"
-      width="30%"
-      @close="registerDialogClosed"
-      class="registerDialog"
-    >
-      <!-- 内容主体区域 -->
-      <el-form
-        :model="registerForm"
-        :rules="registerFormRules"
-        ref="registerFormRef"
-        label-width="100px"
-      >
-        <el-form-item label="Username" prop="username">
-          <el-input v-model="registerForm.username"></el-input>
-        </el-form-item>
-        <el-form-item label="Password" prop="password">
-          <el-input v-model="registerForm.password"></el-input>
-        </el-form-item>
-      </el-form>
-      <!-- 对话框底部确定取消按钮 -->
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancelRegister">Cancel</el-button>
-        <el-button type="primary" @click="register">Confirm</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -69,7 +41,7 @@ export default {
     return {
       //
       login_container: {
-        backgroundImage: 'url(' + require('../assets/wallhaven-457511.jpg') + ')'
+        backgroundImage: 'url(' + require('../assets/wallhaven-457511.jpg') + ')',
       },
       // 这是登录表单的数据绑定对象
       loginForm: {
@@ -88,28 +60,14 @@ export default {
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
         ]
-      },
-      // 控制注册对话框的显示与隐藏
-      registerDialogVisible: false,
-      // 注册表单
-      registerForm: {
-        username: '',
-        password: ''
-      },
-      // 注册表单的验证规则对象
-      registerFormRules: {
-        username: [
-          { required: true, message: 'Please enter username', trigger: 'blur' },
-          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: 'Please enter password', trigger: 'blur' },
-          { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
-        ]
       }
     }
   },
   methods: {
+    // 点击重置按钮，重置登录表单
+    resetLoginForm () {
+      this.$refs.loginFormRef.resetFields()
+    },
     publisherLogin () {
       console.log('publisherLogin')
       this.$refs.loginFormRef.validate(valid => {
@@ -163,38 +121,12 @@ export default {
             this.$message.error('登陆失败')
           })
       })
-    },
-    // 展示注册的对话框
-    showRegisterDialog () {
-      this.registerDialogVisible = true
-    },
-    // 监听修改游戏对话框的关闭事件
-    registerDialogClosed () {
-      // this.$refs.registerFormRef.resetFields()
-    },
-    // 取消对游戏信息的修改
-    cancelRegister () {
-      // 关闭对话框
-      this.registerDialogVisible = false
-      // 提示取消修改
-      this.$message('Cancel register')
-    },
-    // 修改游戏信息并提交
-    register () {
-      // 关闭对话框
-      this.registerDialogVisible = false
-      // 提示修改成功
-      this.$message.success('Register success')
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.registerDialog {
-  margin-top: 10%;
-}
-
 .login-container {
   background-color: #bd2c00;
   height: 100%;

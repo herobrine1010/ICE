@@ -35,7 +35,6 @@
       :visible.sync="registerDialogVisible"
       width="30%"
       @close="registerDialogClosed"
-      class="registerDialog"
     >
       <!-- 内容主体区域 -->
       <el-form
@@ -191,10 +190,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.registerDialog {
-  margin-top: 10%;
-}
-
 .login-container {
   background-color: #bd2c00;
   height: 100%;
