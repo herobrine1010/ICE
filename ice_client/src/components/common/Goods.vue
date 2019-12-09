@@ -3,14 +3,13 @@
   <el-row>
     <el-col :span="4" v-for="(o, index) in 4" :key="o" :offset="index > 0 ? 1 : 2">
       <div>
-      <el-card  shadow="hover" @click.native="enterGoodsDetail(0)">
-        <img :src="goodsInfo.imgSrc" class="image">
+      <el-card  shadow="hover" @click.native="enterGoodsDetail(goodsInfo[index].id)">
+        <img :src="goodsInfo[index].imgSrc" class="image">
         <div style="padding: 14px;">
-          <el-row class="name">{{goodsInfo.name}}</el-row>
-          <el-row class="value">{{goodsInfo.value}}</el-row>
+          <el-row class="name">{{goodsInfo[index].name}}</el-row>
+          <el-row class="value">{{goodsInfo[index].value}}</el-row>
           <el-row class="tags">
-          <el-tag size="mini">{{goodsInfo.tag[0]}}</el-tag>
-          <el-tag size="mini">{{goodsInfo.tag[1]}}</el-tag>
+          <el-tag v-for="tag in goodsInfo[index].tag" :key="tag" size="mini">{{tag}}</el-tag>
           </el-row>
         </div>
       </el-card>
@@ -27,8 +26,11 @@ export default {
   methods: {
     enterGoodsDetail (goodsId) {
       // window.sessionStorage.setItem('activePath', '/GoodsDetail')
-      this.$router.push('/GoodsDetail/' + this.goodsInfo.id + '')
+      this.$router.push('/GoodsDetail/' + goodsId + '')
     }
+  },
+  created () {
+    console.log(this.goodsInfo)
   }
 }
 </script>

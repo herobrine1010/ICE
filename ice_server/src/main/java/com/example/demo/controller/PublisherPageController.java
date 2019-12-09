@@ -458,6 +458,7 @@ public class PublisherPageController {
             result.add(orderService.convertToOrderManager(presentOrderList.get(i)));
         }
 
+        response.setResult(result);
         response.setStatus("200");
         return response;
     }

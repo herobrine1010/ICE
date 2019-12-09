@@ -5,6 +5,8 @@ public class Chart {
 
     private Integer userId;
 
+    private Integer consoleId;
+
     public Integer getGameId() {
         return gameId;
     }
@@ -19,5 +21,13 @@ public class Chart {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public Integer getConsoleId() {
+        return consoleId;
+    }
+
+    public void setConsoleId(Integer consoleId) {
+        this.consoleId = consoleId;
     }
 }
