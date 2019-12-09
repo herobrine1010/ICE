@@ -104,36 +104,27 @@ export default {
   },
   methods: {
     handleSelect (key, keyPath) {
-      console.log(key)
+      console.log('点击菜单栏', key)
       switch (key) {
         case '5':
-          console.log(55555555)
+          console.log('进入一个页面', 55555555)
           this.$router.push('/PersonPage')
           break
         case '6':
-          console.log(66666666)
+          console.log('进入一个页面', 66666666)
           this.$router.push('/PersonOrder')
           break
         case '7':
-          console.log(77777777)
+          console.log('进入一个页面', 77777777)
           this.$router.push('/ShoppingCart')
           break
       }
-    },
-    handleScroll () {
-      // 兼容性，获取页面滚动距离
-      var scrollTop = window.pageYOffset || document.getElementById('main').scrollTop || document.body.scrollTop
-      // 判断页面滚动的距离是否大于吸顶元素的位置
-      this.headerFixed = scrollTop > this.offsetTop
     },
     search () {
       console.log('search')
     }
   },
   mounted () {
-    // 对整个页面滚轮进行监听，每发生一次滚轮事件，执行一次方法
-    // window.addEventListener('scroll', this.handleScroll)
-    document.getElementById('main').addEventListener('scroll', this.handleScroll)
     // DOM异步更新 对未来更新后的视图进行操作 在更新后执行
     // 监听dom渲染完成
     this.$nextTick(function () {

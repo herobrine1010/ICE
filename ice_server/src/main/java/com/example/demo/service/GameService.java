@@ -142,6 +142,7 @@ public class GameService {
     @Getter
     @Setter
     public class GameInfo{
+        private Integer id;
         private String cover_path;
         private Float price;
         private String title;
@@ -150,6 +151,7 @@ public class GameService {
 
     public GameInfo convertToInfo(Games game){
         GameInfo gameInfo = new GameInfo();
+        gameInfo.setId(game.getGameId());
         gameInfo.setCover_path(game.getCoverPath());
         gameInfo.setPrice(game.getPrice());
         gameInfo.setTitle(game.getTitle());

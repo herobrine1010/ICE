@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div class="login-container" :style="login_container">
     <div class="login-box">
       <!-- 头像区域 -->
       <div class="avator-box">
@@ -23,8 +23,8 @@
         </el-form-item>
         <!-- 按钮区域 -->
         <el-form-item class="btns">
-          <el-button type="primary" plain  @click="enterUserInterface">用户界面</el-button>
-          <el-button type="primary" @click="publisherLogin">登录</el-button>
+          <el-button type="primary" plain  @click="userLogin">用户登录</el-button>
+          <el-button type="primary" @click="publisherLogin">商家登录</el-button>
           <el-button type="info" @click="resetLoginForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -39,6 +39,11 @@ export default {
   mixins: [mixin],
   data () {
     return {
+      //
+      login_container: {
+        backgroundImage: 'url(' + require('../assets/wallhaven-457511.jpg') + ')',
+        backgroundSize: "100% auto"
+      },
       // 这是登录表单的数据绑定对象
       loginForm: {
         publisherName: 'Naughty Dog',
@@ -65,13 +70,12 @@ export default {
       this.$refs.loginFormRef.resetFields()
     },
     publisherLogin () {
-      console.log('login')
+      console.log('publisherLogin')
       this.$refs.loginFormRef.validate(valid => {
         if (!valid) return this.$message.error('登录失败')
         this.$axios.post('/api/publisherLogin', this.loginForm)
           .then(response => {
-            console.log(response)
-            console.log(response.data.status)
+            console.log('publisherLogin response', response)
             switch (response.data.status) {
               case '200':
                 this.$message.success('登录成功')
@@ -90,8 +94,34 @@ export default {
           })
       })
     },
-    enterUserInterface () {
-      this.$router.push('/main')
+    userLogin () {
+      console.log('userLogin')
+      this.$refs.loginFormRef.validate(valid => {
+        if (!valid) return this.$message.error('登录失败')
+        let userInfo = {
+          userName: this.loginForm.publisherName,
+          pwd: this.loginForm.pwd
+        }
+        this.$axios.post('/api/login', userInfo)
+          .then(response => {
+            console.log('userLogin response', response)
+            switch (response.data.status) {
+              case '200':
+                this.$message.success('登录成功')
+                this.$router.push('/main')
+                break
+              case '404':
+                this.$message.error('用户不存在')
+                break
+              default:
+                this.$message.error('密码错误')
+                break
+            }
+          })
+          .catch(response => {
+            this.$message.error('登陆失败')
+          })
+      })
     }
   }
 }
@@ -99,7 +129,7 @@ export default {
 
 <style lang="less" scoped>
 .login-container {
-  background-color: #2b4b6b;
+  background-color: #bd2c00;
   height: 100%;
 }
 
@@ -112,6 +142,7 @@ export default {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  opacity: 0.75;
 
   .avator-box {
     height: 130px;

@@ -118,6 +118,22 @@ public class MainPageController {
 
 
     //Game Part
+    @RequestMapping(value = "/mainGameNum", method = RequestMethod.GET)
+    public Response mainGameNum(HttpSession session){
+        Response response = new Response();
+
+        if(sessionService.auth(session).getStatus()!="200") {
+            return sessionService.auth(session);
+        }
+        int thisUserId = Integer.parseInt(session.getAttribute("id").toString());
+
+        List<Integer> result=new ArrayList<>();
+        result.add(gamesList.size());
+        response.setResult(result);
+        response.setStatus("200");
+        return  response;
+    }
+
     @RequestMapping(value = "/getGames", method = RequestMethod.GET)
     public Response getGames(@RequestParam(value = "reset") boolean reset){
 
