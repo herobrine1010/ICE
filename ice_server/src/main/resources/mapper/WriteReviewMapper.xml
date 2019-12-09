@@ -62,6 +62,14 @@
     where user_id = #{userId} and game_id = #{gameId}
   </select>
 
+  <select id="commentsCount" resultType="Integer">
+    select count(*) as c
+    from reviews inner join write_review inner join has_review
+        on reviews.REVIEW_ID=write_review.review_id
+           and write_review.REVIEW_ID=has_review.review_id
+    where  GAME_ID=#{gameId}
+  </select>
+
   <select id="selectAllComment" resultType="com.example.demo.entity.ReviewsDetailed">
         select user_id,content
         from reviews inner join write_review inner join has_review
@@ -71,7 +79,9 @@
         order by reviews.REVIEW_ID
         <if test="reverse&gt;0">desc</if>
         <if test="!reverse&gt;0">asc</if>
-        limit #{number}
+        limit #{startWith},#{endWith}
 
     </select>
+
+
 </mapper>
