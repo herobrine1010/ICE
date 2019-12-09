@@ -5,9 +5,11 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class ReviewsDetailed {
+public class ReviewWithUser {
     //private Integer reviewId;
     private Integer userId;
-    private Date reviewDate;
+    private String username;
+    private String avatarPath;
     private String content;
+    private Date reviewDate;
 }

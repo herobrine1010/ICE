@@ -95,25 +95,36 @@ public class CommentController {
     }
 
     @RequestMapping(value="/allComment",method=RequestMethod.GET,params={"gameId"})
-    public Response<ReviewsDetailed> allComment
+    public Response<ReviewWithUser> allComment
             (@RequestParam("gameId") int gameId,
              @RequestParam(value="from",required = false,defaultValue = "0")int from,
              @RequestParam("to")int to,
              @RequestParam(value="reverse",required = false,defaultValue = "1") int reversed,             //whether the result is arranged by time-reverse order(default) or not
              HttpSession session){
-        Response<ReviewsDetailed> response = new Response<>();
+        Response<ReviewWithUser> response = new Response<>();
 
         //System.out.println(session.getAttribute("id"));
         if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
             return sessionService.auth(session);
         }
         try{
-            List<ReviewsDetailed> resultList=writeReviewMapper.selectAllComment(gameId,from,to-from,reversed);
-            if (resultList.isEmpty()){
+            List<ReviewsDetailed> commentList=writeReviewMapper.selectAllComment(gameId,from,to-from,reversed);
+            if (commentList.isEmpty()){
                 response.setError("No comment yet!");
                 response.setStatus("404");
             }
             else{
+                List<ReviewWithUser> resultList=new ArrayList<>();
+                for(int i=0;i<commentList.size();i++){
+                    int uid=commentList.get(i).getUserId();
+                    Users u=usersMapper.selectByPrimaryKey(uid);
+                    ReviewWithUser reviewWithUser=new ReviewWithUser();
+                    reviewWithUser.setAvatarPath(u.getAvatarPath());
+                    reviewWithUser.setUserId(uid);
+                    reviewWithUser.setUsername(u.getUserName());
+                    reviewWithUser.setContent(commentList.get(i).getContent());
+                    reviewWithUser.setReviewDate(commentList.get(i).getReviewDate());
+                }
                 response.setResult(resultList);
                 response.setStatus("200");
             }
