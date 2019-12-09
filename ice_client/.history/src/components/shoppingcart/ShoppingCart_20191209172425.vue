@@ -38,9 +38,14 @@
     >
       <!-- 内容主体区域 -->
       <el-form :model="buyForm" ref="buyFormRef" label-width="100px">
-        <el-form-item label="Title">{{ buyForm.title }}</el-form-item>
-        <el-form-item label="Console">{{ buyForm.consolename }}</el-form-item>
-        <el-form-item label="Price">¥ {{ buyForm.price }}</el-form-item>
+        <el-form-item label="Title">
+          <!-- <el-input v-model="buyForm.title" disabled></el-input> -->
+          {{ buyForm.title }}
+        </el-form-item>
+        <el-form-item label="Price">
+          <!-- <el-input v-model="buyForm.price" disabled></el-input> -->
+          ¥ {{ buyForm.price }}
+        </el-form-item>
       </el-form>
       <!-- 对话框底部确定取消按钮 -->
       <span slot="footer" class="dialog-footer">
@@ -102,7 +107,7 @@ export default {
       buyForm: {
         title: 'SUPERMARIO',
         price: '19.90',
-        consolename: 'PS4',
+        consoles: [],
         category: 'Adventure'
       }
     }
@@ -116,31 +121,6 @@ export default {
     // 展示编辑游戏的对话框
     showBuyDialog () {
       this.buyDialogVisible = true
-    },
-    // 监听修改游戏对话框的关闭事件
-    buyDialogClosed () {
-      // this.$refs.buyFormRef.resetFields()
-    },
-    // 取消对游戏的购买
-    cancelBuyGame () {
-      // 关闭对话框
-      this.buyDialogVisible = false
-      // 提示取消修改
-      this.$message('Cancel buy game')
-    },
-    // 修改游戏信息并提交
-    buyGame () {
-      // !!!!!!!!!!!!!!!!!!!!!!!在这里需要添加一个验证，验证是否已经单选游戏平台，若未选择，前端报错，不可提交，示例代码如下注释!!!!!!!!!!!!!!!!!!!!!!
-      // if (this.buyForm.consoles === '') {
-      //   return this.$message.error('Please choose game consoles')
-      // }
-      // console.log(this.buyForm.consoles)
-      // 关闭对话框
-      this.buyDialogVisible = false
-      // 刷新数据列表
-      // this.getGameList()
-      // 提示修改成功
-      this.$message.success('Buy game success')
     }
   }
 }

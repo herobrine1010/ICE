@@ -36,11 +36,11 @@
         </el-row>
         <el-row>
           <el-col :span="6">
-            <el-button class="input-car" type="warning" @click="showShopcartDialog()">加入购物车</el-button>
+            <el-button class="input-car" type="warning">加入购物车</el-button>
           </el-col>
           <el-col :span="6">
             <el-button
-              @click="staring()"
+              @click="staring"
               :type="star_button_type"
               icon="el-icon-star-off"
               circle
@@ -139,6 +139,7 @@
 
 <script>
 import Carousel from './Carousel'
+import { mapGetters } from 'vuex'
 export default {
   name: 'GoodsDetail',
   components: { Carousel },
@@ -196,14 +197,18 @@ export default {
       buyForm: {
         title: 'SUPERMARIO',
         price: '19.90',
-        consoles: [],
+        consoles: [
+          'PS4',
+          'PS Vita',
+          'Xbox one'
+        ],
         category: 'Adventure'
       },
       // 添加游戏到购物车按钮弹出的对话框-----------------------------------------------------------------------------------
       // 控制添加游戏到购物车对话框的显示与隐藏
-      shopcartDialogVisible: false,
+      buyDialogVisible: false,
       // 查询到的游戏信息对象
-      shopcartForm: {
+      buyForm: {
         title: 'SUPERMARIO',
         price: '19.90',
         consoles: [
@@ -212,37 +217,16 @@ export default {
           'Xbox one'
         ],
         category: 'Adventure'
-      },
-      evaluationNum: {
-        current: 0,
-        total: 0
       }
     }
   },
-  mounted () {
-    // 对整个页面滚轮进行监听，每发生一次滚轮事件，执行一次方法
-    document.getElementById('main').addEventListener('scroll', this.handleScroll)
+  computed: {
+    ...mapGetters([
+      'goodsList'
+    ])
   },
   methods: {
-    // 滚动事件触发函数
-    handleScroll () {
-      // 兼容性，获取页面滚动距离
-      // console.log('滚动')
-      // document.getElementById('main').scrollTop 当前页面滚动距离
-      // document.body.scrollHeight 页面高度
-      // document.getElementById('main').scrollHeight 滚动区域高度
-      let scrollLength = document.getElementById('main').scrollTop + document.body.scrollHeight
-      // console.log(scrollLength)
-      // console.log(document.getElementById('main').scrollHeight)
-      // 判断是否滚动到底部
-      if (scrollLength >= document.getElementById('main').scrollHeight) {
-        // console.log('滚动到底部')
-        // TODO:滚动到底部，调用请求评论API
-        this.loadingEvaluation(this.evaluationNum.current, this.evaluationNum.current + 2)
-      }
-    },
     staring () {
-      // 在这里添加gameid到user的愿望清单里------------------------------------------------------
       if (this.star_button_type === '') {
         this.star_button_type = 'warning'
       } else {
@@ -253,6 +237,14 @@ export default {
     // 购买游戏按钮相关------------------------------------------------------------------------
     // 展示编辑游戏的对话框
     showBuyDialog () {
+      // 调用 API 接口，获取选中游戏商品的信息，存储到修改表格 editForm 中
+      // // console.log(id)
+      // const { data: res } = await this.$http.get('users/' + id)
+
+      // if (res.meta.status !== 200) {
+      //   return this.$message.error('查询用户信息失败！')
+      // }
+
       console.log(this.buyForm)
       this.buyDialogVisible = true
     },
@@ -260,7 +252,7 @@ export default {
     buyDialogClosed () {
       // this.$refs.buyFormRef.resetFields()
     },
-    // 取消对游戏的购买
+    // 取消对游戏信息的修改
     cancelBuyGame () {
       // 关闭对话框
       this.buyDialogVisible = false
@@ -269,95 +261,36 @@ export default {
     },
     // 修改游戏信息并提交
     buyGame () {
-      // !!!!!!!!!!!!!!!!!!!!!!!在这里需要添加一个验证，验证是否已经单选游戏平台，若未选择，前端报错，不可提交，示例代码如下注释!!!!!!!!!!!!!!!!!!!!!!
-      // if (this.buyForm.consoles === '') {
-      //   return this.$message.error('Please choose game consoles')
-      // }
-      // console.log(this.buyForm.consoles)
+      // 调用 API 接口，发起修改游戏信息的请求，根据返回的 response 进行对应的操作
+      // this.$refs.editFormRef.validate(async valid => {
+      //   if (!valid) return
+      //   // 发起修改用户信息的数据请求
+      //   const { data: res } = await this.$http.put(
+      //     'users/' + this.editForm.id,
+      //     {
+      //       email: this.editForm.email,
+      //       mobile: this.editForm.mobile
+      //     }
+      //   )
+
+      //   if (res.meta.status !== 200) {
+      //     return this.$message.error('更新用户信息失败！')
+      //   }
+
+      //   // 关闭对话框
+      //   this.editDialogVisible = false
+      //   // 刷新数据列表
+      //   this.getUserList()
+      //   // 提示修改成功
+      //   this.$message.success('更新用户信息成功！')
+      // })
       // 关闭对话框
       this.buyDialogVisible = false
       // 刷新数据列表
       // this.getGameList()
       // 提示修改成功
       this.$message.success('Buy game success')
-    },
-    // 添加游戏到购物车按钮相关------------------------------------------------------------------------
-    // 展示编辑游戏的对话框
-    showShopcartDialog () {
-      console.log(this.shopcartForm)
-      this.shopcartDialogVisible = true
-    },
-    // 监听修改游戏对话框的关闭事件
-    shopcartDialogClosed () {
-      // this.$refs.buyFormRef.resetFields()
-    },
-    // 取消对游戏信息的修改
-    cancelShopcartGame () {
-      // 关闭对话框
-      this.shopcartDialogVisible = false
-      // 提示取消修改
-      this.$message('Cancel add game to shopping cart')
-    },
-    // 修改游戏信息并提交
-    shopcartGame () {
-      // !!!!!!!!!!!!!!!!!!!!!!!在这里需要添加一个验证，验证是否已经单选游戏平台，若未选择，前端报错，不可提交，示例代码如下注释!!!!!!!!!!!!!!!!!!!!!!
-      // if (this.shopcartForm.consoles === '') {
-      //   return this.$message.error('Please choose game consoles')
-      // }
-      // console.log(this.shopcartForm.consoles)
-      // 关闭对话框
-      this.shopcartDialogVisible = false
-      // 刷新数据列表
-      // this.getGameList()
-      // 提示修改成功
-      this.$message.success('Add game to shopping cart success')
-    },
-    // 获取总评论数
-    getEvaluationNum () {
-      console.log('getEvaluationNum')
-      this.$axios.get('/api/commentsNumber', { params: { gameId: this.$router.currentRoute.params.id } })
-        .then(response => {
-          console.log(response)
-          if (response.data.status === '200') {
-            this.evaluationNum.total = response.data.result[0]
-            console.log(this.evaluationNum.total)
-            this.loadingEvaluation(this.evaluationNum.current, this.evaluationNum.current + 2)
-          }
-        })
-    },
-    // 加载评论
-    loadingEvaluation (from, to) {
-      console.log('loading')
-      if (from >= this.evaluationNum.total) {
-        return
-      }
-      if (to > this.evaluationNum.total) {
-        to = this.evaluationNum.total
-      }
-      // 获取当前路由参数
-      console.log('gameId:', this.$router.currentRoute.params.id)
-      this.$axios.get('/api/allComment', { params: { gameId: this.$router.currentRoute.params.id, from: from, to: to } })
-        .then(response => {
-          console.log(response)
-          if (response.data.status === '200') {
-            for (let index in response.data.result) {
-              let commentInfo = {}
-              commentInfo.avatar = response.data.result[index].avatarPath
-              commentInfo.name = response.data.result[index].username
-              try {
-                commentInfo.date = response.data.result[index].reviewDate.split('T')[0]
-              } catch (e) {
-              }
-              commentInfo.comment = response.data.result[index].content
-              this.user_evaluation.push(commentInfo)
-              this.evaluationNum.current += 1
-            }
-          }
-        })
     }
-  },
-  created () {
-    this.getEvaluationNum()
   }
 }
 </script>

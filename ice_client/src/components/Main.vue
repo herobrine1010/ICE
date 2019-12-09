@@ -74,9 +74,16 @@ export default {
           authName: '游戏分类',
           // TODO 获取分类列表
           children: [
-            { id: '1-1', authName: '类别1', path: '类别1' },
-            { id: '1-2', authName: '类别2', path: '类别2' },
-            { id: '1-3', authName: '类别3', path: '类别3' }
+            { id: '1-1', authName: 'Action', path: 'action' },
+            { id: '1-2', authName: 'Adventure', path: 'adventure' },
+            { id: '1-3', authName: 'Arcade', path: 'arcade' },
+            { id: '1-3', authName: 'Board Games', path: 'boardgames' },
+            { id: '1-3', authName: 'Racing', path: 'racing' },
+            { id: '1-3', authName: 'Role-Playing Games', path: 'roleplayinggames' },
+            { id: '1-3', authName: 'Shooter', path: 'shooter' },
+            { id: '1-3', authName: 'Simulation', path: 'simulation' },
+            { id: '1-3', authName: 'Sports', path: 'sports' },
+            { id: '1-3', authName: 'Strategy', path: 'strategy' }
           ]
         },
         {
@@ -84,9 +91,14 @@ export default {
           authName: '游戏平台',
           // TODO 获取平台列表
           children: [
-            { id: '2-1', authName: '平台1', path: '' },
-            { id: '2-2', authName: '平台2', path: '' },
-            { id: '2-3', authName: '平台3', path: '' }
+            { id: '2-1', authName: 'PS3', path: '/PlatForm/ps3' },
+            { id: '2-2', authName: 'PS4', path: '/PlatForm/ps4' },
+            { id: '2-3', authName: 'PS Vita', path: '/PlatForm/psvita' },
+            { id: '2-4', authName: 'PSP', path: '/PlatForm/' },
+            { id: '2-5', authName: 'Nintendo Switch', path: '/PlatForm/nintendoswitch' },
+            { id: '2-6', authName: 'Nintendo 3DS', path: '/PlatForm/nintendo3ds' },
+            { id: '2-7', authName: 'Xbox 360', path: '/PlatForm/xbox360' },
+            { id: '2-8', authName: 'Xbox one', path: '/PlatForm/xboxone' }
           ]
         },
         {
@@ -120,11 +132,20 @@ export default {
           break
       }
     },
+    handleScroll () {
+      // 兼容性，获取页面滚动距离
+      var scrollTop = window.pageYOffset || document.getElementById('main').scrollTop || document.body.scrollTop
+      // 判断页面滚动的距离是否大于吸顶元素的位置
+      this.headerFixed = scrollTop > this.offsetTop
+    },
     search () {
       console.log('search')
     }
   },
   mounted () {
+    // 对整个页面滚轮进行监听，每发生一次滚轮事件，执行一次方法
+    // window.addEventListener('scroll', this.handleScroll)
+    document.getElementById('main').addEventListener('scroll', this.handleScroll)
     // DOM异步更新 对未来更新后的视图进行操作 在更新后执行
     // 监听dom渲染完成
     this.$nextTick(function () {

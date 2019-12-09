@@ -139,6 +139,7 @@
 
 <script>
 import Carousel from './Carousel'
+import { mapGetters } from 'vuex'
 export default {
   name: 'GoodsDetail',
   components: { Carousel },
@@ -212,35 +213,15 @@ export default {
           'Xbox one'
         ],
         category: 'Adventure'
-      },
-      evaluationNum: {
-        current: 0,
-        total: 0
       }
     }
   },
-  mounted () {
-    // 对整个页面滚轮进行监听，每发生一次滚轮事件，执行一次方法
-    document.getElementById('main').addEventListener('scroll', this.handleScroll)
+  computed: {
+    ...mapGetters([
+      'goodsList'
+    ])
   },
   methods: {
-    // 滚动事件触发函数
-    handleScroll () {
-      // 兼容性，获取页面滚动距离
-      // console.log('滚动')
-      // document.getElementById('main').scrollTop 当前页面滚动距离
-      // document.body.scrollHeight 页面高度
-      // document.getElementById('main').scrollHeight 滚动区域高度
-      let scrollLength = document.getElementById('main').scrollTop + document.body.scrollHeight
-      // console.log(scrollLength)
-      // console.log(document.getElementById('main').scrollHeight)
-      // 判断是否滚动到底部
-      if (scrollLength >= document.getElementById('main').scrollHeight) {
-        // console.log('滚动到底部')
-        // TODO:滚动到底部，调用请求评论API
-        this.loadingEvaluation(this.evaluationNum.current, this.evaluationNum.current + 2)
-      }
-    },
     staring () {
       // 在这里添加gameid到user的愿望清单里------------------------------------------------------
       if (this.star_button_type === '') {
@@ -311,53 +292,7 @@ export default {
       // this.getGameList()
       // 提示修改成功
       this.$message.success('Add game to shopping cart success')
-    },
-    // 获取总评论数
-    getEvaluationNum () {
-      console.log('getEvaluationNum')
-      this.$axios.get('/api/commentsNumber', { params: { gameId: this.$router.currentRoute.params.id } })
-        .then(response => {
-          console.log(response)
-          if (response.data.status === '200') {
-            this.evaluationNum.total = response.data.result[0]
-            console.log(this.evaluationNum.total)
-            this.loadingEvaluation(this.evaluationNum.current, this.evaluationNum.current + 2)
-          }
-        })
-    },
-    // 加载评论
-    loadingEvaluation (from, to) {
-      console.log('loading')
-      if (from >= this.evaluationNum.total) {
-        return
-      }
-      if (to > this.evaluationNum.total) {
-        to = this.evaluationNum.total
-      }
-      // 获取当前路由参数
-      console.log('gameId:', this.$router.currentRoute.params.id)
-      this.$axios.get('/api/allComment', { params: { gameId: this.$router.currentRoute.params.id, from: from, to: to } })
-        .then(response => {
-          console.log(response)
-          if (response.data.status === '200') {
-            for (let index in response.data.result) {
-              let commentInfo = {}
-              commentInfo.avatar = response.data.result[index].avatarPath
-              commentInfo.name = response.data.result[index].username
-              try {
-                commentInfo.date = response.data.result[index].reviewDate.split('T')[0]
-              } catch (e) {
-              }
-              commentInfo.comment = response.data.result[index].content
-              this.user_evaluation.push(commentInfo)
-              this.evaluationNum.current += 1
-            }
-          }
-        })
     }
-  },
-  created () {
-    this.getEvaluationNum()
   }
 }
 </script>

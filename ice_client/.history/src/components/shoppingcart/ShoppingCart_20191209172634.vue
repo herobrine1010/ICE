@@ -40,7 +40,10 @@
       <el-form :model="buyForm" ref="buyFormRef" label-width="100px">
         <el-form-item label="Title">{{ buyForm.title }}</el-form-item>
         <el-form-item label="Console">{{ buyForm.consolename }}</el-form-item>
-        <el-form-item label="Price">¥ {{ buyForm.price }}</el-form-item>
+        <el-form-item label="Price">
+          <!-- <el-input v-model="buyForm.price" disabled></el-input> -->
+          ¥ {{ buyForm.price }}
+        </el-form-item>
       </el-form>
       <!-- 对话框底部确定取消按钮 -->
       <span slot="footer" class="dialog-footer">

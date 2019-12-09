@@ -38,9 +38,19 @@
     >
       <!-- 内容主体区域 -->
       <el-form :model="buyForm" ref="buyFormRef" label-width="100px">
-        <el-form-item label="Title">{{ buyForm.title }}</el-form-item>
-        <el-form-item label="Console">{{ buyForm.consolename }}</el-form-item>
-        <el-form-item label="Price">¥ {{ buyForm.price }}</el-form-item>
+        <el-form-item label="Title">
+          <!-- <el-input v-model="buyForm.title" disabled></el-input> -->
+          {{ buyForm.title }}
+        </el-form-item>
+        <el-form-item label="Price">
+          <!-- <el-input v-model="buyForm.price" disabled></el-input> -->
+          ¥ {{ buyForm.price }}
+        </el-form-item>
+        <el-form-item label="Consoles">
+          <el-radio-group v-model="buyForm.consoles" size="small">
+            <el-radio-button v-for="con in goodsInfo.platform" :label="con" :key="con">{{con}}</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
       </el-form>
       <!-- 对话框底部确定取消按钮 -->
       <span slot="footer" class="dialog-footer">
@@ -102,7 +112,7 @@ export default {
       buyForm: {
         title: 'SUPERMARIO',
         price: '19.90',
-        consolename: 'PS4',
+        consoles: [],
         category: 'Adventure'
       }
     }
@@ -115,6 +125,7 @@ export default {
     // 购买游戏按钮相关------------------------------------------------------------------------
     // 展示编辑游戏的对话框
     showBuyDialog () {
+      console.log(this.buyForm)
       this.buyDialogVisible = true
     },
     // 监听修改游戏对话框的关闭事件

@@ -36,11 +36,11 @@
         </el-row>
         <el-row>
           <el-col :span="6">
-            <el-button class="input-car" type="warning" @click="showShopcartDialog()">加入购物车</el-button>
+            <el-button class="input-car" type="warning">加入购物车</el-button>
           </el-col>
           <el-col :span="6">
             <el-button
-              @click="staring()"
+              @click="staring"
               :type="star_button_type"
               icon="el-icon-star-off"
               circle
@@ -75,27 +75,43 @@
       </el-row>
     </div>
 
-    <!-- 购买游戏的对话框 -->
+    <!-- 修改游戏商品信息的对话框 -->
     <el-dialog
       title="Buy Game"
       :visible.sync="buyDialogVisible"
-      width="30%"
+      width="50%"
       @close="buyDialogClosed"
     >
       <!-- 内容主体区域 -->
-      <el-form :model="buyForm" ref="buyFormRef" label-width="100px">
-        <el-form-item label="Title">
-          <!-- <el-input v-model="buyForm.title" disabled></el-input> -->
-          {{ buyForm.title }}
+      <el-form :model="buyForm" :rules="buyFormRules" ref="buyFormRef" label-width="100px">
+        <el-form-item label="Game ID">
+          <el-input v-model="buyForm.gameid" disabled></el-input>
         </el-form-item>
-        <el-form-item label="Price">
-          <!-- <el-input v-model="buyForm.price" disabled></el-input> -->
-          ¥ {{ buyForm.price }}
+        <el-form-item label="Title" prop="title">
+          <el-input v-model="buyForm.title"></el-input>
+        </el-form-item>
+        <el-form-item label="Price" prop="price">
+          <el-input v-model="buyForm.price"></el-input>
+        </el-form-item>
+        <el-form-item label="Discount">
+          <el-radio-group v-model="buyForm.discount" size="small">
+            <el-radio-button label="On"></el-radio-button>
+            <el-radio-button label="Off"></el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="Pre Order">
+          <el-radio-group v-model="buyForm.pre_order" size="small">
+            <el-radio-button label="On"></el-radio-button>
+            <el-radio-button label="Off"></el-radio-button>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="Consoles">
-          <el-radio-group v-model="buyForm.consoles" size="small">
-            <el-radio-button v-for="con in goodsInfo.platform" :label="con" :key="con">{{con}}</el-radio-button>
-          </el-radio-group>
+          <el-checkbox-group v-model="buyForm.consoles" size="small">
+            <el-checkbox-button v-for="con in consoleOptions" :label="con" :key="con">{{con}}</el-checkbox-button>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="Discription" prop="discription">
+          <el-input v-model="buyForm.discription"></el-input>
         </el-form-item>
       </el-form>
       <!-- 对话框底部确定取消按钮 -->
@@ -104,41 +120,12 @@
         <el-button type="primary" @click="buyGame">Confirm</el-button>
       </span>
     </el-dialog>
-
-    <!-- 添加游戏到购物车的对话框 -->
-    <el-dialog
-      title="Add Game To Shopping Cart"
-      :visible.sync="shopcartDialogVisible"
-      width="30%"
-      @close="shopcartDialogClosed"
-    >
-      <!-- 内容主体区域 -->
-      <el-form :model="shopcartForm" ref="shopcartFormRef" label-width="100px">
-        <el-form-item label="Title">
-          <!-- <el-input v-model="buyForm.title" disabled></el-input> -->
-          {{ shopcartForm.title }}
-        </el-form-item>
-        <el-form-item label="Price">
-          <!-- <el-input v-model="buyForm.price" disabled></el-input> -->
-          ¥ {{ shopcartForm.price }}
-        </el-form-item>
-        <el-form-item label="Consoles">
-          <el-radio-group v-model="shopcartForm.consoles" size="small">
-            <el-radio-button v-for="con in goodsInfo.platform" :label="con" :key="con">{{con}}</el-radio-button>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <!-- 对话框底部确定取消按钮 -->
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancelShopcartGame">Cancel</el-button>
-        <el-button type="primary" @click="shopcartGame">Confirm</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import Carousel from './Carousel'
+import { mapGetters } from 'vuex'
 export default {
   name: 'GoodsDetail',
   components: { Carousel },
@@ -190,59 +177,58 @@ export default {
         }
       ],
       // 购买游戏按钮弹出的对话框-----------------------------------------------------------------------------------
-      // 控制购买游戏对话框的显示与隐藏
+      // 控制修改游戏对话框的显示与隐藏
       buyDialogVisible: false,
       // 查询到的游戏信息对象
       buyForm: {
+        gameid: '12345',
         title: 'SUPERMARIO',
         price: '19.90',
-        consoles: [],
-        category: 'Adventure'
-      },
-      // 添加游戏到购物车按钮弹出的对话框-----------------------------------------------------------------------------------
-      // 控制添加游戏到购物车对话框的显示与隐藏
-      shopcartDialogVisible: false,
-      // 查询到的游戏信息对象
-      shopcartForm: {
-        title: 'SUPERMARIO',
-        price: '19.90',
+        discount: 'On',
+        average_rate: '4.8',
+        release_date: '1985-09-13',
+        pre_order: 'Off',
+        rate_count: '100',
+        discription: 'The game takes place in the Mushroom Kingdom, and Mario begins his new adventure in order to rescue Princess Peach, kidnapped by Kuba.',
+        cover: '/tmp_uploads/30f08d52c551ecb447277eae232304b8',
+        pictures: [
+          '/tmp_uploads/30f08d52c551ecb447277eae232304b1',
+          '/tmp_uploads/30f08d52c551ecb447277eae232304b2',
+          '/tmp_uploads/30f08d52c551ecb447277eae232304b3'
+        ],
         consoles: [
           'PS4',
           'PS Vita',
           'Xbox one'
         ],
-        category: 'Adventure'
+        category: 'Adventure',
+        tags: [
+          'CARTOON',
+          'POPULAR'
+        ]
       },
-      evaluationNum: {
-        current: 0,
-        total: 0
+      // 修改表单的验证规则对象
+      buyFormRules: {
+        title: [
+          { required: true, message: 'Please enter game name', trigger: 'blur' }
+        ],
+        price: [
+          { required: true, message: 'Please enter game price', trigger: 'blur' },
+          { validator: checkPrice, trigger: 'blur' }
+        ],
+        discription: [
+          { validator: checkDiscription, trigger: 'blur' }
+        ]
       }
     }
   },
-  mounted () {
-    // 对整个页面滚轮进行监听，每发生一次滚轮事件，执行一次方法
-    document.getElementById('main').addEventListener('scroll', this.handleScroll)
+  computed: {
+    ...mapGetters([
+      'goodsList'
+    ])
   },
   methods: {
-    // 滚动事件触发函数
-    handleScroll () {
-      // 兼容性，获取页面滚动距离
-      // console.log('滚动')
-      // document.getElementById('main').scrollTop 当前页面滚动距离
-      // document.body.scrollHeight 页面高度
-      // document.getElementById('main').scrollHeight 滚动区域高度
-      let scrollLength = document.getElementById('main').scrollTop + document.body.scrollHeight
-      // console.log(scrollLength)
-      // console.log(document.getElementById('main').scrollHeight)
-      // 判断是否滚动到底部
-      if (scrollLength >= document.getElementById('main').scrollHeight) {
-        // console.log('滚动到底部')
-        // TODO:滚动到底部，调用请求评论API
-        this.loadingEvaluation(this.evaluationNum.current, this.evaluationNum.current + 2)
-      }
-    },
     staring () {
-      // 在这里添加gameid到user的愿望清单里------------------------------------------------------
       if (this.star_button_type === '') {
         this.star_button_type = 'warning'
       } else {
@@ -252,112 +238,61 @@ export default {
     },
     // 购买游戏按钮相关------------------------------------------------------------------------
     // 展示编辑游戏的对话框
-    showBuyDialog () {
-      console.log(this.buyForm)
-      this.buyDialogVisible = true
+    showEditDialog (gameid) {
+      // 调用 API 接口，获取选中游戏商品的信息，存储到修改表格 editForm 中
+      // // console.log(id)
+      // const { data: res } = await this.$http.get('users/' + id)
+
+      // if (res.meta.status !== 200) {
+      //   return this.$message.error('查询用户信息失败！')
+      // }
+
+      console.log(this.editForm)
+      this.editDialogVisible = true
     },
     // 监听修改游戏对话框的关闭事件
-    buyDialogClosed () {
-      // this.$refs.buyFormRef.resetFields()
+    editDialogClosed () {
+      this.$refs.editFormRef.resetFields()
     },
-    // 取消对游戏的购买
-    cancelBuyGame () {
+    // 取消对游戏信息的修改
+    cancelEditGameInfo () {
       // 关闭对话框
-      this.buyDialogVisible = false
+      this.editDialogVisible = false
       // 提示取消修改
-      this.$message('Cancel buy game')
+      this.$message('Cancel edit game info')
     },
     // 修改游戏信息并提交
-    buyGame () {
-      // !!!!!!!!!!!!!!!!!!!!!!!在这里需要添加一个验证，验证是否已经单选游戏平台，若未选择，前端报错，不可提交，示例代码如下注释!!!!!!!!!!!!!!!!!!!!!!
-      // if (this.buyForm.consoles === '') {
-      //   return this.$message.error('Please choose game consoles')
-      // }
-      // console.log(this.buyForm.consoles)
+    editGameInfo () {
+      // 调用 API 接口，发起修改游戏信息的请求，根据返回的 response 进行对应的操作
+      // this.$refs.editFormRef.validate(async valid => {
+      //   if (!valid) return
+      //   // 发起修改用户信息的数据请求
+      //   const { data: res } = await this.$http.put(
+      //     'users/' + this.editForm.id,
+      //     {
+      //       email: this.editForm.email,
+      //       mobile: this.editForm.mobile
+      //     }
+      //   )
+
+      //   if (res.meta.status !== 200) {
+      //     return this.$message.error('更新用户信息失败！')
+      //   }
+
+      //   // 关闭对话框
+      //   this.editDialogVisible = false
+      //   // 刷新数据列表
+      //   this.getUserList()
+      //   // 提示修改成功
+      //   this.$message.success('更新用户信息成功！')
+      // })
       // 关闭对话框
-      this.buyDialogVisible = false
+      this.editDialogVisible = false
       // 刷新数据列表
       // this.getGameList()
       // 提示修改成功
       this.$message.success('Buy game success')
-    },
-    // 添加游戏到购物车按钮相关------------------------------------------------------------------------
-    // 展示编辑游戏的对话框
-    showShopcartDialog () {
-      console.log(this.shopcartForm)
-      this.shopcartDialogVisible = true
-    },
-    // 监听修改游戏对话框的关闭事件
-    shopcartDialogClosed () {
-      // this.$refs.buyFormRef.resetFields()
-    },
-    // 取消对游戏信息的修改
-    cancelShopcartGame () {
-      // 关闭对话框
-      this.shopcartDialogVisible = false
-      // 提示取消修改
-      this.$message('Cancel add game to shopping cart')
-    },
-    // 修改游戏信息并提交
-    shopcartGame () {
-      // !!!!!!!!!!!!!!!!!!!!!!!在这里需要添加一个验证，验证是否已经单选游戏平台，若未选择，前端报错，不可提交，示例代码如下注释!!!!!!!!!!!!!!!!!!!!!!
-      // if (this.shopcartForm.consoles === '') {
-      //   return this.$message.error('Please choose game consoles')
-      // }
-      // console.log(this.shopcartForm.consoles)
-      // 关闭对话框
-      this.shopcartDialogVisible = false
-      // 刷新数据列表
-      // this.getGameList()
-      // 提示修改成功
-      this.$message.success('Add game to shopping cart success')
-    },
-    // 获取总评论数
-    getEvaluationNum () {
-      console.log('getEvaluationNum')
-      this.$axios.get('/api/commentsNumber', { params: { gameId: this.$router.currentRoute.params.id } })
-        .then(response => {
-          console.log(response)
-          if (response.data.status === '200') {
-            this.evaluationNum.total = response.data.result[0]
-            console.log(this.evaluationNum.total)
-            this.loadingEvaluation(this.evaluationNum.current, this.evaluationNum.current + 2)
-          }
-        })
-    },
-    // 加载评论
-    loadingEvaluation (from, to) {
-      console.log('loading')
-      if (from >= this.evaluationNum.total) {
-        return
-      }
-      if (to > this.evaluationNum.total) {
-        to = this.evaluationNum.total
-      }
-      // 获取当前路由参数
-      console.log('gameId:', this.$router.currentRoute.params.id)
-      this.$axios.get('/api/allComment', { params: { gameId: this.$router.currentRoute.params.id, from: from, to: to } })
-        .then(response => {
-          console.log(response)
-          if (response.data.status === '200') {
-            for (let index in response.data.result) {
-              let commentInfo = {}
-              commentInfo.avatar = response.data.result[index].avatarPath
-              commentInfo.name = response.data.result[index].username
-              try {
-                commentInfo.date = response.data.result[index].reviewDate.split('T')[0]
-              } catch (e) {
-              }
-              commentInfo.comment = response.data.result[index].content
-              this.user_evaluation.push(commentInfo)
-              this.evaluationNum.current += 1
-            }
-          }
-        })
     }
-  },
-  created () {
-    this.getEvaluationNum()
   }
 }
 </script>
