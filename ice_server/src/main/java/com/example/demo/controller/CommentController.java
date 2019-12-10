@@ -94,7 +94,7 @@ public class CommentController {
         return response;
     }
 
-    @RequestMapping(value="/allComment",method=RequestMethod.GET,params={"gameId"})
+    @RequestMapping(value="/allComment",method=RequestMethod.GET)
     public Response<ReviewWithUser> allComment
             (@RequestParam("gameId") int gameId,
              @RequestParam(value="from",required = false,defaultValue = "0")int from,
@@ -124,6 +124,7 @@ public class CommentController {
                     reviewWithUser.setUsername(u.getUserName());
                     reviewWithUser.setContent(commentList.get(i).getContent());
                     reviewWithUser.setReviewDate(commentList.get(i).getReviewDate());
+                    resultList.add(reviewWithUser);
                 }
                 response.setResult(resultList);
                 response.setStatus("200");
