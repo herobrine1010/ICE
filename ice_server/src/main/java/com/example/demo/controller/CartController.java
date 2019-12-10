@@ -26,25 +26,6 @@ public class CartController {
     @Autowired
     private GamesMapper gamesMapper;
 
-    @RequestMapping(value = "/getGameDetail",method =RequestMethod.GET)
-    public Response<Games> getGameDetail(@RequestParam("gameId") int gameId, HttpSession session) {
-        Response<Games> response = new Response<>();
-
-        //System.out.println(session.getAttribute("id"));
-        if (!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
-            return sessionService.auth(session);
-        }
-        try {
-            Games g=gamesMapper.selectByPrimaryKey(gameId);
-            List<Games> resultList=new ArrayList<>();
-            resultList.add(g);
-
-        } catch (Exception e) {
-            response.setError("SQL Error!");
-            response.setStatus("403");
-        }
-        return response;
-    }
 
     @RequestMapping(value="/getMyCart",method=RequestMethod.GET)
     public Response<CartItem> getMyCart(
