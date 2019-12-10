@@ -1,11 +1,10 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
-import com.example.demo.dao.HasReviewMapper;
-import com.example.demo.dao.ReviewsMapper;
-import com.example.demo.dao.UsersMapper;
-import com.example.demo.dao.WriteReviewMapper;
+
+import com.example.demo.dao.*;
 import com.example.demo.entity.*;
+import com.example.demo.service.OrderService;
 import com.example.demo.service.SessionService;
 import com.example.demo.service.UserService;
 import org.apache.ibatis.annotations.Param;
@@ -32,12 +31,14 @@ public class CommentController {
     private UserService userService;
     @Autowired
     private SessionService sessionService;
+    @Autowired
+    private OrdersMapper ordersMapper;
 
 
     //gameIdがurlの中に在る原因は、gameIdと評価内容が同時に含まれるクラスはありません。
     //それで、元々にgameIdが商品ページのurlから取られ得るはず。
-    @RequestMapping(value = "/addComment",method =RequestMethod.GET)
-    public Response addComment(@RequestParam("gameId") int gameId,@RequestBody String s, HttpSession session) {
+    @RequestMapping(value = "/addComment",method =RequestMethod.POST)
+    public Response addComment(@RequestBody ReviewAdder r, HttpSession session) {
         Response response = new Response();
 
         //System.out.println(session.getAttribute("id"));
@@ -47,7 +48,7 @@ public class CommentController {
         int thisUserId=Integer.parseInt(session.getAttribute("id").toString());
 
         Reviews review=new Reviews();
-        review.setContent(s);
+        review.setContent(r.getContent());
         java.util.Date currentTime = new java.util.Date();
         review.setReviewDate(currentTime);
 
@@ -55,8 +56,8 @@ public class CommentController {
         //又は、ユーザーは評価内容ただ一つを発表できる。ご注意ください。
         //独立的なAPIは"checkMyComment"のところに見に行ってください。
         try{
-            System.out.println(gameId);
-            int c=writeReviewMapper.getWhetherCommented(thisUserId,gameId);
+            System.out.println(r.getGameId());
+            int c=writeReviewMapper.getWhetherCommented(thisUserId,r.getGameId());
             if(c==1){
                 response.setStatus("403");
                 response.setError("You have already Commented !");
@@ -82,7 +83,7 @@ public class CommentController {
             reviewsMapper.insert(review);
             //review{review_id,content}
             HasReview hasReview = new HasReview();
-            hasReview.setGameId(gameId);
+            hasReview.setGameId(r.getGameId());
             hasReview.setReviewId(reviewsMapper.getLastInsertReviewId());
             hasReviewMapper.insert(hasReview);
             //has_review{game_id(√),review_id}
@@ -97,6 +98,11 @@ public class CommentController {
             response.setStatus("403");
             return response;
         }
+
+        Orders order_record = ordersMapper.selectByPrimaryKey(r.getOrderId());
+        order_record.setStatus(3);
+        ordersMapper.updateByPrimaryKeySelective(order_record);
+
         response.setError("Comment successful!");
         response.setStatus("200");
         return response;

@@ -1,24 +1,19 @@
 <template>
   <div>
-    <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
-    <el-breadcrumb-item :to="{ path: '/MainIndex' }">首页</el-breadcrumb-item>
-    <el-breadcrumb-item>平台</el-breadcrumb-item>
-    <el-breadcrumb-item>{{platformName}}</el-breadcrumb-item>
-    </el-breadcrumb>
+    <Carousel :carouselImgUrl="this.$store.state.carouselImgUrl"/>
+    <SortMenu/>
     <Goods v-for="(i,index) in rowNumber" :goodsInfo="getGoodsInfo(index)"  :key="i" class="list-item"/>
   </div>
 </template>
 
 <script>
+import Carousel from '../common/Carousel'
+import SortMenu from '../common/SortMenu'
 import Goods from '../common/Goods'
 export default {
-  components: { Goods },
+  components: { Carousel, SortMenu, Goods },
   data () {
     return {
-      // 当前name
-      platformName: '',
-      // 当前id
-      platformId: 0,
       // 每次加载的行数
       rowNumber: 0,
       // 商品列表
@@ -33,38 +28,6 @@ export default {
     document.getElementById('main').addEventListener('scroll', this.handleScroll)
   },
   methods: {
-    getPlatformName() {
-      this.platformName = this.$router.currentRoute.params.name
-    },
-    getPlatFormId() {
-      console.log('categoryName:', this.$router.currentRoute.params.name)
-      switch (this.$router.currentRoute.params.name) {
-        case 'PS3':
-          this.platformId = 1
-          break
-        case 'PS4':
-          this.platformId = 2
-          break
-        case 'PS Vita':
-          this.platformId = 3
-          break
-        case 'PSP':
-          this.platformId = 4
-          break
-        case 'Nintendo Switch':
-          this.platformId = 5
-          break
-        case 'Nintendo 3DS':
-          this.platformId = 6
-          break
-        case 'Xbox 360':
-          this.platformId = 7
-          break
-        case 'Xbox one':
-          this.platformId = 8
-          break
-      }
-    },
     getGoodsInfo (index) {
       let goodsInfo = []
       if ((index * 4 + 4) > this.goodsList.length) {
@@ -83,10 +46,10 @@ export default {
       return goodsInfo
     },
     getGames(reset) {
-      console.log('getGames')
+      console.log('sortGames')
       this.$axios.get('/api/getGames', { params: { reset: reset } })
         .then(response => {
-          // console.log('getGames response', response)
+          console.log('getGames response', response)
           if (response.data.status === '200') {
             // console.log('response.data.result', response.data.result)
             if (response.data.result.length === 0) {
@@ -122,45 +85,48 @@ export default {
           }
         })
     },
-    searchGamesByConsole(reset) {
-      console.log('getPlatformGames')
-      this.$axios.get('/api/searchGamesByConsole', { params: { consoleId: this.platformId, reset: reset } })
-        .then(response => {
-          // console.log('getCateGames response', response)
-          if (response.data.status === '200') {
-            // console.log('response.data.result', response.data.result)
-            if (response.data.result.length === 0) {
-              console.log('加载完毕')
-              this.isAllGames = true
-            } else {
-              this.goodsList = []
-              this.rowNumber += 3
-              console.log('rowNumber', this.rowNumber)
-              for (let index in response.data.result) {
-                let gameInfo = {
-                  id: response.data.result[index].id,
-                  imgSrc: response.data.result[index].cover_path,
-                  name: response.data.result[index].title,
-                  value: response.data.result[index].price,
-                  tag: []
-                }
-                // 如果cover_path不存在，则替换成默认图片
-                if (response.data.result[index].cover_path === null) {
-                  gameInfo.imgSrc = 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190702171201495133.jpg'
-                }
-                // 如果标签过多，截取前三个
-                if (response.data.result[index].tags_list.length > 2) {
-                  for (let i in response.data.result[index].tags_list) {
-                    if (i >= 2) {
-                      break
+    getSortGames() {
+      this.$axios.get('/api/getGames', { params: { reset: true } })
+        .then(() => {
+          console.log('getSortGames')
+          this.$axios.get('/api/sortGames', { params: { flag: this.$router.currentRoute.params.sortInfo } })
+            .then(response => {
+              // console.log('getCateGames response', response)
+              if (response.data.status === '200') {
+                // console.log('response.data.result', response.data.result)
+                if (response.data.result.length === 0) {
+                  console.log('加载完毕')
+                  this.isAllGames = true
+                } else {
+                  this.goodsList = []
+                  this.rowNumber += 3
+                  console.log('rowNumber', this.rowNumber)
+                  for (let index in response.data.result) {
+                    let gameInfo = {
+                      id: response.data.result[index].id,
+                      imgSrc: response.data.result[index].cover_path,
+                      name: response.data.result[index].title,
+                      value: response.data.result[index].price,
+                      tag: []
                     }
-                    gameInfo.tag.push(response.data.result[index].tags_list[i])
+                    // 如果cover_path不存在，则替换成默认图片
+                    if (response.data.result[index].cover_path === null) {
+                      gameInfo.imgSrc = 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190702171201495133.jpg'
+                    }
+                    // 如果标签过多，截取前三个
+                    if (response.data.result[index].tags_list.length > 2) {
+                      for (let i in response.data.result[index].tags_list) {
+                        if (i >= 2) {
+                          break
+                        }
+                        gameInfo.tag.push(response.data.result[index].tags_list[i])
+                      }
+                    }
+                    this.goodsList.push(gameInfo)
                   }
                 }
-                this.goodsList.push(gameInfo)
               }
-            }
-          }
+            })
         })
     },
     // 滚动事件触发函数
@@ -185,24 +151,20 @@ export default {
     }
   },
   created () {
-    this.getPlatformName()
-    this.getPlatFormId()
     this.isAllGames = false
     this.rowNumber = 0
     this.goodsList = []
-    this.searchGamesByConsole(true)
+    this.getSortGames()
   },
   watch: {
     $route (newRouter, oldRouter) {
       // console.log(this.$route.path)
       // console.log(newRouter.path)
       // console.log(newRouter.path.indexOf('MainIndex'))
-      this.getPlatFormId()
-      this.getPlatFormId()
       this.isAllGames = false
       this.rowNumber = 0
       this.goodsList = []
-      this.searchGamesByConsole(true)
+      this.getSortGames()
     }
   },
   destroyed () {

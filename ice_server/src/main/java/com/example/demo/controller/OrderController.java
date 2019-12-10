@@ -4,6 +4,7 @@ import com.example.demo.dao.OrdersMapper;
 import com.example.demo.dao.UsersMapper;
 import com.example.demo.entity.Orders;
 import com.example.demo.entity.Response;
+import com.example.demo.service.OrderService;
 import com.example.demo.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,8 @@ public class OrderController {
     private UsersMapper usersMapper;
     @Autowired
     private OrdersMapper ordersMapper;
+    @Autowired
+    private OrderService orderService;
     @Autowired
     static private List<Orders> ordersList_0=new ArrayList<>();
     @Autowired
@@ -62,17 +65,29 @@ public class OrderController {
             else if(allOrderList.get(i).getStatus()==2){
                 ordersList_2.add(allOrderList.get(i));
             }
-            else if(allOrderList.get(i).getStatus()==1){
-                ordersList_3.add(allOrderList.get(3));
+            else if(allOrderList.get(i).getStatus()==3){
+                ordersList_3.add(allOrderList.get(i));
             }
-            else if(allOrderList.get(i).getStatus()==1){
-                ordersList_4.add(allOrderList.get(4));
+            else if(allOrderList.get(i).getStatus()==4){
+                ordersList_4.add(allOrderList.get(i));
             }
         }
 
         response.setStatus("200");
         return response;
     }
+
+    @RequestMapping(value = "/confirmOrder", method=RequestMethod.GET)
+    public Response confirmOrder(@RequestParam(value = "orderId") Integer orderId){
+        Response response=new Response();
+
+        Orders record=ordersMapper.selectByPrimaryKey(orderId);
+        record.setStatus(2);
+        ordersMapper.updateByPrimaryKeySelective(record);
+        response.setStatus("200");
+        return response;
+    }
+
 
     @RequestMapping(value = "/getOrderList", method = RequestMethod.GET)
     public Response getOrderList(@RequestParam(value = "status") Integer status,
@@ -106,8 +121,13 @@ public class OrderController {
             temp = ordersList_4;
         }
 
+        List<OrderService.OrderManager> result=new ArrayList<>();
+        for(int i=0; i < temp.size();i++){
+            result.add(orderService.convertToOrderManager(temp.get(i)));
+        }
+
         response.setStatus("200");
-        response.setResult(temp);
+        response.setResult(result);
         return response;
     }
 

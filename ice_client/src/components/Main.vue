@@ -27,7 +27,7 @@
       </template>
       <!-- 二级菜单 -->
       <el-menu-item
-        :index="subItem.id"
+        :index="subItem.menuId"
         v-for="(subItem, i) in item.children"
         :key="i"
       >
@@ -37,7 +37,7 @@
       </el-menu-item>
     </el-submenu>
     <el-menu-item class="search-menu" index="4" >
-    <el-input class="search-input" placeholder="请输入内容">
+    <el-input class="search-input" v-model="queryInfo" placeholder="请输入内容">
       <el-button  @click="search" class="search-button" slot="append" icon="el-icon-search"></el-button>
     </el-input>
     </el-menu-item>
@@ -51,15 +51,12 @@
     <!-- 路由占位符 -->
     <router-view></router-view>
   </el-main>
-   <InfiniteScroll :class="{'infiniteScroll':!isMainIndex}"></InfiniteScroll>
   </div>
 </template>
 
 <script>
-import InfiniteScroll from './common/InfiniteScroll'
 export default {
   name: 'Main',
-  components: { InfiniteScroll },
   data () {
     return {
       activeIndex: '1',
@@ -67,23 +64,23 @@ export default {
       offsetTop: 0,
       offsetHeight: 0,
       headerFixed: false,
-      isMainIndex: true,
+      // isMainIndex: true,
       menuList: [
         {
           id: '1',
           authName: '游戏分类',
           // TODO 获取分类列表
           children: [
-            { id: '1-1', authName: 'Action', path: 'action' },
-            { id: '1-2', authName: 'Adventure', path: 'adventure' },
-            { id: '1-3', authName: 'Arcade', path: 'arcade' },
-            { id: '1-3', authName: 'Board Games', path: 'boardgames' },
-            { id: '1-3', authName: 'Racing', path: 'racing' },
-            { id: '1-3', authName: 'Role-Playing Games', path: 'roleplayinggames' },
-            { id: '1-3', authName: 'Shooter', path: 'shooter' },
-            { id: '1-3', authName: 'Simulation', path: 'simulation' },
-            { id: '1-3', authName: 'Sports', path: 'sports' },
-            { id: '1-3', authName: 'Strategy', path: 'strategy' }
+            { menuId: '1-1', authName: 'Action', path: 'action' },
+            { menuId: '1-2', authName: 'Adventure', path: 'adventure' },
+            { menuId: '1-3', authName: 'Arcade', path: 'arcade' },
+            { menuId: '1-4', authName: 'Board Games', path: 'boardgames' },
+            { menuId: '1-5', authName: 'Racing', path: 'racing' },
+            { menuId: '1-6', authName: 'Role-Playing Games', path: 'roleplayinggames' },
+            { menuId: '1-7', authName: 'Shooter', path: 'shooter' },
+            { menuId: '1-8', authName: 'Simulation', path: 'simulation' },
+            { menuId: '1-9', authName: 'Sports', path: 'sports' },
+            { menuId: '1-10', authName: 'Strategy', path: 'strategy' }
           ]
         },
         {
@@ -91,14 +88,14 @@ export default {
           authName: '游戏平台',
           // TODO 获取平台列表
           children: [
-            { id: '2-1', authName: 'PS3', path: '/PlatForm/ps3' },
-            { id: '2-2', authName: 'PS4', path: '/PlatForm/ps4' },
-            { id: '2-3', authName: 'PS Vita', path: '/PlatForm/psvita' },
-            { id: '2-4', authName: 'PSP', path: '/PlatForm/' },
-            { id: '2-5', authName: 'Nintendo Switch', path: '/PlatForm/nintendoswitch' },
-            { id: '2-6', authName: 'Nintendo 3DS', path: '/PlatForm/nintendo3ds' },
-            { id: '2-7', authName: 'Xbox 360', path: '/PlatForm/xbox360' },
-            { id: '2-8', authName: 'Xbox one', path: '/PlatForm/xboxone' }
+            { menuId: '2-1', authName: 'PS3', path: '/PlatForm/ps3' },
+            { menuId: '2-2', authName: 'PS4', path: '/PlatForm/ps4' },
+            { menuId: '2-3', authName: 'PS Vita', path: '/PlatForm/psvita' },
+            { menuId: '2-4', authName: 'PSP', path: '/PlatForm/' },
+            { menuId: '2-5', authName: 'Nintendo Switch', path: '/PlatForm/nintendoswitch' },
+            { menuId: '2-6', authName: 'Nintendo 3DS', path: '/PlatForm/nintendo3ds' },
+            { menuId: '2-7', authName: 'Xbox 360', path: '/PlatForm/xbox360' },
+            { menuId: '2-8', authName: 'Xbox one', path: '/PlatForm/xboxone' }
           ]
         },
         {
@@ -106,17 +103,19 @@ export default {
           authName: '发行商',
           // TODO 获取发行商列表
           children: [
-            { id: '3-1', authName: '发行商1', path: '' },
-            { id: '3-2', authName: '发行商2', path: '' },
-            { id: '3-3', authName: '发行商3', path: '' }
+            // { menuId: '3-1', authName: '发行商1', path: '' },
+            // { menuId: '3-2', authName: '发行商2', path: '' },
+            // { menuId: '3-3', authName: '发行商3', path: '' }
           ]
         }
-      ]
+      ],
+      queryInfo: ''
     }
   },
   methods: {
     handleSelect (key, keyPath) {
-      console.log('点击菜单栏', key)
+      // console.log('点击菜单栏key', key)
+      // console.log('点击菜单栏keyPath', keyPath)
       switch (key) {
         case '5':
           console.log('进入一个页面', 55555555)
@@ -130,6 +129,110 @@ export default {
           console.log('进入一个页面', 77777777)
           this.$router.push('/ShoppingCart')
           break
+        case '1-1':
+          console.log('进入一个页面', '1-1')
+          this.$router.push('/Category/Action')
+          break
+        case '1-2':
+          console.log('进入一个页面', '1-2')
+          this.$router.push('/Category/Adventure')
+          break
+        case '1-3':
+          console.log('进入一个页面', '1-3')
+          this.$router.push('/Category/Arcade')
+          break
+        case '1-4':
+          console.log('进入一个页面', '1-4')
+          this.$router.push('/Category/Board Games')
+          break
+        case '1-5':
+          console.log('进入一个页面', '1-5')
+          this.$router.push('/Category/Racing')
+          break
+        case '1-6':
+          console.log('进入一个页面', '1-6')
+          this.$router.push('/Category/Role-Playing Games')
+          break
+        case '1-7':
+          console.log('进入一个页面', '1-7')
+          this.$router.push('/Category/Shooter')
+          break
+        case '1-8':
+          console.log('进入一个页面', '1-8')
+          this.$router.push('/Category/Simulation')
+          break
+        case '1-9':
+          console.log('进入一个页面', '1-9')
+          this.$router.push('/Category/Sports')
+          break
+        case '1-10':
+          console.log('进入一个页面', '1-10')
+          this.$router.push('/Category/Strategy')
+          break
+        case '2-1':
+          console.log('进入一个页面', '2-1')
+          this.$router.push('/PlatForm/PS3')
+          break
+        case '2-2':
+          console.log('进入一个页面', '2-2')
+          this.$router.push('/PlatForm/PS4')
+          break
+        case '2-3':
+          console.log('进入一个页面', '2-3')
+          this.$router.push('/PlatForm/PS Vita')
+          break
+        case '2-4':
+          console.log('进入一个页面', '2-4')
+          this.$router.push('/PlatForm/PSP')
+          break
+        case '2-5':
+          console.log('进入一个页面', '2-5')
+          this.$router.push('/PlatForm/Nintendo Switch')
+          break
+        case '2-6':
+          console.log('进入一个页面', '2-6')
+          this.$router.push('/PlatForm/Nintendo 3DS')
+          break
+        case '2-7':
+          console.log('进入一个页面', '2-7')
+          this.$router.push('/PlatForm/Xbox 360')
+          break
+        case '2-8':
+          console.log('进入一个页面', '2-8')
+          this.$router.push('/PlatForm/Xbox one')
+          break
+        case '3-1':
+          console.log('进入一个页面', '3-1')
+          this.$router.push('/PublisherPage/' + this.menuList[2].children[0].id)
+          break
+        case '3-2':
+          console.log('进入一个页面', '3-2')
+          this.$router.push('/PublisherPage/' + this.menuList[2].children[1].id)
+          break
+        case '3-3':
+          console.log('进入一个页面', '3-3')
+          this.$router.push('/PublisherPage/' + this.menuList[2].children[2].id)
+          break
+        case '3-4':
+          console.log('进入一个页面', '3-4')
+          this.$router.push('/PublisherPage/' + this.menuList[2].children[3].id)
+          break
+        case '3-5':
+          console.log('进入一个页面', '3-5')
+          this.$router.push('/PublisherPage/' + this.menuList[2].children[4].id)
+          break
+        case '3-6':
+          console.log('进入一个页面', '3-6')
+          this.$router.push('/PublisherPage/' + this.menuList[2].children[5].id)
+          break
+        case '3-7':
+          console.log('进入一个页面', '3-7')
+          this.$router.push('/PublisherPage/' + this.menuList[2].children[6].id)
+          break
+        case '3-8':
+          console.log('进入一个页面', '3-8')
+          this.$router.push('/PublisherPage/' + this.menuList[2].children[7].id)
+          break
       }
     },
     handleScroll () {
@@ -139,7 +242,36 @@ export default {
       this.headerFixed = scrollTop > this.offsetTop
     },
     search () {
-      console.log('search')
+      console.log('search:', this.queryInfo)
+      if (this.queryInfo === '') {
+        this.$router.push('/MainIndex')
+        return
+      }
+      this.$router.push('/SearchGame/' + this.queryInfo)
+    },
+    getPublisherList () {
+      this.$axios.get('/api/getPublishers')
+        .then(response => {
+          // console.log('getPublisherList response', response)
+          if (response.data.status === '200') {
+            for (let index in response.data.result) {
+              if (index >= 8) {
+                break
+              }
+              let menuId = '3-' + (parseInt(index) + 1).toString()
+              let publisher = {
+                menuId: menuId,
+                authName: response.data.result[index].publisherName,
+                id: response.data.result[index].publisherId
+              }
+              this.menuList[2].children.push(publisher)
+            }
+          } else {
+            this.$message.error('发行商信息加载失败')
+          }
+        }).catch(() => {
+          this.$message.error('发行商信息加载失败')
+        })
     }
   },
   mounted () {
@@ -156,30 +288,31 @@ export default {
   },
   // 每次更新组件，检查路由变化
   created () {
-    console.log(this.isMainIndex)
-    if (this.$route.path.indexOf('MainIndex') === -1) {
-      this.isMainIndex = false
-    } else {
-      this.isMainIndex = true
-    }
+    // console.log(this.isMainIndex)
+    // if (this.$route.path.indexOf('MainIndex') === -1) {
+    //   this.isMainIndex = false
+    // } else {
+    //   this.isMainIndex = true
+    // }
+    this.getPublisherList()
   },
   destroyed () {
     // 移除监听
     document.getElementById('main').removeEventListener('scroll', this.handleScroll)
-  },
-  watch: {
-    $route (newRouter, oldRouter) {
-      // console.log(this.$route.path)
-      // console.log(newRouter.path)
-      // console.log(newRouter.path.indexOf('MainIndex'))
-      if (newRouter.path.indexOf('MainIndex') === -1) {
-        this.isMainIndex = false
-        console.log(this.isMainIndex)
-      } else {
-        this.isMainIndex = true
-      }
-    }
   }
+  // watch: {
+  //   $route (newRouter, oldRouter) {
+  //     // console.log(this.$route.path)
+  //     // console.log(newRouter.path)
+  //     // console.log(newRouter.path.indexOf('MainIndex'))
+  //     if (newRouter.path.indexOf('MainIndex') === -1) {
+  //       this.isMainIndex = false
+  //       console.log(this.isMainIndex)
+  //     } else {
+  //       this.isMainIndex = true
+  //     }
+  //   }
+  // }
 }
 </script>
 

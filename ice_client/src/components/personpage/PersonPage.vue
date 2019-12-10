@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="main">
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -66,7 +67,6 @@
     </el-card>
 
     <el-card class="wish_list">愿望清单</el-card>
-
     <!-- 修改个人信息的对话框 -->
     <el-dialog
       title="Edit User Information"
@@ -116,10 +116,16 @@
       </span>
     </el-dialog>
   </div>
+  <div>
+    <Goods v-for="(i,index) in rowNumber" :goodsInfo="getWishesInfo(index)"  :key="i" class="list-item"/>
+  </div>
+  </div>
 </template>
 
 <script>
+import Goods from '../common/Goods'
 export default {
+  components: { Goods },
   data () {
     // 验证手机号的规则
     var checkTelephone = (rule, value, callback) => {
@@ -151,11 +157,11 @@ export default {
       editDialogVisible: false,
       // 查询到的商家信息对象
       editForm: {
-        user_id: '997219957',
-        username: 'budi',
-        avator_url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        tel: '17717924664',
-        birthday: '2000-04-27'
+        // user_id: '997219957',
+        // username: 'budi',
+        // avator_url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        // tel: '17717924664',
+        // birthday: '2000-04-27'
       },
       // 修改表单的验证规则对象
       editFormRules: {
@@ -179,15 +185,46 @@ export default {
         address2: [
           { required: true, message: '请输入详细地址', trigger: 'blur' }
         ]
-      }
+      },
+      // 每次加载的行数
+      rowNumber: 1,
+      // 商品列表
+      wishList: []
     }
   },
   created () {
+    this.rowNumber = 1
+    this.wishList = []
+    this.getWishes()
     this.getUserList()
   },
   methods: {
     // 获取用户个人信息列表
-    getUserList () { },
+    getUserList () {
+      console.log('getUserList')
+      console.log(this.$store.state.userId)
+      this.$axios.get('/api/getUser', { params: { userId: this.$store.state.userId } })
+        .then(response => {
+          console.log(response)
+          this.userInfo = []
+          let avatarPath = ''
+          if (response.data.result[0].avatarPath === null) {
+            avatarPath = 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+          } else {
+            avatarPath = response.data.result[0].avatarPath
+          }
+          let userData = {
+            user_id: response.data.result[0].userId,
+            username: response.data.result[0].userName,
+            avator_url: avatarPath,
+            tel: response.data.result[0].tel,
+            birthday: response.data.result[0].birthday
+          }
+          this.userInfo.push(userData)
+          this.editForm = userData
+          console.log(this.userInfo)
+        })
+    },
     // 监听修改游戏对话框的关闭事件
     editDialogClosed () {
       this.$refs.editFormRef.resetFields()
@@ -202,32 +239,21 @@ export default {
     // 修改个人信息并提交
     editUserInfo () {
       // 调用 API 接口，发起修改游戏信息的请求，根据返回的 response 进行对应的操作
-      // this.$refs.editFormRef.validate(async valid => {
-      //   if (!valid) return
-      //   // 发起修改用户信息的数据请求
-      //   const { data: res } = await this.$http.put(
-      //     'users/' + this.editForm.id,
-      //     {
-      //       email: this.editForm.email,
-      //       mobile: this.editForm.mobile
-      //     }
-      //   )
-
-      //   if (res.meta.status !== 200) {
-      //     return this.$message.error('更新用户信息失败！')
-      //   }
-
-      //   // 关闭对话框
-      //   this.editDialogVisible = false
-      //   // 刷新数据列表
-      //   this.getUserList()
-      //   // 提示修改成功
-      //   this.$message.success('更新用户信息成功！')
-      // })
-      // 关闭对话框
+      let editData = {
+        userName: this.editForm.username,
+        avatarPath: this.editForm.avator_url,
+        tel: this.editForm.tel
+        // birthday: this.editForm.birthday,
+        // userId: this.editForm.user_id
+      }
+      console.log('editUserInfo')
+      this.$axios.post('/api/updateInfo', editData)
+        .then(response => {
+          console.log(response)
+          // 刷新数据列表
+          this.getUserList()
+        })
       this.editDialogVisible = false
-      // 刷新数据列表
-      this.getUserList()
       // 提示修改成功
       this.$message.success('Edit user info success')
     },
@@ -248,37 +274,91 @@ export default {
       // 提示取消添加
       this.$message('Cancel add address')
     },
-    // 添加地址信息并提交
+    // 修改收货地址并提交
     addAddress () {
-      // 调用 API 接口，发起修改游戏信息的请求，根据返回的 response 进行对应的操作
+      // 调用 API 接口，发起修改收货地址的请求，根据返回的 response 进行对应的操作
       // this.$refs.editFormRef.validate(async valid => {
-      //   if (!valid) return
-      //   // 发起修改用户信息的数据请求
-      //   const { data: res } = await this.$http.put(
-      //     'users/' + this.editForm.id,
-      //     {
-      //       email: this.editForm.email,
-      //       mobile: this.editForm.mobile
-      //     }
-      //   )
-
-      //   if (res.meta.status !== 200) {
-      //     return this.$message.error('更新用户信息失败！')
-      //   }
-
-      //   // 关闭对话框
-      //   this.editDialogVisible = false
-      //   // 刷新数据列表
-      //   this.getUserList()
-      //   // 提示修改成功
-      //   this.$message.success('更新用户信息成功！')
-      // })
+      if (this.editForm.tel.length !== 11) {
+        this.$message.error('telephone number is invalid!')
+        return
+      }
+      let editData = {
+        address: this.addForm.address2
+      }
+      console.log('editAddress')
+      this.$axios.post('/api/updateInfo', editData)
+        .then(response => {
+          console.log(response)
+          // 刷新数据列表
+          this.getUserList()
+        })
+      this.editDialogVisible = false
+      // 提示修改成功
+      this.$message.success('Edit Address success')
       // 关闭对话框
       this.addDialogVisible = false
       // 刷新数据列表
       this.getUserList()
       // 提示修改成功
       this.$message.success('Add address success')
+    },
+    getWishesInfo (index) {
+      let wishesInfo = []
+      if ((index * 4 + 4) > this.wishList.length) {
+        for (let i in this.wishList) {
+          if (i >= index * 4) {
+            wishesInfo.push(this.wishList[i])
+          }
+        }
+      } else {
+        for (let i in this.wishList) {
+          if (i >= (index * 4) && i <= (index * 4 + 3)) {
+            wishesInfo.push(this.wishList[i])
+          }
+        }
+      }
+      return wishesInfo
+    },
+    getWishes() {
+      console.log('getWishes')
+      this.$axios.post('/api/getMyWishList')
+        .then(response => {
+          console.log('getWishes response', response)
+          if (response.data.status === '200') {
+            console.log('response.data.result', response.data.result)
+            if (response.data.result.length === 0) {
+              console.log('加载完毕')
+            } else {
+              for (let index in response.data.result) {
+                if ((parseInt(index) + 1) % 4 === 0) {
+                  this.rowNumber += 1
+                  console.log('rowNumber', this.rowNumber)
+                }
+                let gameInfo = {
+                  id: response.data.result[index].id,
+                  imgSrc: response.data.result[index].cover_path,
+                  name: response.data.result[index].title,
+                  value: response.data.result[index].price,
+                  tag: []
+                }
+                // 如果cover_path不存在，则替换成默认图片
+                if (response.data.result[index].cover_path === null) {
+                  gameInfo.imgSrc = 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190702171201495133.jpg'
+                }
+                // 如果标签过多，截取前两个
+                if (response.data.result[index].tags_list.length > 2) {
+                  for (let i in response.data.result[index].tags_list) {
+                    if (i >= 2) {
+                      break
+                    }
+                    gameInfo.tag.push(response.data.result[index].tags_list[i])
+                  }
+                }
+                this.wishList.push(gameInfo)
+              }
+            }
+          }
+        })
     },
     // 删除地址信息
     deleteAddress (item) {
@@ -319,6 +399,7 @@ export default {
 }
 .wish_list {
   margin-top: 30px;
+  margin-bottom: 50px;
 }
 .address-gap {
   margin-bottom: 10px;

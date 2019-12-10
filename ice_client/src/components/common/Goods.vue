@@ -29,7 +29,7 @@ export default {
       this.$router.push('/GoodsDetail/' + goodsId + '')
     },
     loadingGoods () {
-      console.log('Goods中加载商品', this.goodsInfo)
+      // console.log('Goods中加载商品', this.goodsInfo)
       for (let index in this.goodsInfo) {
         if (this.goodsInfo[index] === undefined) {
           this.goodsInfo.splice(index, 1)
