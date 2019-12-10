@@ -37,7 +37,7 @@ public class CommentController {
     //gameIdがurlの中に在る原因は、gameIdと評価内容が同時に含まれるクラスはありません。
     //それで、元々にgameIdが商品ページのurlから取られ得るはず。
     @RequestMapping(value = "/addComment",method =RequestMethod.GET)
-    public Response addComment(@RequestParam("gameId") int gameId,@RequestBody Reviews review, HttpSession session) {
+    public Response addComment(@RequestParam("gameId") int gameId,@RequestBody String s, HttpSession session) {
         Response response = new Response();
 
         //System.out.println(session.getAttribute("id"));
@@ -45,6 +45,12 @@ public class CommentController {
             return sessionService.auth(session);
         }
         int thisUserId=Integer.parseInt(session.getAttribute("id").toString());
+
+        Reviews review=new Reviews();
+        review.setContent(s);
+        java.util.Date currentTime = new java.util.Date();
+        review.setReviewDate(currentTime);
+
 
         //又は、ユーザーは評価内容ただ一つを発表できる。ご注意ください。
         //独立的なAPIは"checkMyComment"のところに見に行ってください。
@@ -68,6 +74,8 @@ public class CommentController {
             response.setStatus("403");
             return response;
         }
+
+
 
         //アップデートさせるべきテーブルは先ずREVIEWS、そしてHAS_REVIEWとWRITE_REVIEWである。
         try {
