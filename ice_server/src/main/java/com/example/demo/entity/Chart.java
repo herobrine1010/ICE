@@ -1,10 +1,14 @@
 package com.example.demo.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Chart {
     private Integer gameId;
 
     private Integer userId;
 
+    @Getter @Setter
     private Integer consoleId;
 
     public Integer getGameId() {
@@ -21,13 +25,5 @@ public class Chart {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
-    }
-
-    public Integer getConsoleId() {
-        return consoleId;
-    }
-
-    public void setConsoleId(Integer consoleId) {
-        this.consoleId = consoleId;
     }
 }

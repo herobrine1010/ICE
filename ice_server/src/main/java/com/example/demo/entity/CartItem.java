@@ -10,6 +10,7 @@ public class CartItem {
     private String coverPath;
     private Boolean discount;
     private String consoleName;
+    private String consoleId;
     private Integer cateId;
     private String cateName;
 

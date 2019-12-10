@@ -73,4 +73,18 @@
     from CHART
     where USER_ID = #{userId,jdbcType=INTEGER}
   </select>
+  <select id="getMyCart" resultType="com.example.demo.entity.CartItem">
+    select distinct chart.game_Id,title,price,cover_Path,discount,chart.CONSOLE_ID,CONSOLE_NAME,categories.CATE_ID,CATE_NAME
+    from chart inner join games inner join played_on inner join consoles inner join belong inner join categories
+        on chart.game_id=games.game_id and chart.game_id=played_on.game_id and chart.CONSOLE_ID=consoles.CONSOLE_ID
+           and belong.GAME_ID=chart.GAME_ID and categories.CATE_ID=belong.CATE_ID
+    order by games.GAME_ID
+    <if test="reverse&gt;0">desc</if>
+    <if test="!reverse&gt;0">asc</if>
+    where user_id=#{userId} limit #{startWith},#{endWith};
+  </select>
+
+  <insert id="addToCart" >
+    insert into chart values(#{gameId},#{userId},#{consoleId});
+  </insert>
 </mapper>

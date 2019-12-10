@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.dao.PublishersMapper;
+import com.example.demo.entity.CartItem;
 import com.example.demo.entity.Publishers;
 import com.example.demo.entity.Response;
 import com.example.demo.entity.Users;
@@ -25,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +34,7 @@ import java.util.Objects;
 import com.example.demo.dao.UsersMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import sun.reflect.annotation.ExceptionProxy;
 
 @RestController
 public class LoginController {
@@ -218,4 +221,51 @@ public class LoginController {
         return response;
 
     }
+
+    @RequestMapping(value="/getAddress",method=RequestMethod.POST)
+    public Response<String> getAddress(HttpSession session){
+        Response<String> response = new Response<>();
+        if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
+            return sessionService.auth(session);
+        }
+        int thisUserId=Integer.parseInt(session.getAttribute("id").toString());
+        try {
+            String s = usersMapper.selectByPrimaryKey(thisUserId).getAddress();
+            String[] ss = s.split("%");
+            List<String> resultList = Arrays.asList(ss);
+            response.setResult(resultList);
+            response.setStatus("200");
+        }catch (Exception e){
+            response.setError("SQL Error!");
+            response.setStatus("403");
+        }
+        return response;
+    }
+
+    @RequestMapping(value="/updateAddress",method=RequestMethod.POST)
+    public Response updateAddress(@RequestBody List<String> s, HttpSession session){
+        Response response = new Response<>();
+        if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
+            return sessionService.auth(session);
+        }
+        int thisUserId=Integer.parseInt(session.getAttribute("id").toString());
+        try{
+            String w="";
+            for(int i=0;i<s.size();i++){
+                w+=s.get(i);
+                if(i!=s.size()-1) w+="%";
+            }
+            Users u=new Users();
+            u.setUserId(thisUserId);
+            u.setAddress(w);
+            updateInfo(u,session);
+            response.setError("修改地址成功，测试地址:"+w);
+            response.setStatus("200");
+        }catch(Exception e){
+            response.setError("SQL Error!");
+            response.setStatus("403");
+        }
+        return response;
+    }
+
 }
