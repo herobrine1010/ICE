@@ -42,7 +42,7 @@ const i18n = new VueI18n({
   locale: 'zh-CN', // 语言标识
   messages: {
     'zh-CN': require('./common/lang/zh'),
-    'en-US': require('./common/lang/en')
+    'en-CN': require('./common/lang/en')
   }
 })
 

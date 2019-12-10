@@ -233,9 +233,8 @@ export default {
     },
     // 监听地址选择器选择完毕地址的操作
     addressPickerSelected (data) {
+      alert(data.province + ' | ' + data.city + ' | ' + data.area)
       console.log(data)
-      this.addForm.address1 = data
-      console.log(this.addForm.address1.province.value + ' | ' + this.addForm.address1.city.value + ' | ' + this.addForm.address1.area.value)
     },
     // 监听添加地址对话框的关闭事件
     addDialogClosed () {

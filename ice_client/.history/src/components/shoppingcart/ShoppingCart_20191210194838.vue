@@ -150,20 +150,14 @@ export default {
     },
     // 删除游戏信息并提交
     deleteShopcart (gameid) {
-      this.$confirm('This operation will permanently delete the game, do you want to continue?', 'Prompt', {
-        confirmButtonText: 'Confirm',
-        cancelButtonText: 'Cancel',
-        type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: 'Delete success'
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: 'Cancel delete'
-        })
+      this.$alert('这是一段内容', '标题名称', {
+        confirmButtonText: '确定',
+        callback: action => {
+          this.$message({
+            type: 'info',
+            message: `action: ${action}`
+          })
+        }
       })
     }
   }

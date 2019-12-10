@@ -235,7 +235,7 @@ export default {
     addressPickerSelected (data) {
       console.log(data)
       this.addForm.address1 = data
-      console.log(this.addForm.address1.province.value + ' | ' + this.addForm.address1.city.value + ' | ' + this.addForm.address1.area.value)
+      console.log(this.addForm.address1.province + ' | ' + this.addForm.address1.city + ' | ' + this.addForm.address1.area)
     },
     // 监听添加地址对话框的关闭事件
     addDialogClosed () {

@@ -11,10 +11,6 @@ import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-// 导入地区选择器
-import VDistpicker from 'v-distpicker'
-// 导入国际化语言切换 vue-i18n
-import VueI18n from 'vue-i18n'
 
 import axios from 'axios'
 // 配置请求的根路径
@@ -32,19 +28,6 @@ Vue.config.productionTip = false
 
 // 将富文本编辑器注册为全局可用的组件
 Vue.use(VueQuillEditor)
-// 将地区选择器注册为全局可用的组件
-Vue.component('v-distpicker', VDistpicker)
-// 将国际化语言切换 vue-i18n 注册为全局组件
-Vue.use(VueI18n)
-// 使用多文件管理不同的语言是一个好习惯：
-const i18n = new VueI18n({
-  // locale: LangStorage.getLang('zh'),  // 语言标识，后面会用做切换和将用户习惯存储到本地浏览器
-  locale: 'zh-CN', // 语言标识
-  messages: {
-    'zh-CN': require('./common/lang/zh'),
-    'en-US': require('./common/lang/en')
-  }
-})
 
 Vue.filter('dateFormat', function (originVal) {
   const dt = new Date(originVal)
@@ -61,7 +44,6 @@ Vue.filter('dateFormat', function (originVal) {
 })
 
 new Vue({
-  i18n,
   router,
   store,
   render: h => h(App)

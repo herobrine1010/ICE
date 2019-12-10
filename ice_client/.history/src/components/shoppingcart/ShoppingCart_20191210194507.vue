@@ -28,7 +28,7 @@
               type="danger"
               icon="el-icon-delete"
               size="mini"
-              @click="deleteShopcart(scope.row.gameid)"
+              @click="showBuyDialog(scope.row.gameid)"
             ></el-button>
           </template>
         </el-table-column>
@@ -147,24 +147,6 @@ export default {
       // this.getGameList()
       // 提示修改成功
       this.$message.success('Buy game success')
-    },
-    // 删除游戏信息并提交
-    deleteShopcart (gameid) {
-      this.$confirm('This operation will permanently delete the game, do you want to continue?', 'Prompt', {
-        confirmButtonText: 'Confirm',
-        cancelButtonText: 'Cancel',
-        type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: 'Delete success'
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: 'Cancel delete'
-        })
-      })
     }
   }
 }

@@ -10,15 +10,14 @@
     <el-card>
       <el-row>个人信息</el-row>
       <!-- 头像区域 -->
-      <el-row class="userinfo" :gutter="20">
+      <el-row class="userinfo">
         <el-col :span="4">
           <el-image
             src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-            fit="cover"
-            class="avator"
+            fit="fill"
           ></el-image>
         </el-col>
-        <el-col :span="4" class="el-col-gap">
+        <el-col :span="8" class="el-col-gap">
           <!-- 个人信息区域 -->
           <el-table :data="userInfo" stripe>
             <el-table-column label="用户昵称" prop="username"></el-table-column>
@@ -30,16 +29,10 @@
             <el-table-column label="生日" prop="birthday"></el-table-column>
           </el-table>
         </el-col>
-        <el-col :span="14" class="el-col-gap">
+        <el-col :span="8" class="el-col-gap">
           <el-card class="address-gap" v-for="item in userInfo[0].address" :key="item">
-            <el-button
-              size="mini"
-              type="info"
-              icon="el-icon-delete"
-              circle
-              @click="deleteAddress(item)"
-            ></el-button>
             {{ item }}
+            <el-button type="danger" icon="el-icon-delete" circle></el-button>
           </el-card>
           <!-- 收货地址信息区域 -->
           <!-- <el-table :data="userInfo" stripe>
@@ -55,7 +48,7 @@
       </el-row>
 
       <!-- 编辑区域 -->
-      <el-row class="edit-part">
+      <el-row>
         <el-col :span="4">
           <el-button type="primary" @click="editDialogVisible = true">编辑个人信息</el-button>
         </el-col>
@@ -102,9 +95,6 @@
     >
       <!-- 内容主体区域 -->
       <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="100px">
-        <el-form-item>
-          <v-distpicker @selected="addressPickerSelected"></v-distpicker>
-        </el-form-item>
         <el-form-item label="Address" prop="address2">
           <el-input v-model="addForm.address2"></el-input>
         </el-form-item>
@@ -231,24 +221,18 @@ export default {
       // 提示修改成功
       this.$message.success('Edit user info success')
     },
-    // 监听地址选择器选择完毕地址的操作
-    addressPickerSelected (data) {
-      console.log(data)
-      this.addForm.address1 = data
-      console.log(this.addForm.address1.province.value + ' | ' + this.addForm.address1.city.value + ' | ' + this.addForm.address1.area.value)
-    },
     // 监听添加地址对话框的关闭事件
     addDialogClosed () {
       this.$refs.addFormRef.resetFields()
     },
-    // 取消对地址信息的添加
+    // 取消对个人信息的修改
     cancelAddAddress () {
       // 关闭对话框
       this.addDialogVisible = false
-      // 提示取消添加
+      // 提示取消修改
       this.$message('Cancel add address')
     },
-    // 添加地址信息并提交
+    // 修改个人信息并提交
     addAddress () {
       // 调用 API 接口，发起修改游戏信息的请求，根据返回的 response 进行对应的操作
       // this.$refs.editFormRef.validate(async valid => {
@@ -279,25 +263,6 @@ export default {
       this.getUserList()
       // 提示修改成功
       this.$message.success('Add address success')
-    },
-    // 删除地址信息
-    deleteAddress (item) {
-      this.$confirm('This operation will permanently delete the address, do you want to continue?', 'Prompt', {
-        confirmButtonText: 'Confirm',
-        cancelButtonText: 'Cancel',
-        type: 'warning'
-      }).then(() => {
-        // item中传输的是地址的字符串信息，需要匹配字符串进行删除。
-        this.$message({
-          type: 'success',
-          message: 'Delete success'
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: 'Cancel delete'
-        })
-      })
     }
   }
 }
@@ -311,9 +276,6 @@ export default {
 .userinfo {
   margin-top: 20px;
 }
-.avator {
-  border-radius: 50%;
-}
 .el-col-gap {
   margin-left: 30px;
 }
@@ -322,8 +284,5 @@ export default {
 }
 .address-gap {
   margin-bottom: 10px;
-}
-.edit-part {
-  margin-top: 20px;
 }
 </style>

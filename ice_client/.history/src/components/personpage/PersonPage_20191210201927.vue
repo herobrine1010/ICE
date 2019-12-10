@@ -10,7 +10,7 @@
     <el-card>
       <el-row>个人信息</el-row>
       <!-- 头像区域 -->
-      <el-row class="userinfo" :gutter="20">
+      <el-row class="userinfo" gutter="20">
         <el-col :span="4">
           <el-image
             src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
@@ -103,7 +103,7 @@
       <!-- 内容主体区域 -->
       <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="100px">
         <el-form-item>
-          <v-distpicker @selected="addressPickerSelected"></v-distpicker>
+          <v-distpicker></v-distpicker>
         </el-form-item>
         <el-form-item label="Address" prop="address2">
           <el-input v-model="addForm.address2"></el-input>
@@ -231,24 +231,18 @@ export default {
       // 提示修改成功
       this.$message.success('Edit user info success')
     },
-    // 监听地址选择器选择完毕地址的操作
-    addressPickerSelected (data) {
-      console.log(data)
-      this.addForm.address1 = data
-      console.log(this.addForm.address1.province.value + ' | ' + this.addForm.address1.city.value + ' | ' + this.addForm.address1.area.value)
-    },
     // 监听添加地址对话框的关闭事件
     addDialogClosed () {
       this.$refs.addFormRef.resetFields()
     },
-    // 取消对地址信息的添加
+    // 取消对个人信息的修改
     cancelAddAddress () {
       // 关闭对话框
       this.addDialogVisible = false
-      // 提示取消添加
+      // 提示取消修改
       this.$message('Cancel add address')
     },
-    // 添加地址信息并提交
+    // 修改个人信息并提交
     addAddress () {
       // 调用 API 接口，发起修改游戏信息的请求，根据返回的 response 进行对应的操作
       // this.$refs.editFormRef.validate(async valid => {
