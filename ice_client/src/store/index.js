@@ -79,11 +79,11 @@ const store = new Vuex.Store({
     goods
   },
   state: {
-    HOST: 'http://localhost:8080',
+    HOST: 'http://localhost:8021',
     loginIn: false, // 是否登录
     searchword: '', // 搜索关键词
     goodsList: [
-      { 'id': 0,
+      { 'id': 1,
         'imgSrc': 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190702171201495133.jpg',
         'name': '名称',
         'value': '￥20',

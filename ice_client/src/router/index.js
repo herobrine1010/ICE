@@ -12,11 +12,12 @@ import GoodsList from '../components/goods/List.vue'
 import Add from '../components/goods/Add.vue'
 import Order from '../components/order/Order.vue'
 import Main from '../components/Main.vue'
-import GoodsDetail from '../components/common/GoodsDetail'
-import MainIndex from '../components/MainIndex'
-import PersonPage from '../components/personpage/PersonPage'
+import GoodsDetail from '../components/common/GoodsDetail.vue'
+import MainIndex from '../components/MainIndex.vue'
+import PersonPage from '../components/personpage/PersonPage.vue'
 import PersonOrder from '../components/personorder/PersonOrder.vue'
 import ShoppingCart from '../components/shoppingcart/ShoppingCart.vue'
+import PlatForm from '../components/platform/PlatForm.vue'
 
 Vue.use(VueRouter)
 
@@ -53,7 +54,8 @@ const routes = [
       { path: '/GoodsDetail/:id', component: GoodsDetail },
       { path: '/PersonPage', component: PersonPage },
       { path: '/PersonOrder', component: PersonOrder },
-      { path: '/ShoppingCart', component: ShoppingCart }
+      { path: '/ShoppingCart', component: ShoppingCart },
+      { path: '/PlatForm/:name', component: PlatForm }
     ]
   }
 ]

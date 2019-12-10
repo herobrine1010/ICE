@@ -4,15 +4,28 @@
   <resultMap id="BaseResultMap" type="com.example.demo.entity.Chart">
     <id column="GAME_ID" jdbcType="INTEGER" property="gameId" />
     <id column="USER_ID" jdbcType="INTEGER" property="userId" />
+    <result column="CONSOLE_ID" jdbcType="INTEGER" property="consoleId" />
   </resultMap>
+  <sql id="Base_Column_List">
+    GAME_ID, USER_ID, CONSOLE_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from chart
+    where GAME_ID = #{gameId,jdbcType=INTEGER}
+      and USER_ID = #{userId,jdbcType=INTEGER}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="map">
     delete from chart
     where GAME_ID = #{gameId,jdbcType=INTEGER}
       and USER_ID = #{userId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.example.demo.entity.Chart">
-    insert into chart (GAME_ID, USER_ID)
-    values (#{gameId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER})
+    insert into chart (GAME_ID, USER_ID, CONSOLE_ID
+      )
+    values (#{gameId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{consoleId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.entity.Chart">
     insert into chart
@@ -23,6 +36,9 @@
       <if test="userId != null">
         USER_ID,
       </if>
+      <if test="consoleId != null">
+        CONSOLE_ID,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="gameId != null">
@@ -31,8 +47,27 @@
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
       </if>
+      <if test="consoleId != null">
+        #{consoleId,jdbcType=INTEGER},
+      </if>
     </trim>
   </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.entity.Chart">
+    update chart
+    <set>
+      <if test="consoleId != null">
+        CONSOLE_ID = #{consoleId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where GAME_ID = #{gameId,jdbcType=INTEGER}
+      and USER_ID = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Chart">
+    update chart
+    set CONSOLE_ID = #{consoleId,jdbcType=INTEGER}
+    where GAME_ID = #{gameId,jdbcType=INTEGER}
+      and USER_ID = #{userId,jdbcType=INTEGER}
+  </update>
   <select id="chartNumOf" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     select count(USER_ID)
     from CHART

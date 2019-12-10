@@ -104,9 +104,9 @@ public class CommentController {
         Response<ReviewWithUser> response = new Response<>();
 
         //System.out.println(session.getAttribute("id"));
-        if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
-            return sessionService.auth(session);
-        }
+//        if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
+//            return sessionService.auth(session);
+//        }
         try{
             List<ReviewsDetailed> commentList=writeReviewMapper.selectAllComment(gameId,from,to-from,reversed);
             if (commentList.isEmpty()){
@@ -165,9 +165,9 @@ public class CommentController {
     public Response<Integer> commentsNumber(@RequestParam("gameId")int gameId, HttpSession session){
         Response<Integer> response = new Response<>();
         //System.out.println(session.getAttribute("id"));
-        if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
-            return sessionService.auth(session);
-        }
+//        if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
+//            return sessionService.auth(session);
+//        }
         try{
             Integer cCount=writeReviewMapper.commentsCount(gameId);
             List<Integer> l=new ArrayList<>();
