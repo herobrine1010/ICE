@@ -194,7 +194,7 @@
             <if test="pwd != null and pwd!=''">PWD=#{pwd},</if>
             <if test="gender != null and gender!=''">GENDER=#{gender},</if>
             <if test="birthday != null and birthday!=''">BIRTHDAY=#{birthday},</if>
-            <if test="tel != null and tel!=''">TEL#={tel},</if>
+            <if test="tel != null and tel!=''">TEL=#{tel},</if>
             <if test="address != null and address!=''">ADDRESS=#{address},</if>
             <if test="avatarPath!=null and avatarPath!=''">AVATAR_PATH=#{avatarPath},</if>
         </set>
