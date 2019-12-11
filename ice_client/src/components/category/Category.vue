@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
+<div>
+  <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
     <el-breadcrumb-item :to="{ path: '/MainIndex' }">首页</el-breadcrumb-item>
-    <el-breadcrumb-item>平台</el-breadcrumb-item>
-    <el-breadcrumb-item>{{platformName}}</el-breadcrumb-item>
-    </el-breadcrumb>
-    <Goods v-for="(i,index) in rowNumber" :goodsInfo="getGoodsInfo(index)"  :key="i" class="list-item"/>
-  </div>
+    <el-breadcrumb-item>分类</el-breadcrumb-item>
+    <el-breadcrumb-item>{{cateName}}</el-breadcrumb-item>
+  </el-breadcrumb>
+  <Goods v-for="(i,index) in rowNumber" :goodsInfo="getGoodsInfo(index)"  :key="i" class="list-item"/>
+</div>
 </template>
 
 <script>
@@ -15,10 +15,10 @@ export default {
   components: { Goods },
   data () {
     return {
-      // 当前name
-      platformName: '',
       // 当前id
-      platformId: 0,
+      categoryId: 0,
+      // 当前分类
+      cateName: '',
       // 每次加载的行数
       rowNumber: 0,
       // 商品列表
@@ -33,35 +33,41 @@ export default {
     document.getElementById('main').addEventListener('scroll', this.handleScroll)
   },
   methods: {
-    getPlatformName() {
-      this.platformName = this.$router.currentRoute.params.name
+    getCateName() {
+      this.cateName = this.$router.currentRoute.params.name
     },
-    getPlatFormId() {
+    getCategoryId() {
       console.log('categoryName:', this.$router.currentRoute.params.name)
       switch (this.$router.currentRoute.params.name) {
-        case 'PS3':
-          this.platformId = 1
+        case 'Action':
+          this.categoryId = 1
           break
-        case 'PS4':
-          this.platformId = 2
+        case 'Adventure':
+          this.categoryId = 2
           break
-        case 'PS Vita':
-          this.platformId = 3
+        case 'Arcade':
+          this.categoryId = 3
           break
-        case 'PSP':
-          this.platformId = 4
+        case 'Board Games':
+          this.categoryId = 4
           break
-        case 'Nintendo Switch':
-          this.platformId = 5
+        case 'Racing':
+          this.categoryId = 5
           break
-        case 'Nintendo 3DS':
-          this.platformId = 6
+        case 'Role-Playing Games':
+          this.categoryId = 6
           break
-        case 'Xbox 360':
-          this.platformId = 7
+        case 'Shooter':
+          this.categoryId = 7
           break
-        case 'Xbox one':
-          this.platformId = 8
+        case 'Simulation':
+          this.categoryId = 8
+          break
+        case 'Sports':
+          this.categoryId = 9
+          break
+        case 'Strategy':
+          this.categoryId = 10
           break
       }
     },
@@ -82,17 +88,18 @@ export default {
       }
       return goodsInfo
     },
-    getGames(reset) {
-      console.log('getGames')
-      this.$axios.get('/api/getGames', { params: { reset: reset } })
+    searchGamesByCate(reset) {
+      console.log('getCateGames')
+      this.$axios.get('/api/searchGamesByCate', { params: { cateId: this.categoryId, reset: reset } })
         .then(response => {
-          // console.log('getGames response', response)
+          // console.log('getCateGames response', response)
           if (response.data.status === '200') {
             // console.log('response.data.result', response.data.result)
             if (response.data.result.length === 0) {
               console.log('加载完毕')
               this.isAllGames = true
             } else {
+              this.goodsList = []
               this.rowNumber += 3
               console.log('rowNumber', this.rowNumber)
               for (let index in response.data.result) {
@@ -122,18 +129,17 @@ export default {
           }
         })
     },
-    searchGamesByConsole(reset) {
-      console.log('getPlatformGames')
-      this.$axios.get('/api/searchGamesByConsole', { params: { consoleId: this.platformId, reset: reset } })
+    getGames(reset) {
+      console.log('getGames')
+      this.$axios.get('/api/getGames', { params: { reset: reset } })
         .then(response => {
-          // console.log('getCateGames response', response)
+          // console.log('getGames response', response)
           if (response.data.status === '200') {
             // console.log('response.data.result', response.data.result)
             if (response.data.result.length === 0) {
               console.log('加载完毕')
               this.isAllGames = true
             } else {
-              this.goodsList = []
               this.rowNumber += 3
               console.log('rowNumber', this.rowNumber)
               for (let index in response.data.result) {
@@ -185,24 +191,24 @@ export default {
     }
   },
   created () {
-    this.getPlatformName()
-    this.getPlatFormId()
+    this.getCateName()
+    this.getCategoryId()
     this.isAllGames = false
     this.rowNumber = 0
     this.goodsList = []
-    this.searchGamesByConsole(true)
+    this.searchGamesByCate(true)
   },
   watch: {
     $route (newRouter, oldRouter) {
       // console.log(this.$route.path)
       // console.log(newRouter.path)
       // console.log(newRouter.path.indexOf('MainIndex'))
-      this.getPlatFormId()
-      this.getPlatFormId()
+      this.getCateName()
+      this.getCategoryId()
       this.isAllGames = false
       this.rowNumber = 0
       this.goodsList = []
-      this.searchGamesByConsole(true)
+      this.searchGamesByCate(true)
     }
   },
   destroyed () {

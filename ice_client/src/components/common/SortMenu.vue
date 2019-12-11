@@ -4,11 +4,11 @@
     排序<i class="el-icon-arrow-down el-icon--right"></i>
   </el-button>
     <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item command="a">按上架时间</el-dropdown-item>
-      <el-dropdown-item command="b">按浏览量</el-dropdown-item>
-      <el-dropdown-item command="c">按购买量</el-dropdown-item>
-      <el-dropdown-item command="d">按价格升序</el-dropdown-item>
-      <el-dropdown-item command="e">按价格降序</el-dropdown-item>
+      <el-dropdown-item :command=1>默认排序</el-dropdown-item>
+      <el-dropdown-item :command=2>按价格降序</el-dropdown-item>
+      <el-dropdown-item :command=3>按价格升序</el-dropdown-item>
+      <el-dropdown-item :command=4>按评分降序</el-dropdown-item>
+      <el-dropdown-item :command=5>按评分升序</el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
@@ -18,7 +18,9 @@ export default {
   name: 'SortMenu',
   methods: {
     handleCommand (command) {
-      this.$message('click on item ' + command)
+      console.log('sort')
+      this.$router.push('/MainIndex/' + command)
+      // this.$message('click on item ' + command)
     }
   }
 }

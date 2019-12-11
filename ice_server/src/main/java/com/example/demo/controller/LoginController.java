@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -50,8 +51,8 @@ public class LoginController {
     private PublisherService publisherService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Response login(@RequestBody Users user, HttpSession session) {
-        Response response = new Response();
+    public Response<Integer> login(@RequestBody Users user, HttpSession session) {
+        Response<Integer> response = new Response();
 
         if (!Objects.equals(userService.Exist(user.getUserName()).getStatus(), "200")) {
             return userService.Exist(user.getUserName());
@@ -71,7 +72,9 @@ public class LoginController {
         //System.out.println(session.getAttribute("id"));
 
         response.setStatus("200");
-
+        List<Integer> l =new ArrayList<>();
+        l.add(users.get(0).getUserId());
+        response.setResult(l);
         response.setError(session.getId());
         return response;
     }
@@ -160,7 +163,7 @@ public class LoginController {
         //普段使いに省略するでも問題を齎させず。
 
         try {
-            usersMapper.updateUser(user);
+            usersMapper.updateByPrimaryKeySelective(user);
         } catch (Exception e) {
             e.printStackTrace();
 //            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

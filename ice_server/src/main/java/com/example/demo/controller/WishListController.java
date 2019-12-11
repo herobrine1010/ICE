@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dao.*;
 import com.example.demo.entity.Response;
 import com.example.demo.entity.Wishlist;
+import com.example.demo.service.GameService;
 import com.example.demo.service.SessionService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,6 +25,10 @@ public class WishListController {
     private SessionService sessionService;
     @Autowired
     private WishlistMapper wishlistMapper;
+    @Autowired
+    private GameService gameService;
+    @Autowired
+    private GamesMapper gamesMapper;
 
     //Wishlistはネーミングルールを違反したから、WishListになられたww
     @RequestMapping(value="/checkInMyWishList",method=RequestMethod.GET)
@@ -95,21 +101,25 @@ public class WishListController {
     //複数のパラメータがあるんで、リターン値にクラスWishlistを使った。
     @RequestMapping(value="/getMyWishList",method=RequestMethod.POST)
     public Response<Wishlist> getMyWishList(HttpSession session){
-        Response<Wishlist> response= new Response<>();
+        Response response= new Response();
         if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
             return sessionService.auth(session);
         }
         int thisUserId=Integer.parseInt(session.getAttribute("id").toString());
         try{
             List<Wishlist> l = wishlistMapper.selectByUserId(thisUserId);
+            List<GameService.GameInfo> result=new ArrayList<>();
             if (l.size()==0){
                 response.setStatus("404");
                 response.setError("Your wishlist is now empty!");
+                return response;
             }
-            else{
-                response.setStatus("200");
-                response.setResult(l);
+            for (int i = 0; i < l.size(); i++) {
+                result.add(gameService.convertToInfo(gamesMapper.selectByPrimaryKey(l.get(i).getGameId())));
             }
+            response.setStatus("200");
+            response.setResult(result);
+
         }catch(Exception e){
             response.setError("SQL Error!");
             response.setStatus("403");

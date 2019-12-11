@@ -66,10 +66,9 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                type="info"
-                icon="el-icon-star-off"
-                @click="showScoreDialog(scope.row.orderid)"
-                disabled
+                type="primary"
+                icon="el-icon-check"
+                @click="confirm(scope.row.orderid)"
               ></el-button>
             </template>
           </el-table-column>
@@ -106,7 +105,7 @@
                 size="mini"
                 type="primary"
                 icon="el-icon-star-off"
-                @click="showScoreDialog(scope.row.orderid)"
+                @click="showScoreDialog(scope.row.orderid, scope.row.gameId)"
               ></el-button>
             </template>
           </el-table-column>
@@ -209,65 +208,71 @@ export default {
       },
       total0: 1,
       orderList0: [
-        {
-          orderid: '47',
-          gamename: 'SuperMario',
-          consolename: 'PS4',
-          price: '19.90',
-          status: 0,
-          username: 'budi',
-          address: 'Tongji University',
-          contacttel: '17717924664',
-          date: '2019-11-28'
-        }
+        // {
+        //   orderid: '47',
+        //   gamename: 'SuperMario',
+        //   consolename: 'PS4',
+        //   price: '19.90',
+        //   status: 0,
+        //   username: 'budi',
+        //   address: 'Tongji University',
+        //   contacttel: '17717924664',
+        //   date: '2019-11-28',
+        //   gameId: 0
+        // }
       ],
       total1: 1,
       orderList1: [
-        {
-          orderid: '47',
-          gamename: 'SuperMario',
-          consolename: 'PS4',
-          price: '19.90',
-          status: 1,
-          username: 'budi',
-          address: 'Tongji University',
-          contacttel: '17717924664',
-          date: '2019-11-28'
-        }
+        // {
+        //   orderid: '47',
+        //   gamename: 'SuperMario',
+        //   consolename: 'PS4',
+        //   price: '19.90',
+        //   status: 1,
+        //   username: 'budi',
+        //   address: 'Tongji University',
+        //   contacttel: '17717924664',
+        //   date: '2019-11-28',
+        //   gameId: 0
+        // }
       ],
       total2: 1,
       orderList2: [
-        {
-          orderid: '47',
-          gamename: 'SuperMario',
-          consolename: 'PS4',
-          price: '19.90',
-          status: 2,
-          username: 'budi',
-          address: 'Tongji University',
-          contacttel: '17717924664',
-          date: '2019-11-28'
-        }
+        // {
+        //   orderid: '47',
+        //   gamename: 'SuperMario',
+        //   consolename: 'PS4',
+        //   price: '19.90',
+        //   status: 2,
+        //   username: 'budi',
+        //   address: 'Tongji University',
+        //   contacttel: '17717924664',
+        //   date: '2019-11-28'
+        // }
       ],
       total3: 1,
       orderList3: [
-        {
-          orderid: '47',
-          gamename: 'SuperMario',
-          consolename: 'PS4',
-          price: '19.90',
-          status: 3,
-          username: 'budi',
-          address: 'Tongji University',
-          contacttel: '17717924664',
-          date: '2019-11-28'
-        }
+        // {
+        //   orderid: '47',
+        //   gamename: 'SuperMario',
+        //   consolename: 'PS4',
+        //   price: '19.90',
+        //   status: 3,
+        //   username: 'budi',
+        //   address: 'Tongji University',
+        //   contacttel: '17717924664',
+        //   date: '2019-11-28'
+        // }
       ],
       scoreDialogVisible: false,
       scoreForm: {
         score: null,
         comment: ''
       },
+      // 当前打分选择对象
+      gameId: 0,
+      // 当前打分选择的订单id
+      orderId: 0,
       // 打分星星的颜色变化
       colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
       // 打分表单的验证规则对象
@@ -284,7 +289,92 @@ export default {
   },
   methods: {
     // 根据分页获取对应的商品列表
-    getOrderList () { },
+    getOrderList () {
+      this.orderList0 = []
+      this.orderList1 = []
+      this.orderList2 = []
+      this.orderList3 = []
+      this.$axios.get('/api/initAllOrderList')
+        .then(response => {
+          console.log(response)
+        })
+      this.$axios.get('/api/getOrderList', { params: { status: 0 } })
+        .then(response => {
+          console.log('orderList0', response)
+          for (let index in response.data.result) {
+            let orderInfo = {
+              orderid: response.data.result[index].order_id,
+              gamename: response.data.result[index].game_name,
+              consolename: response.data.result[index].console.consoleName,
+              price: response.data.result[index].price,
+              status: response.data.result[index].status,
+              username: response.data.result[index].user_name,
+              address: response.data.result[index].address,
+              contacttel: response.data.result[index].contact_tel,
+              date: response.data.result[index].order_date.split('T')[0],
+              gameId: response.data.result[index].game_id
+            }
+            this.orderList0.push(orderInfo)
+          }
+        })
+      this.$axios.get('/api/getOrderList', { params: { status: 1 } })
+        .then(response => {
+          console.log('orderList1', response)
+          for (let index in response.data.result) {
+            let orderInfo = {
+              orderid: response.data.result[index].order_id,
+              gamename: response.data.result[index].game_name,
+              consolename: response.data.result[index].console.consoleName,
+              price: response.data.result[index].price,
+              status: response.data.result[index].status,
+              username: response.data.result[index].user_name,
+              address: response.data.result[index].address,
+              contacttel: response.data.result[index].contact_tel,
+              date: response.data.result[index].order_date.split('T')[0],
+              gameId: response.data.result[index].game_id
+            }
+            this.orderList1.push(orderInfo)
+          }
+        })
+      this.$axios.get('/api/getOrderList', { params: { status: 2 } })
+        .then(response => {
+          console.log('orderList2', response)
+          for (let index in response.data.result) {
+            let orderInfo = {
+              orderid: response.data.result[index].order_id,
+              gamename: response.data.result[index].game_name,
+              consolename: response.data.result[index].console.consoleName,
+              price: response.data.result[index].price,
+              status: response.data.result[index].status,
+              username: response.data.result[index].user_name,
+              address: response.data.result[index].address,
+              contacttel: response.data.result[index].contact_tel,
+              date: response.data.result[index].order_date.split('T')[0],
+              gameId: response.data.result[index].game_id
+            }
+            this.orderList2.push(orderInfo)
+          }
+        })
+      this.$axios.get('/api/getOrderList', { params: { status: 3 } })
+        .then(response => {
+          console.log('orderList3', response)
+          for (let index in response.data.result) {
+            let orderInfo = {
+              orderid: response.data.result[index].order_id,
+              gamename: response.data.result[index].game_name,
+              consolename: response.data.result[index].console.consoleName,
+              price: response.data.result[index].price,
+              status: response.data.result[index].status,
+              username: response.data.result[index].user_name,
+              address: response.data.result[index].address,
+              contacttel: response.data.result[index].contact_tel,
+              date: response.data.result[index].order_date.split('T')[0],
+              gameId: response.data.result[index].game_id
+            }
+            this.orderList3.push(orderInfo)
+          }
+        })
+    },
     // 监听 pagesize 改变的事件
     handleSizeChange (newSize) {
       this.queryInfo.pagesize = newSize
@@ -296,7 +386,10 @@ export default {
       this.getOrderList()
     },
     // 展示评价对话框
-    showScoreDialog (orderid) {
+    showScoreDialog (orderId, gameId) {
+      this.gameId = 0
+      this.orderId = orderId
+      this.gameId = gameId
       this.scoreDialogVisible = true
     },
     // 监听打分订单对话框的关闭事件
@@ -315,12 +408,50 @@ export default {
       // 2. 更新订单状态 status 为 3（已完成）
       // 3. 更新订单列表显示状态
       // —————————————————————————————————————————————————————————————————————————————————
-      // 关闭对话框
-      this.scoreDialogVisible = false
-      // 刷新数据列表
-      this.getOrderList()
-      // 提示打分成功
-      this.$message.success('Score order success')
+      this.$axios.get('/api/submitRate', { params: { gameId: this.gameId, rate: this.scoreForm.score } })
+        .then(response => {
+          console.log('rate', response)
+          if (response.data.status === '200') {
+            let comment = {
+              gameId: this.gameId,
+              content: this.scoreForm.comment,
+              orderId: this.orderId
+            }
+            console.log(comment)
+            this.$axios.post('/api/addComment', comment)
+              .then(response => {
+                if (response.data.status === '200') {
+                  // 关闭对话框
+                  this.scoreDialogVisible = false
+                  // 刷新数据列表
+                  this.getOrderList()
+                  this.$message.success('Score order success')
+                } else {
+                  this.$message.error('You have commented on this game!')
+                  // 关闭对话框
+                  this.scoreDialogVisible = false
+                }
+              })
+          } else {
+            this.$message.error('You have commented on this game!')
+          }
+        })
+        .catch(() => {
+          this.$message.success('Score order success')
+        })
+    },
+    // 收货
+    confirm (orderId) {
+      console.log(orderId)
+      this.$axios.get('/api/confirmOrder', { params: { orderId: orderId } })
+        .then(response => {
+          console.log(response)
+          this.getOrderList()
+          this.$message.success('order confirmed!')
+        })
+        .catch(() => {
+          this.$message.error('network error!')
+        })
     }
   }
 }

@@ -245,10 +245,19 @@ export default {
       // 在这里添加gameid到user的愿望清单里------------------------------------------------------
       if (this.star_button_type === '') {
         this.star_button_type = 'warning'
+        console.log('加入收藏')
+        this.$axios.get('/api/insertIntoWishList', { params: { gameId: this.$router.currentRoute.params.id } })
+          .then(() => {
+            this.$message.success('add game to favorite')
+          })
       } else {
         this.star_button_type = ''
+        this.$axios.get('/api/removeFromWishList', { params: { gameId: this.$router.currentRoute.params.id } })
+          .then(() => {
+            this.$message.error('remove game from favorite')
+          })
+        console.log('取消收藏')
       }
-      console.log(this.star)
     },
     // 购买游戏按钮相关------------------------------------------------------------------------
     // 展示编辑游戏的对话框
@@ -328,6 +337,7 @@ export default {
     // 加载评论
     loadingEvaluation (from, to) {
       console.log('loading')
+      this.user_evaluation = []
       if (from >= this.evaluationNum.total) {
         return
       }
@@ -354,9 +364,84 @@ export default {
             }
           }
         })
+    },
+    // 加载游戏信息
+    getGamesInfo () {
+      this.$axios.get('/api/getGameDetail', { params: { gameId: this.$router.currentRoute.params.id } })
+        .then(response => {
+          console.log('getGameDetail')
+          console.log(response)
+          this.goodsInfo = {}
+          let goodsData = {
+            name: response.data.result[0].title,
+            value: response.data.result[0].price,
+            platform: [],
+            publisher: '',
+            tag: [],
+            release_date: response.data.result[0].releaseDate.split('T')[0],
+            description: response.data.result[0].description
+          }
+          this.goodsInfo = goodsData
+          this.getGameConsole()
+          this.getGameCate()
+          this.getGameTag()
+          this.getRate()
+          this.getGamePublisher()
+        })
+    },
+    getGameConsole () {
+      this.$axios.get('/api/getGameConsole', { params: { gameId: this.$router.currentRoute.params.id } })
+        .then(response => {
+          console.log('getGameConsole')
+          console.log(response)
+          for (let index in response.data.result) {
+            this.goodsInfo.platform.push(response.data.result[index].consoleName)
+          }
+        })
+    },
+    getGameTag () {
+      this.$axios.get('/api/getGameTag', { params: { gameId: this.$router.currentRoute.params.id } })
+        .then(response => {
+          console.log('getGameTag')
+          console.log(response)
+          for (let index in response.data.result) {
+            if (parseInt(index) >= 2) {
+              break
+            }
+            this.goodsInfo.tag.push(response.data.result[index].tagName)
+          }
+        })
+    },
+    getGameCate () {
+      this.$axios.get('/api/getGameCate', { params: { gameId: this.$router.currentRoute.params.id } })
+        .then(response => {
+          console.log('getGameCate')
+          console.log(response)
+        })
+    },
+    getRate () {
+      this.$axios.get('/api/getRate', { params: { gameId: this.$router.currentRoute.params.id } })
+        .then(response => {
+          console.log('getRate')
+          console.log(response)
+          if (response.data.error === 'This game has not been rated yet!' || response.data.error === 'SQL Error!') {
+            this.rate = 'no rate yet...'
+            return
+          }
+          this.rate = parseFloat(parseFloat(response.data.error).toFixed(1))
+        })
+    },
+    getGamePublisher () {
+      this.$axios.get('/api/getGamePublisher', { params: { gameId: this.$router.currentRoute.params.id } })
+        .then(response => {
+          console.log('getGamePublisher')
+          console.log(response)
+          this.goodsInfo.publisher = response.data.result[0].publisherName
+        })
     }
   },
   created () {
+    this.getGamesInfo()
     this.getEvaluationNum()
   }
 }
