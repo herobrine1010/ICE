@@ -21,4 +21,6 @@ public interface PlayedOnMapper {
     PlayedOn selectByPrimaryKey(@Param("gameId") Integer gameId, @Param("consoleId") Integer consoleId);
 
     List<PlayedOn> selectByGameId(Integer gameId);
+
+    int deleteByGameId(Integer gameId);
 }

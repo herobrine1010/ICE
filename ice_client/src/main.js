@@ -37,14 +37,14 @@ Vue.component('v-distpicker', VDistpicker)
 // 将国际化语言切换 vue-i18n 注册为全局组件
 Vue.use(VueI18n)
 // 使用多文件管理不同的语言是一个好习惯：
-const i18n = new VueI18n({
-  // locale: LangStorage.getLang('zh'),  // 语言标识，后面会用做切换和将用户习惯存储到本地浏览器
-  locale: 'zh-CN', // 语言标识
-  messages: {
-    'zh-CN': require('./common/lang/zh'),
-    'en-US': require('./common/lang/en')
-  }
-})
+// const i18n = new VueI18n({
+//  // locale: LangStorage.getLang('zh'),  // 语言标识，后面会用做切换和将用户习惯存储到本地浏览器
+//  locale: 'zh-CN', // 语言标识
+//  messages: {
+//    'zh-CN': require('./common/lang/zh'),
+//    'en-US': require('./common/lang/en')
+//  }
+// })
 
 Vue.filter('dateFormat', function (originVal) {
   const dt = new Date(originVal)
@@ -61,7 +61,7 @@ Vue.filter('dateFormat', function (originVal) {
 })
 
 new Vue({
-  i18n,
+//  i18n,
   router,
   store,
   render: h => h(App)

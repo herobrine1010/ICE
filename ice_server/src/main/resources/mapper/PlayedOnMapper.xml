@@ -49,4 +49,8 @@
     from played_on
     where game_id=#{gameId,jdbcType=INTEGER}
   </select>
+  <delete id="deleteByGameId" parameterType="map">
+    delete from played_on
+    where GAME_ID = #{gameId,jdbcType=INTEGER}
+  </delete>
 </mapper>
