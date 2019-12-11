@@ -4,7 +4,6 @@ import com.example.demo.dao.*;
 import com.example.demo.entity.*;
 import com.example.demo.service.GameService;
 import com.example.demo.service.GameService.GameAdder;
-import com.example.demo.service.GameService.GameModifier;
 import com.example.demo.service.GameService.GameManager;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.OrderService.OrderManager;
@@ -40,6 +39,8 @@ public class PublisherPageController {
     private PlayedOnMapper playedOnMapper;
     @Autowired
     private BelongMapper belongMapper;
+    @Autowired
+    private TagsMapper tagsMapper;
     @Autowired
     private UsersMapper usersMapper;
     @Autowired
@@ -365,8 +366,18 @@ public class PublisherPageController {
         return response;
     }
 
+    @RequestMapping(value = "/getAllTags", method=RequestMethod.GET)
+    public Response getAllTags(){
+        Response response=new Response();
+        List<Tags> result=tagsMapper.selectAll();
+
+        response.setStatus("200");
+        response.setResult(result);
+        return response;
+    }
+
     @RequestMapping(value = "/modifyGame", method = RequestMethod.POST)
-    public Response modifyGame(@RequestBody GameModifier gameModifier,
+    public Response modifyGame(@RequestBody GameService.GameModifier gameModifier,
                                HttpSession session){
         Response response=new Response();
 
@@ -413,8 +424,6 @@ public class PublisherPageController {
         response.setStatus("200");
         return response;
     }
-
-
 
 
     //Order
