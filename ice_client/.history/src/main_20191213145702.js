@@ -61,7 +61,11 @@ Vue.filter('dateFormat', function (originVal) {
 })
 
 new Vue({
+<<<<<<< HEAD
   // i18n,
+=======
+//  i18n,
+>>>>>>> 01bef9f3bc9d6e25f2536fc59613ac5516b20b44
   router,
   store,
   render: h => h(App)

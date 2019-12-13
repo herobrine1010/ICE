@@ -1,11 +1,7 @@
 <template>
-    <ul
-      class="list"
-      v-infinite-scroll="load"
-      infinite-scroll-disabled="disabled"
-      infinite-scroll-distance="10px">
+  <div>
       <Goods v-for="(i,index) in rowNumber" :goodsInfo="getGoodsInfo(index)"  :key="i" class="list-item"/>
-    </ul>
+  </div>
 </template>
 
 <script>
@@ -16,7 +12,6 @@ export default {
     return {
       // 每次加载的行数
       rowNumber: 0,
-      loading: true,
       // 商品列表
       goodsList: [
         // { 'id': 1,
@@ -205,13 +200,9 @@ export default {
       isAllGames: false
     }
   },
-  computed: {
-    noMore () {
-      return this.isAllGames
-    },
-    disabled () {
-      return this.loading || this.noMore
-    }
+  mounted () {
+    // 对整个页面滚轮进行监听，每发生一次滚轮事件，执行一次方法
+    document.getElementById('main').addEventListener('scroll', this.handleScroll)
   },
   methods: {
     getGoodsInfo (index) {
@@ -235,12 +226,15 @@ export default {
       console.log('getGames')
       this.$axios.get('/api/getGames', { params: { reset: reset } })
         .then(response => {
-          console.log('getGames response', response)
+          // console.log('getGames response', response)
           if (response.data.status === '200') {
-            if (response.data.result === []) {
+            // console.log('response.data.result', response.data.result)
+            if (response.data.result.length === 0) {
               console.log('加载完毕')
               this.isAllGames = true
             } else {
+              this.rowNumber += 3
+              console.log('rowNumber', this.rowNumber)
               for (let index in response.data.result) {
                 let gameInfo = {
                   id: response.data.result[index].id,
@@ -264,23 +258,51 @@ export default {
                 }
                 this.goodsList.push(gameInfo)
               }
-              this.loading = false
-              this.rowNumber += 3
             }
           }
         })
     },
-    load () {
-      this.loading = true
-      // TODO: 滚动到底部时请求数据，调用请求数据API
-      console.log('滚动到底部')
-      this.getGames(false)
+    // 滚动事件触发函数
+    handleScroll () {
+      if (this.isAllGames) {
+        return
+      }
+      // 兼容性，获取页面滚动距离
+      // console.log('滚动')
+      // document.getElementById('main').scrollTop 当前页面滚动距离
+      // document.body.scrollHeight 页面高度
+      // document.getElementById('main').scrollHeight 滚动区域高度
+      let scrollLength = document.getElementById('main').scrollTop + document.body.scrollHeight + 1
+      // console.log(scrollLength)
+      // console.log(document.getElementById('main').scrollHeight)
+      // 判断是否滚动到底部
+      if (scrollLength >= document.getElementById('main').scrollHeight) {
+        console.log('滚动到底部')
+        // TODO:滚动到底部，调用请求商品API
+        this.getGames(false)
+      }
     }
   },
   created () {
+    this.isAllGames = false
     this.rowNumber = 0
     this.goodsList = []
     this.getGames(true)
+  },
+  destroyed () {
+    // 移除监听
+    document.getElementById('main').removeEventListener('scroll', this.handleScroll)
+  },
+  watch: {
+    $route (newRouter, oldRouter) {
+      // console.log(this.$route.path)
+      // console.log(newRouter.path)
+      // console.log(newRouter.path.indexOf('MainIndex'))
+      this.isAllGames = false
+      this.rowNumber = 0
+      this.goodsList = []
+      this.getGames(true)
+    }
   }
 }
 </script>

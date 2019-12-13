@@ -271,6 +271,25 @@ public class GameService {
         }
     }
 
+    @Getter
+    @Setter
+    static public class GameModifier{
+        private Integer game_id;
+        private String title;
+        private Float price;
+        private boolean discount;
+        private boolean pre_order;
+        private String description;
+        private List<Integer> list_console_id;
+
+        public boolean getDiscount(){
+            return discount;
+        }
+        public boolean getPreOrder(){
+            return pre_order;
+        }
+    }
+
     @Configuration
     public class MyPicConfig implements WebMvcConfigurer {
         @Override

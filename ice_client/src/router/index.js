@@ -18,6 +18,10 @@ import PersonPage from '../components/personpage/PersonPage.vue'
 import PersonOrder from '../components/personorder/PersonOrder.vue'
 import ShoppingCart from '../components/shoppingcart/ShoppingCart.vue'
 import PlatForm from '../components/platform/PlatForm.vue'
+import Category from '../components/category/Category'
+import PublisherPage from '../components/publisherPage/PublisherPage'
+import SearchGame from '../components/searchGame/SearchGame'
+import SortGame from '../components/SortGame/SortGame'
 
 Vue.use(VueRouter)
 
@@ -51,11 +55,15 @@ const routes = [
     redirect: '/MainIndex',
     children: [
       { path: '/MainIndex', component: MainIndex },
+      { path: '/MainIndex/:sortInfo', component: SortGame },
       { path: '/GoodsDetail/:id', component: GoodsDetail },
       { path: '/PersonPage', component: PersonPage },
       { path: '/PersonOrder', component: PersonOrder },
       { path: '/ShoppingCart', component: ShoppingCart },
-      { path: '/PlatForm/:name', component: PlatForm }
+      { path: '/PlatForm/:name', component: PlatForm },
+      { path: '/Category/:name', component: Category },
+      { path: '/PublisherPage/:id', component: PublisherPage },
+      { path: '/SearchGame/:queryInfo', component: SearchGame }
     ]
   }
 ]

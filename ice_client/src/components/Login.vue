@@ -149,6 +149,7 @@ export default {
             switch (response.data.status) {
               case '200':
                 this.$message.success('登录成功')
+                this.$store.commit('setUserId', response.data.result[0])
                 this.$router.push('/main')
                 break
               case '404':

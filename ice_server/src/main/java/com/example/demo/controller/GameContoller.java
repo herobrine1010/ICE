@@ -5,6 +5,7 @@ import com.example.demo.entity.*;
 import com.example.demo.service.SessionService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,6 +40,10 @@ public class GameContoller {
     private CategoriesMapper categoriesMapper;
     @Autowired
     private BelongMapper belongMapper;
+    @Autowired
+    private PublishersMapper publishersMapper;
+    @Autowired
+    private SaleGameMapper saleGameMapper;
 
     @RequestMapping(value = "/getGameDetail",method =RequestMethod.GET)
     public Response<Games> getGameDetail(@RequestParam("gameId") int gameId, HttpSession session) {
@@ -51,7 +56,8 @@ public class GameContoller {
             Games g=gamesMapper.selectByPrimaryKey(gameId);
             List<Games> resultList=new ArrayList<>();
             resultList.add(g);
-
+            response.setResult(resultList);
+            response.setStatus("200");
         } catch (Exception e) {
             response.setError("SQL Error!");
             response.setStatus("403");
@@ -73,6 +79,7 @@ public class GameContoller {
                 list2.add(consolesMapper.selectByPrimaryKey(list1.get(i).getConsoleId()));
             }
             response.setStatus("200");
+            response.setResult(list2);
         }catch(Exception e){
             response.setStatus("403");
             response.setError("SQL Error!");
@@ -94,6 +101,7 @@ public class GameContoller {
                 list2.add(tagsMapper.selectByPrimaryKey(list1.get(i).getTagId()));
             }
             response.setStatus("200");
+            response.setResult(list2);
         }catch(Exception e){
             response.setStatus("403");
             response.setError("SQL Error!");
@@ -121,5 +129,28 @@ public class GameContoller {
         }
         return response;
     }
+
+    @RequestMapping(value="/getGamePublisher",method=RequestMethod.GET)
+    public Response<Publishers> getGamePublisher(@RequestParam("gameId")int gameId, HttpSession session){
+        Response<Publishers> response = new Response<>();
+        //System.out.println(session.getAttribute("id"));
+        if (!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
+            return sessionService.auth(session);
+        }
+        try{
+            List<SaleGame> b=saleGameMapper.selectByGameId(gameId);
+            List<Publishers> resultList=new ArrayList<>();
+            Publishers c= publishersMapper.selectByPrimaryKey(b.get(0).getGameId());
+            resultList.add(c);
+            response.setResult(resultList);
+            response.setStatus("200");
+        }catch(Exception e){
+            response.setStatus("403");
+            response.setError("SQL Error!");
+        }
+        return response;
+    }
+
+
 
 }

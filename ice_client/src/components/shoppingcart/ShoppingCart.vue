@@ -7,9 +7,9 @@
     </el-breadcrumb>
     <el-card>
       <el-table :data="shoppingCartList" tooltip-effect="dark" style="width: 100%">
-        <el-table-column label="Cover" prop="cover">
+        <el-table-column label="Cover" prop="cover" >
           <template slot-scope="scope">
-            <el-image :src="scope.row.cover"></el-image>
+            <el-image :src="scope.row.cover" class="cart-cover"></el-image>
           </template>
         </el-table-column>
         <el-table-column label="Game" prop="gamename"></el-table-column>
@@ -65,46 +65,47 @@
 export default {
   data () {
     return {
-      shoppingCartList: [{
-        gameid: '1',
-        gamename: 'SuperMario',
-        cover: 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190710183805263591.jpg',
-        consolename: 'PS4',
-        category: 'Adventure',
-        price: '19.90'
-      },
-      {
-        gameid: '1',
-        gamename: 'SuperMario',
-        cover: 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190710183805263591.jpg',
-        consolename: 'PS4',
-        category: 'Adventure',
-        price: '19.90'
-      },
-      {
-        gameid: '1',
-        gamename: 'SuperMario',
-        cover: 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190710183805263591.jpg',
-        consolename: 'PS4',
-        category: 'Adventure',
-        price: '19.90'
-      },
-      {
-        gameid: '1',
-        gamename: 'SuperMario',
-        cover: 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190710183805263591.jpg',
-        consolename: 'PS4',
-        category: 'Adventure',
-        price: '19.90'
-      },
-      {
-        gameid: '1',
-        gamename: 'SuperMario',
-        cover: 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190710183805263591.jpg',
-        consolename: 'PS4',
-        category: 'Adventure',
-        price: '19.90'
-      }],
+      shoppingCartList: [
+        {
+          gameid: '1',
+          gamename: 'SuperMario',
+          cover: 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190710183805263591.jpg',
+          consolename: 'PS4',
+          category: 'Adventure',
+          price: '19.90'
+        },
+        {
+          gameid: '1',
+          gamename: 'SuperMario',
+          cover: 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190710183805263591.jpg',
+          consolename: 'PS4',
+          category: 'Adventure',
+          price: '19.90'
+        },
+        {
+          gameid: '1',
+          gamename: 'SuperMario',
+          cover: 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190710183805263591.jpg',
+          consolename: 'PS4',
+          category: 'Adventure',
+          price: '19.90'
+        },
+        {
+          gameid: '1',
+          gamename: 'SuperMario',
+          cover: 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190710183805263591.jpg',
+          consolename: 'PS4',
+          category: 'Adventure',
+          price: '19.90'
+        },
+        {
+          gameid: '1',
+          gamename: 'SuperMario',
+          cover: 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190710183805263591.jpg',
+          consolename: 'PS4',
+          category: 'Adventure',
+          price: '19.90'
+        }],
       multipleSelection: [],
       // 购买游戏按钮弹出的对话框-----------------------------------------------------------------------------------
       // 控制购买游戏对话框的显示与隐藏
@@ -132,10 +133,33 @@ export default {
     }
   },
   created () {
+    this.getShoppingCartList()
   },
   methods: {
     // 根据分页获取对应的商品列表
-    getShoppingCartList () { },
+    getShoppingCartList () {
+      this.shoppingCartList = []
+      this.$axios.get('/api/getMyCart')
+        .then(response => {
+          console.log('getMyChart')
+          console.log(response)
+          for (let index in response.data.result) {
+            let cart = {
+              gameid: response.data.result[index].gameId,
+              gamename: response.data.result[index].title,
+              cover: response.data.result[index].coverPath,
+              consolename: response.data.result[index].consoleName,
+              category: response.data.result[index].cateName,
+              price: response.data.result[index].price
+            }
+            if (response.data.result[index].coverPath === null) {
+              // cart.cover = 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190710183805263591.jpg'
+              cart.cover = 'http://ww1.sinaimg.cn/large/007oltUXly1g9rveswx8mj306o06ot94.jpg'
+            }
+            this.shoppingCartList.push(cart)
+          }
+        })
+    },
     // 购买游戏按钮相关------------------------------------------------------------------------
     // 展示编辑游戏的对话框
     showBuyDialog () {
@@ -193,4 +217,8 @@ export default {
   margin-left: 10%;
   margin-right: 10%;
 }
+  .cart-cover{
+    height: 100px;
+    width: 100px;
+  }
 </style>

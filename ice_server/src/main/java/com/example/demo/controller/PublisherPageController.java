@@ -40,6 +40,8 @@ public class PublisherPageController {
     @Autowired
     private BelongMapper belongMapper;
     @Autowired
+    private TagsMapper tagsMapper;
+    @Autowired
     private UsersMapper usersMapper;
     @Autowired
     private HasTagMapper hasTagMapper;
@@ -361,6 +363,65 @@ public class PublisherPageController {
 
         response.setError("Deleting Success!");
         response.setStatus("204");
+        return response;
+    }
+
+    @RequestMapping(value = "/getAllTags", method=RequestMethod.GET)
+    public Response getAllTags(){
+        Response response=new Response();
+        List<Tags> result=tagsMapper.selectAll();
+
+        response.setStatus("200");
+        response.setResult(result);
+        return response;
+    }
+
+    @RequestMapping(value = "/modifyGame", method = RequestMethod.POST)
+    public Response modifyGame(@RequestBody GameService.GameModifier gameModifier,
+                               HttpSession session){
+        Response response=new Response();
+
+        if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
+            return sessionService.auth(session);
+        }
+        Integer pubId = (Integer) session.getAttribute("id");
+        if(publishersMapper.selectByPrimaryKey(pubId)==null){
+            response.setStatus("403");
+            response.setError("");
+            return response;
+        }
+
+        if(saleGameMapper.selectByGameId(gameModifier.getGame_id()).get(0).getPublisherId()!=pubId){
+            response.setStatus("403");
+            response.setError("Not sell by this publisher!");
+            return response;
+        }
+
+        Games gameRecord=gamesMapper.selectByPrimaryKey(gameModifier.getGame_id());
+        gameRecord.setTitle(gameModifier.getTitle());
+        gameRecord.setDiscount(gameModifier.getDiscount());
+        gameRecord.setPreOrder(gameModifier.getPreOrder());
+        gameRecord.setDescription(gameModifier.getDescription());
+        gameRecord.setPrice(gameModifier.getPrice());
+        gamesMapper.updateByPrimaryKeySelective(gameRecord);
+
+        //console
+        if(gameModifier.getList_console_id()==null){
+            response.setError("Successfully Modified!");
+            response.setStatus("200");
+            return response;
+        }
+        List<Integer> consoleIds=gameModifier.getList_console_id();
+        playedOnMapper.deleteByGameId(gameRecord.getGameId());
+        for (int i = 0; i < consoleIds.size(); i++) {
+            PlayedOn temp=new PlayedOn();
+            temp.setGameId(gameRecord.getGameId());
+            temp.setConsoleId(consoleIds.get(i));
+            playedOnMapper.insert(temp);
+        }
+
+        response.setError("Successfully Modified!");
+        response.setStatus("200");
         return response;
     }
 

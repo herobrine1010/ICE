@@ -55,4 +55,8 @@
     set TAG_NAME = #{tagName,jdbcType=VARCHAR}
     where TAG_ID = #{tagId,jdbcType=INTEGER}
   </update>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select *
+    from tags
+  </select>
 </mapper>

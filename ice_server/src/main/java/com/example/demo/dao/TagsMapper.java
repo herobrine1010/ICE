@@ -4,6 +4,8 @@ import com.example.demo.entity.Tags;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Mapper
 @Repository
 public interface TagsMapper {
@@ -18,4 +20,6 @@ public interface TagsMapper {
     int updateByPrimaryKeySelective(Tags record);
 
     int updateByPrimaryKey(Tags record);
+
+    List<Tags> selectAll();
 }
