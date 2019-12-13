@@ -143,7 +143,7 @@
 </template>
 
 <script>
-const consoleOptions = ['PS3', 'PS4', 'PS Vita', 'PSP', 'Nintendo Switch', 'Nintendo 3DS', 'Xbox 360', 'Xbox one']
+const consoleOptions = ['PS3', 'PS4', 'PS Vita', 'PSP', 'Nintendo Switch', 'Nintendo 3DS', 'xbox 360', 'xbox one']
 
 export default {
   data () {

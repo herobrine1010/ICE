@@ -1,8 +1,8 @@
 <template>
   <div class="block">
-    <el-carousel height="400px">
+    <el-carousel height="250px" indicator-position="outside">
       <el-carousel-item v-for="item in carouselImgUrl" :key="item">
-        <img :src="item" height="400px" width="100%" alt/>
+        <img :src="item" height="100%" width="100%" alt/>
       </el-carousel-item>
     </el-carousel>
   </div>

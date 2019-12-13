@@ -131,7 +131,7 @@
 // import qs from 'qs'
 export default {
   data () {
-    const consoleOptions = ['PS3', 'PS4', 'PS Vita', 'PSP', 'Nintendo Switch', 'Nintendo 3DS', 'Xbox 360', 'Xbox one']
+    const consoleOptions = ['PS3', 'PS4', 'PS Vita', 'PSP', 'Nintendo Switch', 'Nintendo 3DS', 'xbox 360', 'xbox one']
 
     // 验证价格的规则
     var checkPrice = (rule, value, cb) => {
@@ -329,9 +329,9 @@ export default {
           return 5
         case 'Nintendo 3DS':
           return 6
-        case 'Xbox 360':
+        case 'xbox 360':
           return 7
-        case 'Xbox one':
+        case 'xbox one':
           return 8
       }
     },

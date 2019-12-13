@@ -6,10 +6,10 @@
       <el-breadcrumb-item>商品详情</el-breadcrumb-item>
     </el-breadcrumb>
     <el-row>
-      <el-col :span="12" class="goods-image">
+      <el-col :span="14" class="goods-image">
         <Carousel :carouselImgUrl="carouselImgUrl" />
       </el-col>
-      <el-col :span="12">
+      <el-col :span="10">
         <el-row>
           <p class="name">{{goodsInfo.name}}</p>
           <el-row class="value">￥{{goodsInfo.value}}</el-row>
@@ -68,7 +68,7 @@
       <el-row v-for="item in user_evaluation" :key="item.name">
         <el-card class="user_evaluation">
           <el-row class="user_evaluation_name">{{item.name}}</el-row>
-          <el-avatar :src="item.avatar"></el-avatar>
+          <el-avatar :src="'http://localhost:8021'+item.avatar"></el-avatar>
           <el-row class="grey-font">{{item.date}}</el-row>
           <el-row class="grey-font">{{item.comment}}</el-row>
         </el-card>
@@ -124,11 +124,11 @@
       <el-form :model="shopcartForm" ref="shopcartFormRef" label-width="100px">
         <el-form-item label="Title">
           <!-- <el-input v-model="buyForm.title" disabled></el-input> -->
-          {{ shopcartForm.title }}
+          {{ goodsInfo.name }}
         </el-form-item>
         <el-form-item label="Price">
           <!-- <el-input v-model="buyForm.price" disabled></el-input> -->
-          ¥ {{ shopcartForm.price }}
+          ¥ {{ goodsInfo.value }}
         </el-form-item>
         <el-form-item label="Consoles">
           <el-radio-group v-model="shopcartForm.consoles" size="small">
@@ -153,12 +153,7 @@ export default {
   data () {
     return {
       breadcrumbItemList: ['类别一'],
-      carouselImgUrl: [
-        'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190702171201495133.jpg',
-        'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20191128153002017543.jpg',
-        'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20191128153002035028.jpg',
-        'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20191128153002085699.jpg'
-      ],
+      carouselImgUrl: [],
       goodsInfo: {
         id: '123',
         name: '名称',
@@ -178,37 +173,32 @@ export default {
       star_button_type: '',
       rate: 4.5,
       user_evaluation: [
-        {
-          avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-          name: '用户1',
-          date: '2019-12-6',
-          comment: 'hhhhhhhhhhhhhhhhhhhhhh'
-        },
-        {
-          avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-          name: '用户2',
-          date: '2019-12-6',
-          comment: 'emmmmmmmmmmmmm'
-        },
-        {
-          avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-          name: '用户3',
-          date: '2019-12-6',
-          comment: '2333333333333333333333'
-        }
+        // {
+        //   avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+        //   name: '用户1',
+        //   date: '2019-12-6',
+        //   comment: 'hhhhhhhhhhhhhhhhhhhhhh'
+        // },
+        // {
+        //   avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+        //   name: '用户2',
+        //   date: '2019-12-6',
+        //   comment: 'emmmmmmmmmmmmm'
+        // },
+        // {
+        //   avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+        //   name: '用户3',
+        //   date: '2019-12-6',
+        //   comment: '2333333333333333333333'
+        // }
       ],
       userInfo: {
-        address: [
-          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区1',
-          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区2',
-          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区3',
-          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区4'
-        ]
+        address: []
       },
       // 用户选择的信息
       userForm: {
         tel: '',
-        address: []
+        address: ''
       },
       // 购买游戏按钮弹出的对话框-----------------------------------------------------------------------------------
       // 控制购买游戏对话框的显示与隐藏
@@ -217,7 +207,7 @@ export default {
       buyForm: {
         title: 'SUPERMARIO',
         price: '19.90',
-        consoles: [],
+        consoles: '',
         category: 'Adventure'
       },
       // 添加游戏到购物车按钮弹出的对话框-----------------------------------------------------------------------------------
@@ -225,14 +215,10 @@ export default {
       shopcartDialogVisible: false,
       // 查询到的游戏信息对象
       shopcartForm: {
-        title: 'SUPERMARIO',
-        price: '19.90',
-        consoles: [
-          'PS4',
-          'PS Vita',
-          'Xbox one'
-        ],
-        category: 'Adventure'
+        title: '',
+        price: '',
+        consoles: '',
+        category: ''
       },
       evaluationNum: {
         current: 0,
@@ -297,19 +283,45 @@ export default {
       // 提示取消修改
       this.$message('Cancel buy game')
     },
-    // 修改游戏信息并提交
+    // 获得地址
+    getUserAddress() {
+      this.$axios.post('/api/getAddress')
+        .then(response => {
+          console.log('address', response)
+          for (let index in response.data.result) {
+            this.userInfo.address.push(response.data.result[index])
+          }
+        })
+    },
+    // 买游戏
     buyGame () {
       // !!!!!!!!!!!!!!!!!!!!!!!在这里需要添加一个验证，验证是否已经单选游戏平台，若未选择，前端报错，不可提交，示例代码如下注释!!!!!!!!!!!!!!!!!!!!!!
       // if (this.buyForm.consoles === '') {
       //   return this.$message.error('Please choose game consoles')
       // }
       // console.log(this.buyForm.consoles)
+      console.log('create order')
+      let order = {
+        address: this.userForm.address,
+        consoleId: this.getPlatFormId(this.buyForm.consoles),
+        contactTel: this.userForm.tel,
+        gameId: this.$router.currentRoute.params.id,
+        price: this.goodsInfo.value
+      }
+      this.$axios.post('/api/createOrder', order)
+        .then(response => {
+          console.log(response)
+          if (response.data.status === '200') {
+            this.$message.success('Buy game success')
+          } else {
+            this.$message.error('Buy game  fail')
+          }
+        })
+        .catch(() => {
+          this.$message.error('Buy game fail')
+        })
       // 关闭对话框
       this.buyDialogVisible = false
-      // 刷新数据列表
-      // this.getGameList()
-      // 提示修改成功
-      this.$message.success('Buy game success')
     },
     // 添加游戏到购物车按钮相关------------------------------------------------------------------------
     // 展示编辑游戏的对话框
@@ -321,26 +333,55 @@ export default {
     shopcartDialogClosed () {
       // this.$refs.buyFormRef.resetFields()
     },
-    // 取消对游戏信息的修改
+    // 取消加入购物物车
     cancelShopcartGame () {
       // 关闭对话框
       this.shopcartDialogVisible = false
       // 提示取消修改
       this.$message('Cancel add game to shopping cart')
     },
-    // 修改游戏信息并提交
+
+    getPlatFormId(consoleName) {
+      switch (consoleName) {
+        case 'PS3':
+          return 1
+        case 'PS4':
+          return 2
+        case 'PS Vita':
+          return 3
+        case 'PSP':
+          return 4
+        case 'Nintendo Switch':
+          return 5
+        case 'Nintendo 3DS':
+          return 6
+        case 'xbox 360':
+          return 7
+        case 'xbox one':
+          return 8
+      }
+    },
+    // 加入购物车
     shopcartGame () {
       // !!!!!!!!!!!!!!!!!!!!!!!在这里需要添加一个验证，验证是否已经单选游戏平台，若未选择，前端报错，不可提交，示例代码如下注释!!!!!!!!!!!!!!!!!!!!!!
       // if (this.shopcartForm.consoles === '') {
       //   return this.$message.error('Please choose game consoles')
       // }
       // console.log(this.shopcartForm.consoles)
+      console.log(this.goodsInfo)
+      this.$axios.get('/api/addToCart', { params: { gameId: this.$router.currentRoute.params.id, consoleId: this.getPlatFormId(this.shopcartForm.consoles) } })
+        .then(response => {
+          if (response.data.status === '200') {
+            this.$message.success('Add game to shopping cart success')
+          } else {
+            this.$message.error('Add game to shopping cart fail')
+          }
+        })
       // 关闭对话框
       this.shopcartDialogVisible = false
       // 刷新数据列表
       // this.getGameList()
       // 提示修改成功
-      this.$message.success('Add game to shopping cart success')
     },
     // 获取总评论数
     getEvaluationNum () {
@@ -358,7 +399,6 @@ export default {
     // 加载评论
     loadingEvaluation (from, to) {
       console.log('loading')
-      this.user_evaluation = []
       if (from >= this.evaluationNum.total) {
         return
       }
@@ -374,9 +414,10 @@ export default {
             for (let index in response.data.result) {
               let commentInfo = {}
               commentInfo.avatar = response.data.result[index].avatarPath
+              console.log('avatar', commentInfo.avatar)
               commentInfo.name = response.data.result[index].username
               try {
-                commentInfo.date = response.data.result[index].reviewDate.split('T')[0]
+                commentInfo.date = this.$moment(response.data.result[index].reviewDate).format('ll')
               } catch (e) {
               }
               commentInfo.comment = response.data.result[index].content
@@ -399,7 +440,7 @@ export default {
             platform: [],
             publisher: '',
             tag: [],
-            release_date: response.data.result[0].releaseDate.split('T')[0],
+            release_date: this.$moment(response.data.result[0].releaseDate).format('ll'),
             description: response.data.result[0].description
           }
           this.goodsInfo = goodsData
@@ -408,6 +449,17 @@ export default {
           this.getGameTag()
           this.getRate()
           this.getGamePublisher()
+          this.getGamesPics()
+        })
+    },
+    getGamesPics () {
+      this.$axios.get('/api/getPics', { params: { gameId: this.$router.currentRoute.params.id } })
+        .then(response => {
+          this.carouselImgUrl = []
+          for (let item of response.data.result) {
+            this.carouselImgUrl.push('http://localhost:8021' + item)
+          }
+          console.log('fghjk', this.carouselImgUrl)
         })
     },
     getGameConsole () {
@@ -440,6 +492,18 @@ export default {
           console.log(response)
         })
     },
+    checkInMyWishList () {
+      console.log('checkInMyWishList')
+      this.$axios.get('/api/checkInMyWishList', { params: { gameId: this.$router.currentRoute.params.id } })
+        .then(response => {
+          console.log('checkInMyWishList response', response)
+          console.log('checkInMyWishList response data status', response.data.status)
+          if (response.data.status === '200') {
+            this.star_button_type = 'warning'
+            console.log(this.star_button_type)
+          }
+        })
+    },
     getRate () {
       this.$axios.get('/api/getRate', { params: { gameId: this.$router.currentRoute.params.id } })
         .then(response => {
@@ -464,6 +528,8 @@ export default {
   created () {
     this.getGamesInfo()
     this.getEvaluationNum()
+    this.checkInMyWishList()
+    this.getUserAddress()
   }
 }
 </script>
@@ -474,7 +540,8 @@ export default {
   margin-right: 10%;
 }
 .goods-image {
-  padding-left: 22%;
+  padding-top: 5%;
+  padding-left: 20%;
   padding-right: 8%;
 }
 .name {

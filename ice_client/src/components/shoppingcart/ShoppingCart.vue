@@ -115,29 +115,26 @@ export default {
       buyDialogVisible: false,
       // 查询到的游戏信息对象
       buyForm: {
-        title: 'SUPERMARIO',
-        price: '19.90',
-        consolename: 'PS4',
-        category: 'Adventure'
+        id: '',
+        title: '',
+        price: '',
+        consolename: '',
+        category: ''
       },
       // 用户地址信息与地址选择
       userInfo: {
-        address: [
-          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区1',
-          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区2',
-          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区3',
-          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区4'
-        ]
+        address: []
       },
       // 用户选择的地址信息
       userForm: {
         tel: '',
-        address: []
+        address: ''
       }
     }
   },
   created () {
     this.getShoppingCartList()
+    this.getUserAddress()
   },
   methods: {
     // 根据分页获取对应的商品列表
@@ -165,8 +162,20 @@ export default {
         })
     },
     // 购买游戏按钮相关------------------------------------------------------------------------
-    // 展示编辑游戏的对话框
-    showBuyDialog () {
+    // 获取当前选择的购物车项的游戏信息
+    getCurrentCartGameInfo(gameId) {
+      for (let item of this.shoppingCartList) {
+        if (item.gameid === gameId) {
+          this.buyForm.id = gameId
+          this.buyForm.title = item.gamename
+          this.buyForm.consolename = item.consolename
+          this.buyForm.price = item.price
+        }
+      }
+    },
+    // 展示购买的对话框
+    showBuyDialog (gameId) {
+      this.getCurrentCartGameInfo(gameId)
       this.buyDialogVisible = true
     },
     // 监听修改游戏对话框的关闭事件
@@ -180,6 +189,36 @@ export default {
       // 提示取消修改
       this.$message('Cancel buy game')
     },
+    // 获得地址
+    getUserAddress() {
+      this.$axios.post('/api/getAddress')
+        .then(response => {
+          console.log('address', response)
+          for (let index in response.data.result) {
+            this.userInfo.address.push(response.data.result[index])
+          }
+        })
+    },
+    getPlatFormId(consoleName) {
+      switch (consoleName) {
+        case 'PS3':
+          return 1
+        case 'PS4':
+          return 2
+        case 'PS Vita':
+          return 3
+        case 'PSP':
+          return 4
+        case 'Nintendo Switch':
+          return 5
+        case 'Nintendo 3DS':
+          return 6
+        case 'xbox 360':
+          return 7
+        case 'xbox one':
+          return 8
+      }
+    },
     // 购买游戏
     buyGame () {
       // !!!!!!!!!!!!!!!!!!!!!!!在这里需要添加一个验证，验证是否已经单选游戏平台，若未选择，前端报错，不可提交，示例代码如下注释!!!!!!!!!!!!!!!!!!!!!!
@@ -187,12 +226,37 @@ export default {
       //   return this.$message.error('Please choose game consoles')
       // }
       // console.log(this.buyForm.consoles)
+      console.log('create order')
+      let order = {
+        address: this.userForm.address,
+        consoleId: this.getPlatFormId(this.buyForm.consolename),
+        contactTel: this.userForm.tel,
+        gameId: this.buyForm.id,
+        price: this.buyForm.price
+      }
+      console.log(this.buyForm.consolename)
+      console.log('cid')
+      console.log(order.consoleId)
+      this.$axios.post('/api/createOrder', order)
+        .then(response => {
+          console.log(response)
+          if (response.data.status === '200') {
+            this.$axios.get('/api/removeFromCart', { params: { gameId: this.buyForm.id } })
+              .then(response => {
+                if (response.data.status === '200') {
+                  this.getShoppingCartList()
+                }
+              })
+            this.$message.success('Buy game success')
+          } else {
+            this.$message.error('Buy game  fail')
+          }
+        })
+        .catch(() => {
+          this.$message.error('Buy game fail')
+        })
       // 关闭对话框
       this.buyDialogVisible = false
-      // 刷新数据列表
-      // this.getGameList()
-      // 提示修改成功
-      this.$message.success('Buy game success')
     },
     // 删除游戏信息并提交
     deleteShopcart (gameid) {
@@ -204,6 +268,7 @@ export default {
         this.$axios.get('/api/removeFromCart', { params: { gameId: gameid } })
           .then(response => {
             if (response.data.status === '200') {
+              this.getShoppingCartList()
               this.$message({
                 type: 'success',
                 message: 'Delete success'

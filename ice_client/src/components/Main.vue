@@ -94,8 +94,8 @@ export default {
             { menuId: '2-4', authName: 'PSP', path: '/PlatForm/' },
             { menuId: '2-5', authName: 'Nintendo Switch', path: '/PlatForm/nintendoswitch' },
             { menuId: '2-6', authName: 'Nintendo 3DS', path: '/PlatForm/nintendo3ds' },
-            { menuId: '2-7', authName: 'Xbox 360', path: '/PlatForm/xbox360' },
-            { menuId: '2-8', authName: 'Xbox one', path: '/PlatForm/xboxone' }
+            { menuId: '2-7', authName: 'xbox 360', path: '/PlatForm/xbox360' },
+            { menuId: '2-8', authName: 'xbox one', path: '/PlatForm/xboxone' }
           ]
         },
         {
@@ -195,11 +195,11 @@ export default {
           break
         case '2-7':
           console.log('进入一个页面', '2-7')
-          this.$router.push('/PlatForm/Xbox 360')
+          this.$router.push('/PlatForm/xbox 360')
           break
         case '2-8':
           console.log('进入一个页面', '2-8')
-          this.$router.push('/PlatForm/Xbox one')
+          this.$router.push('/PlatForm/xbox one')
           break
         case '3-1':
           console.log('进入一个页面', '3-1')

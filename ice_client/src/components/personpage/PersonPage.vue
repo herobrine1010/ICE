@@ -12,13 +12,11 @@
       <el-row>个人信息</el-row>
       <!-- 头像区域 -->
       <el-row class="userinfo" :gutter="20">
+        <div v-if="userInfo[0].avator_url">
         <el-col :span="4">
-          <el-image
-            src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-            fit="cover"
-            class="avator"
-          ></el-image>
+          <el-avatar shape="square" class="avatar" :size="100" fit="contain" :src="this.$store.state.HOST + userInfo[0].avator_url"></el-avatar>
         </el-col>
+        </div>
         <el-col :span="4" class="el-col-gap">
           <!-- 个人信息区域 -->
           <el-table :data="userInfo" stripe>
@@ -26,9 +24,6 @@
           </el-table>
           <el-table :data="userInfo" stripe>
             <el-table-column label="联系方式" prop="tel"></el-table-column>
-          </el-table>
-          <el-table :data="userInfo" stripe>
-            <el-table-column label="生日" prop="birthday"></el-table-column>
           </el-table>
         </el-col>
         <div v-if="userInfo[0].address[0]">
@@ -62,16 +57,14 @@
           <el-col :span="4">
             <el-upload
               class="upload-demo"
+              :show-file-list =false
               action="https://jsonplaceholder.typicode.com/posts/"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :before-remove="beforeRemove"
+              :on-success="handleSuccess"
               multiple
               :limit="1"
               :on-exceed="handleExceed"
-              :file-list="fileList"
             >
-              <el-button size="small" type="warning">修改个人头像</el-button>
+              <el-button  type="warning">修改个人头像</el-button>
             </el-upload>
           </el-col>
           <el-col :span="4">
@@ -164,7 +157,7 @@ export default {
       userInfo: [
         { user_id: '',
           username: '',
-          avator_url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+          avator_url: '',
           tel: '',
           birthday: '',
           address: [] }
@@ -222,7 +215,6 @@ export default {
       this.$axios.get('/api/getUser', { params: { userId: this.$store.state.userId } })
         .then(response => {
           console.log(response)
-          this.userInfo = []
           let avatarPath = ''
           if (response.data.result[0].avatarPath === null) {
             avatarPath = 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
@@ -428,17 +420,23 @@ export default {
         })
       })
     },
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview (file) {
-      console.log(file)
-    },
     handleExceed (files, fileList) {
       this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
-    beforeRemove (file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`)
+    handleSuccess (response, file, fileList) {
+      let fileFormData = new FormData()
+      fileFormData.append('img', file.raw)
+      this.$axios.post('/api/uploadAvatar', fileFormData)
+        .then(response => {
+          if (response.data.status === '200') {
+            this.$message.success('Change avatar success')
+          } else {
+            this.$message.error('Change avatar fail')
+          }
+        })
+        .catch(() => {
+          this.$message.error('Change avatar fail')
+        })
     }
   }
 }
@@ -452,8 +450,8 @@ export default {
 .userinfo {
   margin-top: 20px;
 }
-.avator {
-  border-radius: 50%;
+.avatar {
+  margin-left: 5%;
 }
 .el-col-gap {
   margin-left: 30px;

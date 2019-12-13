@@ -57,10 +57,10 @@ export default {
         case 'Nintendo 3DS':
           this.platformId = 6
           break
-        case 'Xbox 360':
+        case 'xbox 360':
           this.platformId = 7
           break
-        case 'Xbox one':
+        case 'xbox one':
           this.platformId = 8
           break
       }

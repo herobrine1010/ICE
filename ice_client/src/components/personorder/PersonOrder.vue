@@ -311,7 +311,7 @@ export default {
               username: response.data.result[index].user_name,
               address: response.data.result[index].address,
               contacttel: response.data.result[index].contact_tel,
-              date: response.data.result[index].order_date.split('T')[0],
+              date: this.$moment(response.data.result[index].order_date).format('ll'),
               gameId: response.data.result[index].game_id
             }
             this.orderList0.push(orderInfo)
@@ -330,7 +330,7 @@ export default {
               username: response.data.result[index].user_name,
               address: response.data.result[index].address,
               contacttel: response.data.result[index].contact_tel,
-              date: response.data.result[index].order_date.split('T')[0],
+              date: this.$moment(response.data.result[index].order_date).format('ll'),
               gameId: response.data.result[index].game_id
             }
             this.orderList1.push(orderInfo)
@@ -349,7 +349,7 @@ export default {
               username: response.data.result[index].user_name,
               address: response.data.result[index].address,
               contacttel: response.data.result[index].contact_tel,
-              date: response.data.result[index].order_date.split('T')[0],
+              date: this.$moment(response.data.result[index].order_date).format('ll'),
               gameId: response.data.result[index].game_id
             }
             this.orderList2.push(orderInfo)
@@ -368,7 +368,7 @@ export default {
               username: response.data.result[index].user_name,
               address: response.data.result[index].address,
               contacttel: response.data.result[index].contact_tel,
-              date: response.data.result[index].order_date.split('T')[0],
+              date: this.$moment(response.data.result[index].order_date).format('ll'),
               gameId: response.data.result[index].game_id
             }
             this.orderList3.push(orderInfo)

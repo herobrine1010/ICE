@@ -4,7 +4,9 @@
     <el-col :span="4" v-for="(o, index) in goodsInfo.length" :key="o" :offset="index > 0 ? 1 : 2">
       <div>
       <el-card  shadow="hover" @click.native="enterGoodsDetail(goodsInfo[index].id)">
-        <img :src="goodsInfo[index].imgSrc" class="image">
+        <div v-if="goodsInfo[index].imgSrc">
+        <img :src="'http://localhost:8021' + goodsInfo[index].imgSrc" class="image">
+        </div>
         <div style="padding: 14px;">
           <el-row class="name">{{goodsInfo[index].name}}</el-row>
           <el-row class="value">{{goodsInfo[index].value}}</el-row>

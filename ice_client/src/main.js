@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import './plugins/element.js'
 import store from './store/index'
+import moment from 'moment'
 // 导入全局样式表
 import './assets/css/global.css'
 // 导入富文本编辑器
@@ -27,6 +28,8 @@ axios.interceptors.request.use(config => {
 })
 Vue.prototype.$axios = axios
 axios.defaults.baseURL = ''
+
+Vue.prototype.$moment = moment
 
 Vue.config.productionTip = false
 
