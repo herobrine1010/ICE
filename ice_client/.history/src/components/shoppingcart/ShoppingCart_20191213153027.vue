@@ -180,7 +180,7 @@ export default {
       // 提示取消修改
       this.$message('Cancel buy game')
     },
-    // 购买游戏
+    // 修改游戏信息并提交
     buyGame () {
       // !!!!!!!!!!!!!!!!!!!!!!!在这里需要添加一个验证，验证是否已经单选游戏平台，若未选择，前端报错，不可提交，示例代码如下注释!!!!!!!!!!!!!!!!!!!!!!
       // if (this.buyForm.consoles === '') {
@@ -201,20 +201,10 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        this.$axios.get('/api/removeFromCart', { params: { gameId: gameid } })
-          .then(response => {
-            if (response.data.status === '200') {
-              this.$message({
-                type: 'success',
-                message: 'Delete success'
-              })
-            } else {
-              this.$message.error('Delete fail')
-            }
-          })
-          .catch(() => {
-            this.$message.error('Delete fail')
-          })
+        this.$message({
+          type: 'success',
+          message: 'Delete success'
+        })
       }).catch(() => {
         this.$message({
           type: 'info',

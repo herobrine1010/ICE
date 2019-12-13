@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="main">
-      <!-- 面包屑导航区域 -->
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/MainIndex' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>个人主页</el-breadcrumb-item>
-      </el-breadcrumb>
+  <div class="main">
+    <!-- 面包屑导航区域 -->
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/MainIndex' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>个人主页</el-breadcrumb-item>
+    </el-breadcrumb>
 
     <!-- 卡片视图区域 -->
     <el-card>
@@ -31,9 +31,8 @@
             <el-table-column label="生日" prop="birthday"></el-table-column>
           </el-table>
         </el-col>
-        <div v-if="userInfo[0].address[0]">
         <el-col :span="14" class="el-col-gap">
-          <el-card class="address-gap"  v-for="item in userInfo[0].address" :key="item">
+          <el-card class="address-gap" v-for="item in userInfo[0].address" :key="item">
             <el-button
               size="mini"
               type="info"
@@ -54,92 +53,92 @@
             <el-table-column label="生日" prop="birthday"></el-table-column>
           </el-table>-->
         </el-col>
-        </div>
       </el-row>
 
-        <!-- 编辑区域 -->
-        <el-row class="edit-part">
-          <el-col :span="4">
-            <el-upload
-              class="upload-demo"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :before-remove="beforeRemove"
-              multiple
-              :limit="1"
-              :on-exceed="handleExceed"
-              :file-list="fileList"
-            >
-              <el-button size="small" type="warning">修改个人头像</el-button>
-            </el-upload>
-          </el-col>
-          <el-col :span="4">
-            <el-button type="primary" @click="editDialogVisible = true">编辑个人信息</el-button>
-          </el-col>
-          <el-col :span="4">
-            <el-button type="success" @click="addDialogVisible = true">添加收货地址</el-button>
-          </el-col>
-        </el-row>
-      </el-card>
-      <el-card class="wish_list">愿望清单</el-card>
-      <!-- 修改个人信息的对话框 -->
-      <el-dialog
-        title="Edit User Information"
-        :visible.sync="editDialogVisible"
-        width="50%"
-        @close="editDialogClosed"
-      >
-        <!-- 内容主体区域 -->
-        <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="100px">
-          <el-form-item label="User ID">
-            <el-input v-model="editForm.user_id" disabled></el-input>
-          </el-form-item>
-          <el-form-item label="Name" prop="username">
-            <el-input v-model="editForm.username"></el-input>
-          </el-form-item>
-          <el-form-item label="Tel" prop="tel">
-            <el-input v-model="editForm.tel"></el-input>
-          </el-form-item>
-        </el-form>
-        <!-- 对话框底部确定取消按钮 -->
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="cancelEditUserInfo">Cancel</el-button>
-          <el-button type="primary" @click="editUserInfo">Confirm</el-button>
-        </span>
-      </el-dialog>
+      <!-- 编辑区域 -->
+      <el-row class="edit-part">
+        <el-col :span="4">
+          <el-button type="warning" @click="avatorDialogVisible = true">修改个人头像</el-button>
+        </el-col>
+        <el-col :span="4">
+          <el-button type="primary" @click="editDialogVisible = true">编辑个人信息</el-button>
+        </el-col>
+        <el-col :span="4">
+          <el-button type="success" @click="addDialogVisible = true">添加收货地址</el-button>
+        </el-col>
+      </el-row>
+    </el-card>
 
-      <!-- 添加收货地址的对话框 -->
-      <el-dialog
-        title="Add address"
-        :visible.sync="addDialogVisible"
-        width="50%"
-        @close="addDialogClosed"
-      >
-        <!-- 内容主体区域 -->
-        <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="100px">
-          <el-form-item>
-            <v-distpicker @selected="addressPickerSelected"></v-distpicker>
-          </el-form-item>
-          <el-form-item label="Address" prop="address2">
-            <el-input v-model="addForm.address2"></el-input>
-          </el-form-item>
-        </el-form>
-        <!-- 对话框底部确定取消按钮 -->
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="cancelAddAddress">Cancel</el-button>
-          <el-button type="primary" @click="addAddress">Confirm</el-button>
-        </span>
-      </el-dialog>
-    </div>
-    <div>
-      <Goods
-        v-for="(i,index) in rowNumber"
-        :goodsInfo="getWishesInfo(index)"
-        :key="i"
-        class="list-item"
-      />
-    </div>
+    <el-card class="wish_list">愿望清单</el-card>
+
+    <!-- 修改个人头像的对话框 -->
+    <el-dialog
+      title="Edit User Avator"
+      :visible.sync="avatorDialogVisible"
+      width="50%"
+      @close="avatorDialogClosed"
+    >
+      <!-- 内容主体区域 -->
+      
+      <!-- 对话框底部确定取消按钮 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancelEditUserAvator">Cancel</el-button>
+        <el-button type="primary" @click="editUserAvator">Confirm</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 修改个人信息的对话框 -->
+    <el-dialog
+      title="Edit User Information"
+      :visible.sync="editDialogVisible"
+      width="50%"
+      @close="editDialogClosed"
+    >
+      <!-- 内容主体区域 -->
+      <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="100px">
+        <el-form-item label="User ID">
+          <el-input v-model="editForm.user_id" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="Name" prop="username">
+          <el-input v-model="editForm.username"></el-input>
+        </el-form-item>
+        <el-form-item label="Tel" prop="tel">
+          <el-input v-model="editForm.tel"></el-input>
+        </el-form-item>
+      </el-form>
+      <!-- 对话框底部确定取消按钮 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancelEditUserInfo">Cancel</el-button>
+        <el-button type="primary" @click="editUserInfo">Confirm</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 添加收货地址的对话框 -->
+    <el-dialog
+      title="Add address"
+      :visible.sync="addDialogVisible"
+      width="50%"
+      @close="addDialogClosed"
+    >
+      <!-- 内容主体区域 -->
+      <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="100px">
+        <el-form-item>
+          <v-distpicker @selected="addressPickerSelected"></v-distpicker>
+        </el-form-item>
+        <el-form-item label="Address" prop="address2">
+          <el-input v-model="addForm.address2"></el-input>
+        </el-form-item>
+      </el-form>
+      <!-- 对话框底部确定取消按钮 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancelAddAddress">Cancel</el-button>
+        <el-button type="primary" @click="addAddress">Confirm</el-button>
+      </span>
+    </el-dialog>
+  </div>
+  <div>
+    <Goods v-for="(i,index) in rowNumber" :goodsInfo="getWishesInfo(index)"  :key="i" class="list-item"/>
+  </div>
   </div>
 </template>
 
@@ -161,14 +160,19 @@ export default {
       callback(new Error('请输入合法的手机号'))
     }
     return {
-      userInfo: [
-        { user_id: '',
-          username: '',
-          avator_url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          tel: '',
-          birthday: '',
-          address: [] }
-      ],
+      userInfo: [{
+        user_id: '997219957',
+        username: 'budi',
+        avator_url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        tel: '17717924664',
+        birthday: '2000-04-27',
+        address: [
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区1',
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区2',
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区3',
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区4'
+        ]
+      }],
       // 控制修改个人信息对话框的显示与隐藏
       editDialogVisible: false,
       // 查询到的商家信息对象
@@ -234,22 +238,29 @@ export default {
             username: response.data.result[0].userName,
             avator_url: avatarPath,
             tel: response.data.result[0].tel,
-            birthday: response.data.result[0].birthday,
-            address: []
+            birthday: response.data.result[0].birthday
           }
-          this.$axios.post('/api/getAddress')
-            .then(response => {
-              console.log('address', response)
-              for (let index in response.data.result) {
-                userData.address.push(response.data.result[index])
-              }
-              console.log(userData.address)
-              this.userInfo = []
-              this.userInfo.push(userData)
-              this.editForm = userData
-              console.log(this.userInfo)
-            })
+          this.userInfo.push(userData)
+          this.editForm = userData
+          console.log(this.userInfo)
         })
+    },
+    // 监听修改游戏对话框的关闭事件
+    avatorDialogClosed () {
+      // this.$refs.editFormRef.resetFields()
+    },
+    // 取消对个人头像的修改
+    cancelEditUserAvator () {
+      // 关闭对话框
+      this.avatorDialogVisible = false
+      // 提示取消修改
+      this.$message('Cancel edit user avator')
+    },
+    // 修改个人头像并提交
+    editUserAvator () {
+      this.avatorDialogVisible = false
+      // 提示修改成功
+      this.$message.success('Edit user avator success')
     },
     // 监听修改游戏对话框的关闭事件
     editDialogClosed () {
@@ -308,27 +319,25 @@ export default {
         this.$message.error('telephone number is invalid!')
         return
       }
-      let addressData = []
-      addressData = this.userInfo[0].address
-      addressData.push(this.addForm.address1.province.value.toString() + this.addForm.address1.city.value.toString() + this.addForm.address1.area.value.toString() + this.addForm.address2)
-      console.log(addressData)
-      this.$axios.post('/api/updateAddress', addressData)
+      let editData = {
+        address: this.addForm.address2
+      }
+      console.log('editAddress')
+      this.$axios.post('/api/updateInfo', editData)
         .then(response => {
           console.log(response)
           // 刷新数据列表
-          if (response.data.status === '200') {
-            this.getUserList()
-            // 提示修改成功
-            this.$message.success('Add address success')
-          } else {
-            this.$message.error('Add address fail')
-          }
+          this.getUserList()
         })
-        .catch(() => {
-          this.$message.error('Add address fail')
-        })
+      this.editDialogVisible = false
+      // 提示修改成功
+      this.$message.success('Edit Address success')
       // 关闭对话框
       this.addDialogVisible = false
+      // 刷新数据列表
+      this.getUserList()
+      // 提示修改成功
+      this.$message.success('Add address success')
     },
     getWishesInfo (index) {
       let wishesInfo = []
@@ -395,50 +404,17 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        let deleteIndex = this.userInfo[0].address.indexOf(item)
-        if (this.userInfo[0].address.indexOf(item) !== -1) {
-          this.userInfo[0].address.splice(this.userInfo[0].address.indexOf(item), 1)
-        }
-        let addressData = this.userInfo[0].address
-        this.$axios.post('/api/updateAddress', addressData)
-          .then(response => {
-            console.log(response)
-            // 刷新数据列表
-            if (response.data.status === '200') {
-              this.getUserList()
-              // 提示修改成功
-              this.$message.success('Add address success')
-            } else {
-              if (deleteIndex !== -1) {
-                this.userInfo[0].address.splice(deleteIndex, 0, item)
-              }
-              this.$message.error('Delete address fail')
-            }
-          })
-          .catch(() => {
-            if (deleteIndex !== -1) {
-              this.userInfo[0].address.splice(deleteIndex, 0, item)
-            }
-            this.$message.error('Delete address fail')
-          })
+        // item中传输的是地址的字符串信息，需要匹配字符串进行删除。
+        this.$message({
+          type: 'success',
+          message: 'Delete success'
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
           message: 'Cancel delete'
         })
       })
-    },
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview (file) {
-      console.log(file)
-    },
-    handleExceed (files, fileList) {
-      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
-    },
-    beforeRemove (file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`)
     }
   }
 }

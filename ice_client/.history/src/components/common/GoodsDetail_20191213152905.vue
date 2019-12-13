@@ -92,9 +92,6 @@
           <!-- <el-input v-model="buyForm.price" disabled></el-input> -->
           ¥ {{ buyForm.price }}
         </el-form-item>
-        <el-form-item label="Tel">
-          <el-input v-model="userForm.tel"></el-input>
-        </el-form-item>
         <el-form-item label="Consoles">
           <el-radio-group v-model="buyForm.consoles" size="small">
             <el-radio-button v-for="con in goodsInfo.platform" :label="con" :key="con">{{con}}</el-radio-button>
@@ -129,6 +126,9 @@
         <el-form-item label="Price">
           <!-- <el-input v-model="buyForm.price" disabled></el-input> -->
           ¥ {{ shopcartForm.price }}
+        </el-form-item>
+        <el-form-item label="Tel">
+          <el-input v-model="userForm.tel"></el-input>
         </el-form-item>
         <el-form-item label="Consoles">
           <el-radio-group v-model="shopcartForm.consoles" size="small">

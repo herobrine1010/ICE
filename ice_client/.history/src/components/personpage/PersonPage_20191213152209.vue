@@ -7,21 +7,43 @@
         <el-breadcrumb-item>个人主页</el-breadcrumb-item>
       </el-breadcrumb>
 
-    <!-- 卡片视图区域 -->
-    <el-card>
-      <el-row>个人信息</el-row>
-      <!-- 头像区域 -->
-      <el-row class="userinfo" :gutter="20">
-        <el-col :span="4">
-          <el-image
-            src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-            fit="cover"
-            class="avator"
-          ></el-image>
-        </el-col>
-        <el-col :span="4" class="el-col-gap">
-          <!-- 个人信息区域 -->
-          <el-table :data="userInfo" stripe>
+      <!-- 卡片视图区域 -->
+      <el-card>
+        <el-row>个人信息</el-row>
+        <!-- 头像区域 -->
+        <el-row class="userinfo" :gutter="20">
+          <el-col :span="4">
+            <el-image
+              src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+              fit="cover"
+              class="avator"
+            ></el-image>
+          </el-col>
+          <el-col :span="4" class="el-col-gap">
+            <!-- 个人信息区域 -->
+            <el-table :data="userInfo" stripe>
+              <el-table-column label="用户昵称" prop="username"></el-table-column>
+            </el-table>
+            <el-table :data="userInfo" stripe>
+              <el-table-column label="联系方式" prop="tel"></el-table-column>
+            </el-table>
+            <el-table :data="userInfo" stripe>
+              <el-table-column label="生日" prop="birthday"></el-table-column>
+            </el-table>
+          </el-col>
+          <el-col :span="14" class="el-col-gap">
+            <el-card class="address-gap" v-for="item in userInfo[0].address" :key="item">
+              <el-button
+                size="mini"
+                type="info"
+                icon="el-icon-delete"
+                circle
+                @click="deleteAddress(item)"
+              ></el-button>
+              {{ item }}
+            </el-card>
+            <!-- 收货地址信息区域 -->
+            <!-- <el-table :data="userInfo" stripe>
             <el-table-column label="用户昵称" prop="username"></el-table-column>
           </el-table>
           <el-table :data="userInfo" stripe>
@@ -29,33 +51,9 @@
           </el-table>
           <el-table :data="userInfo" stripe>
             <el-table-column label="生日" prop="birthday"></el-table-column>
-          </el-table>
-        </el-col>
-        <div v-if="userInfo[0].address[0]">
-        <el-col :span="14" class="el-col-gap">
-          <el-card class="address-gap"  v-for="item in userInfo[0].address" :key="item">
-            <el-button
-              size="mini"
-              type="info"
-              icon="el-icon-delete"
-              circle
-              @click="deleteAddress(item)"
-            ></el-button>
-            {{ item }}
-          </el-card>
-          <!-- 收货地址信息区域 -->
-          <!-- <el-table :data="userInfo" stripe>
-            <el-table-column label="用户昵称" prop="username"></el-table-column>
-          </el-table>
-          <el-table :data="userInfo" stripe>
-            <el-table-column label="联系方式" prop="tel"></el-table-column>
-          </el-table>
-          <el-table :data="userInfo" stripe>
-            <el-table-column label="生日" prop="birthday"></el-table-column>
-          </el-table>-->
-        </el-col>
-        </div>
-      </el-row>
+            </el-table>-->
+          </el-col>
+        </el-row>
 
         <!-- 编辑区域 -->
         <el-row class="edit-part">
@@ -161,14 +159,19 @@ export default {
       callback(new Error('请输入合法的手机号'))
     }
     return {
-      userInfo: [
-        { user_id: '',
-          username: '',
-          avator_url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-          tel: '',
-          birthday: '',
-          address: [] }
-      ],
+      userInfo: [{
+        user_id: '997219957',
+        username: 'budi',
+        avator_url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        tel: '17717924664',
+        birthday: '2000-04-27',
+        address: [
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区1',
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区2',
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区3',
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区4'
+        ]
+      }],
       // 控制修改个人信息对话框的显示与隐藏
       editDialogVisible: false,
       // 查询到的商家信息对象
@@ -234,21 +237,11 @@ export default {
             username: response.data.result[0].userName,
             avator_url: avatarPath,
             tel: response.data.result[0].tel,
-            birthday: response.data.result[0].birthday,
-            address: []
+            birthday: response.data.result[0].birthday
           }
-          this.$axios.post('/api/getAddress')
-            .then(response => {
-              console.log('address', response)
-              for (let index in response.data.result) {
-                userData.address.push(response.data.result[index])
-              }
-              console.log(userData.address)
-              this.userInfo = []
-              this.userInfo.push(userData)
-              this.editForm = userData
-              console.log(this.userInfo)
-            })
+          this.userInfo.push(userData)
+          this.editForm = userData
+          console.log(this.userInfo)
         })
     },
     // 监听修改游戏对话框的关闭事件
@@ -308,27 +301,25 @@ export default {
         this.$message.error('telephone number is invalid!')
         return
       }
-      let addressData = []
-      addressData = this.userInfo[0].address
-      addressData.push(this.addForm.address1.province.value.toString() + this.addForm.address1.city.value.toString() + this.addForm.address1.area.value.toString() + this.addForm.address2)
-      console.log(addressData)
-      this.$axios.post('/api/updateAddress', addressData)
+      let editData = {
+        address: this.addForm.address2
+      }
+      console.log('editAddress')
+      this.$axios.post('/api/updateInfo', editData)
         .then(response => {
           console.log(response)
           // 刷新数据列表
-          if (response.data.status === '200') {
-            this.getUserList()
-            // 提示修改成功
-            this.$message.success('Add address success')
-          } else {
-            this.$message.error('Add address fail')
-          }
+          this.getUserList()
         })
-        .catch(() => {
-          this.$message.error('Add address fail')
-        })
+      this.editDialogVisible = false
+      // 提示修改成功
+      this.$message.success('Edit Address success')
       // 关闭对话框
       this.addDialogVisible = false
+      // 刷新数据列表
+      this.getUserList()
+      // 提示修改成功
+      this.$message.success('Add address success')
     },
     getWishesInfo (index) {
       let wishesInfo = []
@@ -347,7 +338,7 @@ export default {
       }
       return wishesInfo
     },
-    getWishes() {
+    getWishes () {
       console.log('getWishes')
       this.$axios.post('/api/getMyWishList')
         .then(response => {
@@ -395,50 +386,17 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        let deleteIndex = this.userInfo[0].address.indexOf(item)
-        if (this.userInfo[0].address.indexOf(item) !== -1) {
-          this.userInfo[0].address.splice(this.userInfo[0].address.indexOf(item), 1)
-        }
-        let addressData = this.userInfo[0].address
-        this.$axios.post('/api/updateAddress', addressData)
-          .then(response => {
-            console.log(response)
-            // 刷新数据列表
-            if (response.data.status === '200') {
-              this.getUserList()
-              // 提示修改成功
-              this.$message.success('Add address success')
-            } else {
-              if (deleteIndex !== -1) {
-                this.userInfo[0].address.splice(deleteIndex, 0, item)
-              }
-              this.$message.error('Delete address fail')
-            }
-          })
-          .catch(() => {
-            if (deleteIndex !== -1) {
-              this.userInfo[0].address.splice(deleteIndex, 0, item)
-            }
-            this.$message.error('Delete address fail')
-          })
+        // item中传输的是地址的字符串信息，需要匹配字符串进行删除。
+        this.$message({
+          type: 'success',
+          message: 'Delete success'
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
           message: 'Cancel delete'
         })
       })
-    },
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview (file) {
-      console.log(file)
-    },
-    handleExceed (files, fileList) {
-      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
-    },
-    beforeRemove (file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`)
     }
   }
 }
