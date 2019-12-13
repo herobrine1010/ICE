@@ -47,6 +47,11 @@
         <el-form-item label="Title">{{ buyForm.title }}</el-form-item>
         <el-form-item label="Console">{{ buyForm.consolename }}</el-form-item>
         <el-form-item label="Price">¥ {{ buyForm.price }}</el-form-item>
+        <el-form-item label="Address">
+          <el-radio-group v-model="userForm.address" size="small">
+            <el-radio-button v-for="con in userInfo.address" :label="con" :key="con">{{con}}</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
       </el-form>
       <!-- 对话框底部确定取消按钮 -->
       <span slot="footer" class="dialog-footer">
@@ -111,6 +116,19 @@ export default {
         price: '19.90',
         consolename: 'PS4',
         category: 'Adventure'
+      },
+      // 用户地址信息与地址选择
+      userInfo: {
+        address: [
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区1',
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区2',
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区3',
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区4'
+        ]
+      },
+      // 用户选择的地址信息
+      userForm: {
+        address: []
       }
     }
   },
