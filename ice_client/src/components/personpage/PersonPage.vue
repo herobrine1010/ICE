@@ -31,8 +31,9 @@
             <el-table-column label="生日" prop="birthday"></el-table-column>
           </el-table>
         </el-col>
+        <div v-if="userInfo[0].address[0]">
         <el-col :span="14" class="el-col-gap">
-          <el-card class="address-gap" v-for="item in userInfo[0].address" :key="item">
+          <el-card class="address-gap"  v-for="item in userInfo[0].address" :key="item">
             <el-button
               size="mini"
               type="info"
@@ -53,6 +54,7 @@
             <el-table-column label="生日" prop="birthday"></el-table-column>
           </el-table>-->
         </el-col>
+        </div>
       </el-row>
 
       <!-- 编辑区域 -->
@@ -105,7 +107,7 @@
         <el-form-item>
           <v-distpicker @selected="addressPickerSelected"></v-distpicker>
         </el-form-item>
-        <el-form-item label="Address" prop="address2">
+        <el-form-item label="address" prop="address2">
           <el-input v-model="addForm.address2"></el-input>
         </el-form-item>
       </el-form>
@@ -140,19 +142,14 @@ export default {
       callback(new Error('请输入合法的手机号'))
     }
     return {
-      userInfo: [{
-        user_id: '997219957',
-        username: 'budi',
-        avator_url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        tel: '17717924664',
-        birthday: '2000-04-27',
-        address: [
-          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区1',
-          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区2',
-          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区3',
-          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区4'
-        ]
-      }],
+      userInfo: [
+        { user_id: '',
+          username: '',
+          avator_url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+          tel: '',
+          birthday: '',
+          address: [] }
+      ],
       // 控制修改个人信息对话框的显示与隐藏
       editDialogVisible: false,
       // 查询到的商家信息对象
@@ -206,7 +203,6 @@ export default {
       this.$axios.get('/api/getUser', { params: { userId: this.$store.state.userId } })
         .then(response => {
           console.log(response)
-          this.userInfo = []
           let avatarPath = ''
           if (response.data.result[0].avatarPath === null) {
             avatarPath = 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
@@ -218,11 +214,21 @@ export default {
             username: response.data.result[0].userName,
             avator_url: avatarPath,
             tel: response.data.result[0].tel,
-            birthday: response.data.result[0].birthday
+            birthday: response.data.result[0].birthday,
+            address: []
           }
-          this.userInfo.push(userData)
-          this.editForm = userData
-          console.log(this.userInfo)
+          this.$axios.post('/api/getAddress')
+            .then(response => {
+              console.log('address', response)
+              for (let index in response.data.result) {
+                userData.address.push(response.data.result[index])
+              }
+              console.log(userData.address)
+              this.userInfo = []
+              this.userInfo.push(userData)
+              this.editForm = userData
+              console.log(this.userInfo)
+            })
         })
     },
     // 监听修改游戏对话框的关闭事件
@@ -282,25 +288,27 @@ export default {
         this.$message.error('telephone number is invalid!')
         return
       }
-      let editData = {
-        address: this.addForm.address2
-      }
-      console.log('editAddress')
-      this.$axios.post('/api/updateInfo', editData)
+      let addressData = []
+      addressData = this.userInfo[0].address
+      addressData.push(this.addForm.address1.province.value.toString() + this.addForm.address1.city.value.toString() + this.addForm.address1.area.value.toString() + this.addForm.address2)
+      console.log(addressData)
+      this.$axios.post('/api/updateAddress', addressData)
         .then(response => {
           console.log(response)
           // 刷新数据列表
-          this.getUserList()
+          if (response.data.status === '200') {
+            this.getUserList()
+            // 提示修改成功
+            this.$message.success('Add address success')
+          } else {
+            this.$message.error('Add address fail')
+          }
         })
-      this.editDialogVisible = false
-      // 提示修改成功
-      this.$message.success('Edit Address success')
+        .catch(() => {
+          this.$message.error('Add address fail')
+        })
       // 关闭对话框
       this.addDialogVisible = false
-      // 刷新数据列表
-      this.getUserList()
-      // 提示修改成功
-      this.$message.success('Add address success')
     },
     getWishesInfo (index) {
       let wishesInfo = []
@@ -367,11 +375,32 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        // item中传输的是地址的字符串信息，需要匹配字符串进行删除。
-        this.$message({
-          type: 'success',
-          message: 'Delete success'
-        })
+        let deleteIndex = this.userInfo[0].address.indexOf(item)
+        if (this.userInfo[0].address.indexOf(item) !== -1) {
+          this.userInfo[0].address.splice(this.userInfo[0].address.indexOf(item), 1)
+        }
+        let addressData = this.userInfo[0].address
+        this.$axios.post('/api/updateAddress', addressData)
+          .then(response => {
+            console.log(response)
+            // 刷新数据列表
+            if (response.data.status === '200') {
+              this.getUserList()
+              // 提示修改成功
+              this.$message.success('Add address success')
+            } else {
+              if (deleteIndex !== -1) {
+                this.userInfo[0].address.splice(deleteIndex, 0, item)
+              }
+              this.$message.error('Delete address fail')
+            }
+          })
+          .catch(() => {
+            if (deleteIndex !== -1) {
+              this.userInfo[0].address.splice(deleteIndex, 0, item)
+            }
+            this.$message.error('Delete address fail')
+          })
       }).catch(() => {
         this.$message({
           type: 'info',

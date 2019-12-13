@@ -163,7 +163,7 @@ public class LoginController {
         //普段使いに省略するでも問題を齎させず。
 
         try {
-            usersMapper.updateByPrimaryKeySelective(user);
+            usersMapper.updateUser(user);
         } catch (Exception e) {
             e.printStackTrace();
 //            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

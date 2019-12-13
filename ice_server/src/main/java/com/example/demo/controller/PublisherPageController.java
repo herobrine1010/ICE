@@ -13,8 +13,11 @@ import com.example.demo.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -107,6 +110,17 @@ public class PublisherPageController {
 
         response.setError("Update Success!");
         response.setStatus("200");
+        return response;
+    }
+
+
+    @RequestMapping(value = "/getAllTags", method=RequestMethod.GET)
+    public Response getAllTags(){
+        Response response=new Response();
+        List<Tags> result=tagsMapper.selectAll();
+
+        response.setStatus("200");
+        response.setResult(result);
         return response;
     }
 
@@ -321,10 +335,56 @@ public class PublisherPageController {
         GameManager gm=gameService.convertToGameManager(temp);
         result.add(gm);
         response.setError("Upload Success!");
-        response.setStatus("201");
+        response.setStatus("200");
         response.setResult(result);
         return response;
     }
+
+    // type: cover, detail
+    @RequestMapping(value = "/postImg", method = RequestMethod.POST)
+    public Response postImg(@RequestParam("img") MultipartFile[]  fileList,
+                            @RequestParam("type") String type,
+                            @RequestParam("game_id") Integer game_id,
+                            HttpSession session ) throws IOException {
+        Response response=new Response();
+
+        String dirPath = "E:/java project/ICE/images/games/" + game_id.toString() + "/";
+        if (type.equals("cover")) {
+            for (MultipartFile i : fileList) {
+                String fileName = i.getOriginalFilename();
+                assert fileName != null;
+                String fileSuffix = fileName.substring(fileName.lastIndexOf("."));
+                String localFileName = "cover" + fileSuffix;
+                String filePath = dirPath + localFileName;
+                File localFile = new File(filePath);
+                File imagePath = new File(dirPath);
+                if (!imagePath.exists()) {
+                    imagePath.mkdirs();
+                }
+                i.transferTo(localFile);
+            }
+        }else if(type.equals("detail")){
+            int count = 1;
+            for (MultipartFile i : fileList) {
+                String fileName = i.getOriginalFilename();
+                assert fileName != null;
+                String fileSuffix = fileName.substring(fileName.lastIndexOf("."));
+                String localFileName = "" + count + fileSuffix;
+                String filePath = dirPath + localFileName;
+                File imagePath = new File(dirPath);
+                if (!imagePath.exists()) {
+                    imagePath.mkdirs();
+                }
+                File localFile = new File(filePath);
+                i.transferTo(localFile);
+                count ++;
+            }
+        }
+        System.out.println(dirPath);
+        response.setStatus("200");
+        return response;
+    }
+
 
     public boolean imageProcess(@RequestParam(value = "cover") String cover,
                                 @RequestParam(value = "pictures") List<String> pictures,
@@ -366,15 +426,6 @@ public class PublisherPageController {
         return response;
     }
 
-    @RequestMapping(value = "/getAllTags", method=RequestMethod.GET)
-    public Response getAllTags(){
-        Response response=new Response();
-        List<Tags> result=tagsMapper.selectAll();
-
-        response.setStatus("200");
-        response.setResult(result);
-        return response;
-    }
 
     @RequestMapping(value = "/modifyGame", method = RequestMethod.POST)
     public Response modifyGame(@RequestBody GameService.GameModifier gameModifier,

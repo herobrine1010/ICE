@@ -114,8 +114,8 @@
             <el-checkbox-button v-for="con in consoleOptions" :label="con" :key="con">{{con}}</el-checkbox-button>
           </el-checkbox-group>
         </el-form-item>
-        <el-form-item label="Discription" prop="discription">
-          <el-input v-model="editForm.discription"></el-input>
+        <el-form-item label="Description" prop="description">
+          <el-input v-model="editForm.description"></el-input>
         </el-form-item>
       </el-form>
       <!-- 对话框底部确定取消按钮 -->
@@ -147,11 +147,11 @@ export default {
     }
 
     // 验证简介长度的规则
-    var checkDiscription = (rule, value, cb) => {
+    var checkdescription = (rule, value, cb) => {
       // 验证简介的正则表达式
-      const regDiscription = /^.{0,200}$/
+      const regdescription = /^.{0,200}$/
 
-      if (regDiscription.test(value)) {
+      if (regdescription.test(value)) {
         // 合法的简介
         return cb()
       }
@@ -174,31 +174,13 @@ export default {
       editDialogVisible: false,
       // 查询到的游戏信息对象
       editForm: {
-        gameid: '12345',
-        title: 'SUPERMARIO',
-        price: '19.90',
-        discount: 'On',
-        average_rate: '4.8',
-        release_date: '1985-09-13',
-        pre_order: 'Off',
-        rate_count: '100',
-        discription: 'The game takes place in the Mushroom Kingdom, and Mario begins his new adventure in order to rescue Princess Peach, kidnapped by Kuba.',
-        cover: '/tmp_uploads/30f08d52c551ecb447277eae232304b8',
-        pictures: [
-          '/tmp_uploads/30f08d52c551ecb447277eae232304b1',
-          '/tmp_uploads/30f08d52c551ecb447277eae232304b2',
-          '/tmp_uploads/30f08d52c551ecb447277eae232304b3'
-        ],
-        consoles: [
-          'PS4',
-          'PS Vita',
-          'Xbox one'
-        ],
-        category: 'Adventure',
-        tags: [
-          'CARTOON',
-          'POPULAR'
-        ]
+        gameid: '',
+        title: '',
+        price: '',
+        discount: '',
+        pre_order: '',
+        description: '',
+        consoles: []
       },
       // 修改表单的验证规则对象
       editFormRules: {
@@ -209,8 +191,8 @@ export default {
           { required: true, message: 'Please enter game price', trigger: 'blur' },
           { validator: checkPrice, trigger: 'blur' }
         ],
-        discription: [
-          { validator: checkDiscription, trigger: 'blur' }
+        description: [
+          { validator: checkdescription, trigger: 'blur' }
         ]
       },
       // 游戏商品列表
@@ -224,7 +206,7 @@ export default {
         //   release_date: '',
         //   pre_order: '',
         //   rate_count: '',
-        //   discription: '',
+        //   description: '',
         //   cover: '',
         //   pictures: [],
         //   consoles: [],
@@ -271,7 +253,7 @@ export default {
           this.gamelist[item].pre_order = 'On'
         }
         this.gamelist[item].rate_count = response.data.result[item].rate_count
-        this.gamelist[item].discription = response.data.result[item].discription
+        this.gamelist[item].description = response.data.result[item].description
         this.gamelist[item].cover = response.data.result[item].cover
         this.gamelist[item].picture = response.data.result[item].picture
         this.gamelist[item].consoles = []
@@ -331,6 +313,28 @@ export default {
       this.queryInfo.pagenum = newPage
       this.jumpPage(newPage - 1)
     },
+    // eslint-disable-next-line camelcase
+    getConsoleId(console_name) {
+      // eslint-disable-next-line camelcase
+      switch (console_name) {
+        case 'PS3':
+          return 1
+        case 'PS4':
+          return 2
+        case 'PS Vita':
+          return 3
+        case 'PSP':
+          return 4
+        case 'Nintendo Switch':
+          return 5
+        case 'Nintendo 3DS':
+          return 6
+        case 'Xbox 360':
+          return 7
+        case 'Xbox one':
+          return 8
+      }
+    },
     // 展示编辑游戏的对话框
     showEditDialog (gameid) {
       // 调用 API 接口，获取选中游戏商品的信息，存储到修改表格 editForm 中
@@ -340,13 +344,27 @@ export default {
       // if (res.meta.status !== 200) {
       //   return this.$message.error('查询用户信息失败！')
       // }
-
-      console.log(this.editForm)
+      console.log('show gamelist', this.gamelist)
+      for (let index in this.gamelist) {
+        if (this.gamelist[index].gameid === gameid) {
+          this.editForm.gameid = this.gamelist[index].gameid
+          this.editForm.title = this.gamelist[index].title
+          this.editForm.price = this.gamelist[index].price
+          this.editForm.discount = this.gamelist[index].discount
+          this.editForm.pre_order = this.gamelist[index].pre_order
+          this.editForm.description = this.gamelist[index].description
+          console.log(this.editForm.description)
+          this.editForm.consoles = this.gamelist[index].consoles
+          console.log(this.editForm)
+          break
+        }
+      }
+      this.editForm.gameid = gameid
       this.editDialogVisible = true
     },
     // 监听修改游戏对话框的关闭事件
     editDialogClosed () {
-      this.$refs.editFormRef.resetFields()
+      // this.$refs.editFormRef.resetFields()
     },
     // 取消对游戏信息的修改
     cancelEditGameInfo () {
@@ -358,34 +376,43 @@ export default {
     // 修改游戏信息并提交
     editGameInfo () {
       // 调用 API 接口，发起修改游戏信息的请求，根据返回的 response 进行对应的操作
-      // this.$refs.editFormRef.validate(async valid => {
-      //   if (!valid) return
-      //   // 发起修改用户信息的数据请求
-      //   const { data: res } = await this.$http.put(
-      //     'users/' + this.editForm.id,
-      //     {
-      //       email: this.editForm.email,
-      //       mobile: this.editForm.mobile
-      //     }
-      //   )
-
-      //   if (res.meta.status !== 200) {
-      //     return this.$message.error('更新用户信息失败！')
-      //   }
-
-      //   // 关闭对话框
-      //   this.editDialogVisible = false
-      //   // 刷新数据列表
-      //   this.getUserList()
-      //   // 提示修改成功
-      //   this.$message.success('更新用户信息成功！')
-      // })
+      console.log('editForm', this.editForm)
+      let editdata = {
+        game_id: this.editForm.gameid,
+        title: this.editForm.title,
+        price: this.editForm.price,
+        discount: false,
+        pre_order: false,
+        description: this.editForm.description,
+        list_console_id: []
+      }
+      console.log('editdata', editdata)
+      for (let index in this.editForm.consoles) {
+        editdata.list_console_id.push(this.getConsoleId(this.editForm.consoles[index]))
+      }
+      if (this.editForm.discount === 'On') {
+        editdata.discount = true
+      }
+      if (this.editForm.pre_order === 'On') {
+        editdata.pre_order = true
+      }
+      this.$axios.post('/api/modifyGame', editdata)
+        .then(resopnse => {
+          if (resopnse.data.status === '200') {
+            // 刷新数据列表
+            this.getGameList()
+            console.log('modifyGame', resopnse)
+            // 提示修改成功
+            this.$message.success('Edit game info success')
+          } else {
+            this.$message.error('Edit game info fail')
+          }
+        })
+        .catch(() => {
+          this.$message.error('Edit game info fail')
+        })
       // 关闭对话框
       this.editDialogVisible = false
-      // 刷新数据列表
-      this.getGameList()
-      // 提示修改成功
-      this.$message.success('Edit game info success')
     },
     // 根据 Id 删除对应的用户信息
     async removeGameById (gameid) {

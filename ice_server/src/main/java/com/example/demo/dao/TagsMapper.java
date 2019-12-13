@@ -15,11 +15,11 @@ public interface TagsMapper {
 
     int insertSelective(Tags record);
 
+    List<Tags> selectAll();
+
     Tags selectByPrimaryKey(Integer tagId);
 
     int updateByPrimaryKeySelective(Tags record);
 
     int updateByPrimaryKey(Tags record);
-
-    List<Tags> selectAll();
 }

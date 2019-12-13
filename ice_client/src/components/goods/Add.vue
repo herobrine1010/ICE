@@ -101,10 +101,10 @@
             <!-- action表示图片要上传到的后台API地址 -->
             <el-upload
               :action="uploadURL"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
+              :on-preview="handleCoverPreview"
+              :on-remove="handleCoverRemove"
               list-type="picture"
-              :on-success="handleSuccess"
+              :on-success="handleCoverSuccess"
               :limit="1"
             >
               <el-button size="small" type="primary">点击上传</el-button>
@@ -115,10 +115,10 @@
             <!-- action表示图片要上传到的后台API地址 -->
             <el-upload
               :action="uploadURL"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
+              :on-preview="handleDetailPreview"
+              :on-remove="handleDetailRemove"
               list-type="picture"
-              :on-success="handleSuccess"
+              :on-success="handleDetailSuccess"
               :limit="5"
             >
               <el-button size="small" type="primary">点击上传</el-button>
@@ -176,8 +176,10 @@ export default {
         discount: 'Off',
         // 是否预售
         pre_order: 'Off',
-        // 图片的数组
-        pics: [],
+        // 封面
+        coverFormData: new FormData(),
+        // 详情图片
+        detailImgFormData: new FormData(),
         // 商品的详情描述
         goods_introduce: '',
         attrs: []
@@ -329,13 +331,13 @@ export default {
       // }
     },
     // 处理图片预览效果
-    handlePreview (file) {
+    handleCoverPreview (file) {
       console.log(file)
       this.previewPath = file.url
       this.previewVisible = true
     },
     // 处理移除图片的操作
-    handleRemove (file) {
+    handleCoverRemove (file) {
       // console.log(file)
       // // 1. 获取将要删除的图片的临时路径
       // const filePath = file.response.data.tmp_path
@@ -346,7 +348,56 @@ export default {
       // console.log(this.addForm)
     },
     // 监听图片上传成功的事件
-    handleSuccess (response) {
+    handleCoverSuccess (response, file, fileList) {
+      console.log('cover file success')
+      // console.log(file)
+      // console.log(fileList)
+      // 将图片放入表单对象中
+      this.addForm.coverFormData.append('type', 'cover')
+      for (let index in fileList) {
+        this.addForm.coverFormData.append('img', fileList[index].raw)
+      }
+      // console.log(this.coverFormData)
+      // console.log(this.coverFormData.getAll('cover'))
+
+      // this.$axios.post('api/postImg', this.addForm.coverFormData)
+      //   .then(response => {
+      //     console.log(response)
+      //   })
+      // console.log(response)
+      // // 1. 拼接得到一个图片信息对象
+      // const picInfo = { pic: response.data.tmp_path }
+      // // 2. 将图片信息对象，push 到pics数组中
+      // this.addForm.pics.push(picInfo)
+      // console.log(this.addForm)
+    },
+    // 处理图片预览效果
+    handleDetailPreview (file) {
+      console.log(file)
+      this.previewPath = file.url
+      this.previewVisible = true
+    },
+    // 处理移除图片的操作
+    handleDetailRemove (file) {
+      // console.log(file)
+      // // 1. 获取将要删除的图片的临时路径
+      // const filePath = file.response.data.tmp_path
+      // // 2. 从 pics 数组中，找到这个图片对应的索引值
+      // const i = this.addForm.pics.findIndex(x => x.pic === filePath)
+      // // 3. 调用数组的 splice 方法，把图片信息对象，从 pics 数组中移除
+      // this.addForm.pics.splice(i, 1)
+      // console.log(this.addForm)
+    },
+    // 监听图片上传成功的事件
+    handleDetailSuccess (response, file, fileList) {
+      console.log('detail file success')
+      // console.log('file')
+      // console.log(file)
+      // console.log(fileList)
+      this.addForm.detailImgFormData.append('type', 'detail')
+      for (let index in fileList) {
+        this.addForm.detailImgFormData.append('img', fileList[index].raw)
+      }
       // console.log(response)
       // // 1. 拼接得到一个图片信息对象
       // const picInfo = { pic: response.data.tmp_path }
@@ -432,7 +483,36 @@ export default {
         this.$axios.post('/api/addGame', gameAdder)
           .then(response => {
             console.log(response)
-            this.$message.success('上架游戏成功')
+            if (response.data.status === '200') {
+              let currentGameId = response.data.result[0].game_id
+              this.addForm.coverFormData.append('game_id', currentGameId)
+              this.$axios.post('/api/postImg', this.addForm.coverFormData)
+                .then(response => {
+                  console.log(response)
+                  if (response.data.status === '200') {
+                    this.addForm.detailImgFormData.append('game_id', currentGameId)
+                    this.$axios.post('/api/postImg', this.addForm.detailImgFormData)
+                      .then(response => {
+                        console.log(response)
+                        if (response.data.status === '200') {
+                          this.$message.success('上架游戏成功')
+                        } else {
+                          this.$message.error('详情图片上传失败')
+                        }
+                      })
+                      .catch(() => {
+                        this.$message.error('详情图片上传失败')
+                      })
+                  } else {
+                    this.$message.error('封面图片上传失败')
+                  }
+                })
+                .catch(() => {
+                  this.$message.error('封面图片上传失败')
+                })
+            } else {
+              this.$message.error('上架游戏失败')
+            }
           })
           .catch(() => {
             this.$message.error('上架游戏失败')
