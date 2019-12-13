@@ -1,49 +1,27 @@
 <template>
   <div>
-    <div class="main">
-      <!-- 面包屑导航区域 -->
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/MainIndex' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>个人主页</el-breadcrumb-item>
-      </el-breadcrumb>
+  <div class="main">
+    <!-- 面包屑导航区域 -->
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/MainIndex' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>个人主页</el-breadcrumb-item>
+    </el-breadcrumb>
 
-      <!-- 卡片视图区域 -->
-      <el-card>
-        <el-row>个人信息</el-row>
-        <!-- 头像区域 -->
-        <el-row class="userinfo" :gutter="20">
-          <el-col :span="4">
-            <el-image
-              src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-              fit="cover"
-              class="avator"
-            ></el-image>
-          </el-col>
-          <el-col :span="4" class="el-col-gap">
-            <!-- 个人信息区域 -->
-            <el-table :data="userInfo" stripe>
-              <el-table-column label="用户昵称" prop="username"></el-table-column>
-            </el-table>
-            <el-table :data="userInfo" stripe>
-              <el-table-column label="联系方式" prop="tel"></el-table-column>
-            </el-table>
-            <el-table :data="userInfo" stripe>
-              <el-table-column label="生日" prop="birthday"></el-table-column>
-            </el-table>
-          </el-col>
-          <el-col :span="14" class="el-col-gap">
-            <el-card class="address-gap" v-for="item in userInfo[0].address" :key="item">
-              <el-button
-                size="mini"
-                type="info"
-                icon="el-icon-delete"
-                circle
-                @click="deleteAddress(item)"
-              ></el-button>
-              {{ item }}
-            </el-card>
-            <!-- 收货地址信息区域 -->
-            <!-- <el-table :data="userInfo" stripe>
+    <!-- 卡片视图区域 -->
+    <el-card>
+      <el-row>个人信息</el-row>
+      <!-- 头像区域 -->
+      <el-row class="userinfo" :gutter="20">
+        <el-col :span="4">
+          <el-image
+            src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+            fit="cover"
+            class="avator"
+          ></el-image>
+        </el-col>
+        <el-col :span="4" class="el-col-gap">
+          <!-- 个人信息区域 -->
+          <el-table :data="userInfo" stripe>
             <el-table-column label="用户昵称" prop="username"></el-table-column>
           </el-table>
           <el-table :data="userInfo" stripe>
@@ -51,93 +29,116 @@
           </el-table>
           <el-table :data="userInfo" stripe>
             <el-table-column label="生日" prop="birthday"></el-table-column>
-            </el-table>-->
-          </el-col>
-        </el-row>
+          </el-table>
+        </el-col>
+        <el-col :span="14" class="el-col-gap">
+          <el-card class="address-gap" v-for="item in userInfo[0].address" :key="item">
+            <el-button
+              size="mini"
+              type="info"
+              icon="el-icon-delete"
+              circle
+              @click="deleteAddress(item)"
+            ></el-button>
+            {{ item }}
+          </el-card>
+          <!-- 收货地址信息区域 -->
+          <!-- <el-table :data="userInfo" stripe>
+            <el-table-column label="用户昵称" prop="username"></el-table-column>
+          </el-table>
+          <el-table :data="userInfo" stripe>
+            <el-table-column label="联系方式" prop="tel"></el-table-column>
+          </el-table>
+          <el-table :data="userInfo" stripe>
+            <el-table-column label="生日" prop="birthday"></el-table-column>
+          </el-table>-->
+        </el-col>
+      </el-row>
 
-        <!-- 编辑区域 -->
-        <el-row class="edit-part">
-          <el-col :span="4">
-            <el-upload
-              class="upload-demo"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :before-remove="beforeRemove"
-              multiple
-              :limit="1"
-              :on-exceed="handleExceed"
-              :file-list="fileList"
-            >
-              <el-button size="small" type="warning">修改个人头像</el-button>
-            </el-upload>
-          </el-col>
-          <el-col :span="4">
-            <el-button type="primary" @click="editDialogVisible = true">编辑个人信息</el-button>
-          </el-col>
-          <el-col :span="4">
-            <el-button type="success" @click="addDialogVisible = true">添加收货地址</el-button>
-          </el-col>
-        </el-row>
-      </el-card>
-      <el-card class="wish_list">愿望清单</el-card>
-      <!-- 修改个人信息的对话框 -->
-      <el-dialog
-        title="Edit User Information"
-        :visible.sync="editDialogVisible"
-        width="50%"
-        @close="editDialogClosed"
-      >
-        <!-- 内容主体区域 -->
-        <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="100px">
-          <el-form-item label="User ID">
-            <el-input v-model="editForm.user_id" disabled></el-input>
-          </el-form-item>
-          <el-form-item label="Name" prop="username">
-            <el-input v-model="editForm.username"></el-input>
-          </el-form-item>
-          <el-form-item label="Tel" prop="tel">
-            <el-input v-model="editForm.tel"></el-input>
-          </el-form-item>
-        </el-form>
-        <!-- 对话框底部确定取消按钮 -->
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="cancelEditUserInfo">Cancel</el-button>
-          <el-button type="primary" @click="editUserInfo">Confirm</el-button>
-        </span>
-      </el-dialog>
+      <!-- 编辑区域 -->
+      <el-row class="edit-part">
+        <el-col :span="4">
+          <el-button type="warning" @click="avatorDialogVisible = true">修改个人头像</el-button>
+        </el-col>
+        <el-col :span="4">
+          <el-button type="primary" @click="editDialogVisible = true">编辑个人信息</el-button>
+        </el-col>
+        <el-col :span="4">
+          <el-button type="success" @click="addDialogVisible = true">添加收货地址</el-button>
+        </el-col>
+      </el-row>
+    </el-card>
 
-      <!-- 添加收货地址的对话框 -->
-      <el-dialog
-        title="Add address"
-        :visible.sync="addDialogVisible"
-        width="50%"
-        @close="addDialogClosed"
-      >
-        <!-- 内容主体区域 -->
-        <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="100px">
-          <el-form-item>
-            <v-distpicker @selected="addressPickerSelected"></v-distpicker>
-          </el-form-item>
-          <el-form-item label="Address" prop="address2">
-            <el-input v-model="addForm.address2"></el-input>
-          </el-form-item>
-        </el-form>
-        <!-- 对话框底部确定取消按钮 -->
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="cancelAddAddress">Cancel</el-button>
-          <el-button type="primary" @click="addAddress">Confirm</el-button>
-        </span>
-      </el-dialog>
-    </div>
-    <div>
-      <Goods
-        v-for="(i,index) in rowNumber"
-        :goodsInfo="getWishesInfo(index)"
-        :key="i"
-        class="list-item"
-      />
-    </div>
+    <el-card class="wish_list">愿望清单</el-card>
+
+    <!-- 修改个人头像的对话框 -->
+    <el-dialog
+      title="Edit User Avator"
+      :visible.sync="avatorDialogVisible"
+      width="50%"
+      @close="avatorDialogClosed"
+    >
+      <!-- 内容主体区域 -->
+      
+      <!-- 对话框底部确定取消按钮 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancelEditUserAvator">Cancel</el-button>
+        <el-button type="primary" @click="editUserAvator">Confirm</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 修改个人信息的对话框 -->
+    <el-dialog
+      title="Edit User Information"
+      :visible.sync="editDialogVisible"
+      width="50%"
+      @close="editDialogClosed"
+    >
+      <!-- 内容主体区域 -->
+      <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="100px">
+        <el-form-item label="User ID">
+          <el-input v-model="editForm.user_id" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="Name" prop="username">
+          <el-input v-model="editForm.username"></el-input>
+        </el-form-item>
+        <el-form-item label="Tel" prop="tel">
+          <el-input v-model="editForm.tel"></el-input>
+        </el-form-item>
+      </el-form>
+      <!-- 对话框底部确定取消按钮 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancelEditUserInfo">Cancel</el-button>
+        <el-button type="primary" @click="editUserInfo">Confirm</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 添加收货地址的对话框 -->
+    <el-dialog
+      title="Add address"
+      :visible.sync="addDialogVisible"
+      width="50%"
+      @close="addDialogClosed"
+    >
+      <!-- 内容主体区域 -->
+      <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="100px">
+        <el-form-item>
+          <v-distpicker @selected="addressPickerSelected"></v-distpicker>
+        </el-form-item>
+        <el-form-item label="Address" prop="address2">
+          <el-input v-model="addForm.address2"></el-input>
+        </el-form-item>
+      </el-form>
+      <!-- 对话框底部确定取消按钮 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancelAddAddress">Cancel</el-button>
+        <el-button type="primary" @click="addAddress">Confirm</el-button>
+      </span>
+    </el-dialog>
+  </div>
+  <div>
+    <Goods v-for="(i,index) in rowNumber" :goodsInfo="getWishesInfo(index)"  :key="i" class="list-item"/>
+  </div>
   </div>
 </template>
 
@@ -338,7 +339,7 @@ export default {
       }
       return wishesInfo
     },
-    getWishes () {
+    getWishes() {
       console.log('getWishes')
       this.$axios.post('/api/getMyWishList')
         .then(response => {
@@ -397,18 +398,6 @@ export default {
           message: 'Cancel delete'
         })
       })
-    },
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview (file) {
-      console.log(file)
-    },
-    handleExceed (files, fileList) {
-      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
-    },
-    beforeRemove (file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`)
     }
   }
 }

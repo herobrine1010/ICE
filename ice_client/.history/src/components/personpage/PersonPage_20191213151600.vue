@@ -58,19 +58,7 @@
         <!-- 编辑区域 -->
         <el-row class="edit-part">
           <el-col :span="4">
-            <el-upload
-              class="upload-demo"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :before-remove="beforeRemove"
-              multiple
-              :limit="1"
-              :on-exceed="handleExceed"
-              :file-list="fileList"
-            >
-              <el-button size="small" type="warning">修改个人头像</el-button>
-            </el-upload>
+            <el-button type="warning" @click="avatorDialogVisible = true">修改个人头像</el-button>
           </el-col>
           <el-col :span="4">
             <el-button type="primary" @click="editDialogVisible = true">编辑个人信息</el-button>
@@ -80,7 +68,33 @@
           </el-col>
         </el-row>
       </el-card>
+
       <el-card class="wish_list">愿望清单</el-card>
+
+      <!-- 修改个人头像的对话框 -->
+      <el-dialog
+        title="Edit User Avator"
+        :visible.sync="avatorDialogVisible"
+        width="50%"
+        @close="avatorDialogClosed"
+      >
+        <!-- 内容主体区域 -->
+        <el-upload
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+        >
+          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+        <!-- 对话框底部确定取消按钮 -->
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="cancelEditUserAvator">Cancel</el-button>
+          <el-button type="primary" @click="editUserAvator">Confirm</el-button>
+        </span>
+      </el-dialog>
+
       <!-- 修改个人信息的对话框 -->
       <el-dialog
         title="Edit User Information"
@@ -172,6 +186,8 @@ export default {
           '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区4'
         ]
       }],
+      // 控制修改个人头像对话框的显示与隐藏
+      avatorDialogVisible: false,
       // 控制修改个人信息对话框的显示与隐藏
       editDialogVisible: false,
       // 查询到的商家信息对象
@@ -208,7 +224,8 @@ export default {
       // 每次加载的行数
       rowNumber: 1,
       // 商品列表
-      wishList: []
+      wishList: [],
+      imageUrl: ''
     }
   },
   created () {
@@ -243,6 +260,38 @@ export default {
           this.editForm = userData
           console.log(this.userInfo)
         })
+    },
+    handleAvatarSuccess (res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    beforeAvatarUpload (file) {
+      const isJPG = file.type === 'image/jpeg';
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!');
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!');
+      }
+      return isJPG && isLt2M;
+    },
+    // 监听修改头像对话框的关闭事件
+    avatorDialogClosed () {
+      // this.$refs.editFormRef.resetFields()
+    },
+    // 取消对个人头像的修改
+    cancelEditUserAvator () {
+      // 关闭对话框
+      this.avatorDialogVisible = false
+      // 提示取消修改
+      this.$message('Cancel edit user avator')
+    },
+    // 修改个人头像并提交
+    editUserAvator () {
+      this.avatorDialogVisible = false
+      // 提示修改成功
+      this.$message.success('Edit user avator success')
     },
     // 监听修改游戏对话框的关闭事件
     editDialogClosed () {
@@ -397,18 +446,6 @@ export default {
           message: 'Cancel delete'
         })
       })
-    },
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview (file) {
-      console.log(file)
-    },
-    handleExceed (files, fileList) {
-      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
-    },
-    beforeRemove (file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`)
     }
   }
 }

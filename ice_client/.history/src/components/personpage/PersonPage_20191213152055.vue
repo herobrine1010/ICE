@@ -58,19 +58,7 @@
         <!-- 编辑区域 -->
         <el-row class="edit-part">
           <el-col :span="4">
-            <el-upload
-              class="upload-demo"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :before-remove="beforeRemove"
-              multiple
-              :limit="1"
-              :on-exceed="handleExceed"
-              :file-list="fileList"
-            >
-              <el-button size="small" type="warning">修改个人头像</el-button>
-            </el-upload>
+            <el-button type="warning" @click="avatorDialogVisible = true">修改个人头像</el-button>
           </el-col>
           <el-col :span="4">
             <el-button type="primary" @click="editDialogVisible = true">编辑个人信息</el-button>
@@ -397,18 +385,6 @@ export default {
           message: 'Cancel delete'
         })
       })
-    },
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview (file) {
-      console.log(file)
-    },
-    handleExceed (files, fileList) {
-      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
-    },
-    beforeRemove (file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`)
     }
   }
 }
