@@ -97,6 +97,11 @@
             <el-radio-button v-for="con in goodsInfo.platform" :label="con" :key="con">{{con}}</el-radio-button>
           </el-radio-group>
         </el-form-item>
+        <el-form-item label="Address">
+          <el-radio-group v-model="userForm.address" size="small">
+            <el-radio-button v-for="con in userInfo.address" :label="con" :key="con">{{con}}</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
       </el-form>
       <!-- 对话框底部确定取消按钮 -->
       <span slot="footer" class="dialog-footer">
@@ -189,6 +194,18 @@ export default {
           comment: '2333333333333333333333'
         }
       ],
+      userInfo: {
+        address: [
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区1',
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区2',
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区3',
+          '上海市嘉定区安亭镇曹安公路4800号同济大学嘉定校区4'
+        ]
+      },
+      // 用户选择的信息
+      userForm: {
+        address: []
+      },
       // 购买游戏按钮弹出的对话框-----------------------------------------------------------------------------------
       // 控制购买游戏对话框的显示与隐藏
       buyDialogVisible: false,
