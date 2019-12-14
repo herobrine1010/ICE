@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,6 +41,16 @@ public class CartController {
         int thisUserId=Integer.parseInt(session.getAttribute("id").toString());
         try{
             List<CartItem> resultList=chartMapper.getMyCart(thisUserId,from,to-from,reversed);
+
+            for (int i = 0; i < resultList.size(); i++) {
+                String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "games" + System.getProperty("file.separator") + resultList.get(i).getGameId().toString() + System.getProperty("file.separator");
+                File file = new File(path);
+                File[] tempList = file.listFiles();
+                for (int j = 0; j < tempList.length; j++) {
+                    if(tempList[j].getName().contains("cover")){
+                        resultList.get(i).setCoverPath("/images/games/" + resultList.get(i).getGameId().toString() + "/" + tempList[j].getName());
+                    }
+                } }
             response.setResult(resultList);
             response.setStatus("200");
             if(resultList.isEmpty()){response.setError("No record in database!");}
@@ -49,6 +60,8 @@ public class CartController {
         }
         return response;
     }
+
+
 
     @RequestMapping(value="/addToCart",method=RequestMethod.GET)
     public Response addToCart(

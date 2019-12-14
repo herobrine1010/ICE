@@ -167,7 +167,7 @@ public class GameContoller {
             if(tempList[i].getName().contains("cover")){
                 continue;
             }
-            result.add("/images/users/games/"+gameId+"/"+tempList[i].getName());
+            result.add("/images/games/"+gameId+"/"+tempList[i].getName());
         }
 
         response.setStatus("200");
