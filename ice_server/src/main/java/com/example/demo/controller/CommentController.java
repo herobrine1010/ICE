@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.util.*;
 
 import com.example.demo.dao.*;
 import com.example.demo.entity.*;
@@ -13,9 +14,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+
 import com.example.demo.entity.ReviewsDetailed;
 @RestController
 public class CommentController {
@@ -49,8 +48,7 @@ public class CommentController {
 
         Reviews review=new Reviews();
         review.setContent(r.getContent());
-        java.util.Date currentTime = new java.util.Date();
-        review.setReviewDate(currentTime);
+        review.setReviewDate(new Date());
 
 
         //又は、ユーザーは評価内容ただ一つを発表できる。ご注意ください。
@@ -117,10 +115,10 @@ public class CommentController {
              HttpSession session){
         Response<ReviewWithUser> response = new Response<>();
 
-        //System.out.println(session.getAttribute("id"));
-//        if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
-//            return sessionService.auth(session);
-//        }
+        System.out.println(session.getAttribute("id"));
+        if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
+            return sessionService.auth(session);
+        }
         try{
             List<ReviewsDetailed> commentList=writeReviewMapper.selectAllComment(gameId,from,to-from,reversed);
             if (commentList.isEmpty()){
@@ -133,7 +131,10 @@ public class CommentController {
                     int uid=commentList.get(i).getUserId();
                     Users u=usersMapper.selectByPrimaryKey(uid);
                     ReviewWithUser reviewWithUser=new ReviewWithUser();
-                    reviewWithUser.setAvatarPath(u.getAvatarPath());
+                    String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "users" + System.getProperty("file.separator") + u.getUserId().toString() + System.getProperty("file.separator");
+                    File file = new File(path);
+                    File[] tempList = file.listFiles();
+                    reviewWithUser.setAvatarPath("/images/users/"+u.getUserId().toString()+"/" + tempList[0].getName());
                     reviewWithUser.setUserId(uid);
                     reviewWithUser.setUsername(u.getUserName());
                     reviewWithUser.setContent(commentList.get(i).getContent());

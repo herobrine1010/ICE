@@ -11,9 +11,12 @@ import com.example.demo.service.PublisherService;
 import com.example.demo.service.PublisherService.PublishersInfo;
 import com.example.demo.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
@@ -348,7 +351,7 @@ public class PublisherPageController {
                             HttpSession session ) throws IOException {
         Response response=new Response();
 
-        String dirPath = "E:/java project/ICE/images/games/" + game_id.toString() + "/";
+        String dirPath = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "games" + System.getProperty("file.separator") + game_id.toString() + System.getProperty("file.separator");
         if (type.equals("cover")) {
             for (MultipartFile i : fileList) {
                 String fileName = i.getOriginalFilename();
@@ -384,7 +387,6 @@ public class PublisherPageController {
         response.setStatus("200");
         return response;
     }
-
 
     public boolean imageProcess(@RequestParam(value = "cover") String cover,
                                 @RequestParam(value = "pictures") List<String> pictures,
@@ -669,4 +671,5 @@ public class PublisherPageController {
         response.setError("Altering success!");
         return response;
     }
+
 }

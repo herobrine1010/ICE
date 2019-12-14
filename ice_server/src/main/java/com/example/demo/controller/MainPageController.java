@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,10 +149,17 @@ public class MainPageController {
             if(i>gamesList.size()-1){
                 break;
             }
-            Games tempGame = gamesList.get(i);
-            GameInfo temp = gameService.convertToInfo(tempGame);
 
-            result.add(temp);
+            GameService.GameInfo temp_info = gameService.convertToInfo(gamesList.get(i));
+            String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator")+"users"+System.getProperty("file.separator") + "games" + System.getProperty("file.separator") + gamesList.get(i).getGameId().toString() + System.getProperty("file.separator");
+            File file = new File(path);
+            File[] tempList = file.listFiles();
+            for (int j = 0; j < tempList.length; j++) {
+                if(tempList[j].getName().contains("cover")){
+                    temp_info.setCover_path("/images/users/games/" + gamesList.get(i).getGameId().toString() + "/" + tempList[j].getName());
+                }
+            }
+            result.add(temp_info);
         }
 
         response.setResult(result);

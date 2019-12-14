@@ -6,12 +6,16 @@ import com.example.demo.service.SessionService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -151,6 +155,24 @@ public class GameContoller {
         return response;
     }
 
+    @RequestMapping(value = "/getPics", method = RequestMethod.GET)
+    public Response getPics(@RequestParam("gameId")int gameId){
+        Response response=new Response();
 
+        String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "games" + System.getProperty("file.separator") + gameId + System.getProperty("file.separator");
+        File file = new File(path);
+        File[] tempList = file.listFiles();
+        List<String> result=new ArrayList<>();
+        for (int i = 0; i < tempList.length; i++) {
+            if(tempList[i].getName().contains("cover")){
+                continue;
+            }
+            result.add("/images/users/games/"+gameId+"/"+tempList[i].getName());
+        }
+
+        response.setStatus("200");
+        response.setResult(result);
+        return response;
+    }
 
 }

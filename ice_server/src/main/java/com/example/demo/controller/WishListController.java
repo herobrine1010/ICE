@@ -7,10 +7,14 @@ import com.example.demo.service.GameService;
 import com.example.demo.service.SessionService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -115,7 +119,16 @@ public class WishListController {
                 return response;
             }
             for (int i = 0; i < l.size(); i++) {
-                result.add(gameService.convertToInfo(gamesMapper.selectByPrimaryKey(l.get(i).getGameId())));
+                GameService.GameInfo temp_info = gameService.convertToInfo(gamesMapper.selectByPrimaryKey(l.get(i).getGameId()));
+                String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "games" + System.getProperty("file.separator") + l.get(i).getGameId().toString() + System.getProperty("file.separator");
+                File file = new File(path);
+                File[] tempList = file.listFiles();
+                for (int j = 0; j < tempList.length; j++) {
+                    if(tempList[j].getName().contains("cover")){
+                        temp_info.setCover_path("/images/users/games/" + l.get(i).getGameId().toString() + "/" + tempList[j].getName());
+                    }
+                }
+                result.add(temp_info);
             }
             response.setStatus("200");
             response.setResult(result);
@@ -143,11 +156,6 @@ public class WishListController {
         }
         return response;
     }
-
-
-
-
-
 
 }
 //聞け万国の労働者　轟き渡るメーデーの　示威者に起こる足取りと　未来を継ぐる鬨の声

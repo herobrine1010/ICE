@@ -290,11 +290,4 @@ public class GameService {
         }
     }
 
-    @Configuration
-    public class MyPicConfig implements WebMvcConfigurer {
-        @Override
-        public void addResourceHandlers(ResourceHandlerRegistry registry) {
-            registry.addResourceHandler("/images/games/**").addResourceLocations("file:E:/Schooling/大三上/J2E软工项目/ICE/images/games/");
-        }
-    }
 }
