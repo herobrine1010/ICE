@@ -151,12 +151,12 @@ public class MainPageController {
             }
 
             GameService.GameInfo temp_info = gameService.convertToInfo(gamesList.get(i));
-            String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator")+"users"+System.getProperty("file.separator") + "games" + System.getProperty("file.separator") + gamesList.get(i).getGameId().toString() + System.getProperty("file.separator");
+            String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "games" + System.getProperty("file.separator") + gamesList.get(i).getGameId().toString() + System.getProperty("file.separator");
             File file = new File(path);
             File[] tempList = file.listFiles();
             for (int j = 0; j < tempList.length; j++) {
                 if(tempList[j].getName().contains("cover")){
-                    temp_info.setCover_path("/images/users/games/" + gamesList.get(i).getGameId().toString() + "/" + tempList[j].getName());
+                    temp_info.setCover_path("/images/games/" + gamesList.get(i).getGameId().toString() + "/" + tempList[j].getName());
                 }
             }
             result.add(temp_info);
@@ -188,6 +188,15 @@ public class MainPageController {
             Games tempGame = gamesList.get(i);
             GameInfo temp = gameService.convertToInfo(tempGame);
 
+            String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "games" + System.getProperty("file.separator") + gamesList.get(i).getGameId().toString() + System.getProperty("file.separator");
+            File file = new File(path);
+            File[] tempList = file.listFiles();
+            for (int j = 0; j < tempList.length; j++) {
+                if(tempList[j].getName().contains("cover")){
+                    temp.setCover_path("/images/games/" + gamesList.get(i).getGameId().toString() + "/" + tempList[j].getName());
+                }
+            }
+
             result.add(temp);
         }
 
@@ -212,6 +221,15 @@ public class MainPageController {
             }
             Games tempGame = gamesList.get(i);
             GameInfo temp = gameService.convertToInfo(tempGame);
+
+            String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "games" + System.getProperty("file.separator") + gamesList.get(i).getGameId().toString() + System.getProperty("file.separator");
+            File file = new File(path);
+            File[] tempList = file.listFiles();
+            for (int j = 0; j < tempList.length; j++) {
+                if(tempList[j].getName().contains("cover")){
+                    temp.setCover_path("/images/games/" + gamesList.get(i).getGameId().toString() + "/" + tempList[j].getName());
+                }
+            }
 
             result.add(temp);
         }
@@ -240,6 +258,15 @@ public class MainPageController {
             Games tempGame = gamesList.get(i);
             GameInfo temp = gameService.convertToInfo(tempGame);
 
+            String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "games" + System.getProperty("file.separator") + gamesList.get(i).getGameId().toString() + System.getProperty("file.separator");
+            File file = new File(path);
+            File[] tempList = file.listFiles();
+            for (int j = 0; j < tempList.length; j++) {
+                if(tempList[j].getName().contains("cover")){
+                    temp.setCover_path("/images/games/" + gamesList.get(i).getGameId().toString() + "/" + tempList[j].getName());
+                }
+            }
+
             result.add(temp);
         }
         response.setResult(result);
@@ -267,6 +294,15 @@ public class MainPageController {
             Games tempGame = gamesList.get(i);
             GameInfo temp = gameService.convertToInfo(tempGame);
 
+            String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "games" + System.getProperty("file.separator") + gamesList.get(i).getGameId().toString() + System.getProperty("file.separator");
+            File file = new File(path);
+            File[] tempList = file.listFiles();
+            for (int j = 0; j < tempList.length; j++) {
+                if(tempList[j].getName().contains("cover")){
+                    temp.setCover_path("/images/games/" + gamesList.get(i).getGameId().toString() + "/" + tempList[j].getName());
+                }
+            }
+
             result.add(temp);
         }
         response.setResult(result);
@@ -293,6 +329,15 @@ public class MainPageController {
             }
             Games tempGame = gamesList.get(i);
             GameInfo temp = gameService.convertToInfo(tempGame);
+
+            String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "games" + System.getProperty("file.separator") + gamesList.get(i).getGameId().toString() + System.getProperty("file.separator");
+            File file = new File(path);
+            File[] tempList = file.listFiles();
+            for (int j = 0; j < tempList.length; j++) {
+                if(tempList[j].getName().contains("cover")){
+                    temp.setCover_path("/images/games/" + gamesList.get(i).getGameId().toString() + "/" + tempList[j].getName());
+                }
+            }
 
             result.add(temp);
         }

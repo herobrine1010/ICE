@@ -9,7 +9,7 @@
       <el-table :data="shoppingCartList" tooltip-effect="dark" style="width: 100%">
         <el-table-column label="Cover" prop="cover">
           <template slot-scope="scope">
-            <el-image :src="scope.row.cover" class="cart-cover"></el-image>
+            <el-image :src="'http://localhost:8021'+scope.row.cover" class="cart-cover" @click.native="enterGoodsDetail(scope.row.gameid)"></el-image>
           </template>
         </el-table-column>
         <el-table-column label="Game" prop="gamename"></el-table-column>
@@ -155,11 +155,15 @@ export default {
             }
             if (response.data.result[index].coverPath === null) {
               // cart.cover = 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190710183805263591.jpg'
-              cart.cover = 'http://ww1.sinaimg.cn/large/007oltUXly1g9rveswx8mj306o06ot94.jpg'
+              cart.cover = '/images/default/default_cover.jpg'
             }
             this.shoppingCartList.push(cart)
           }
         })
+    },
+    enterGoodsDetail (goodsId) {
+      // window.sessionStorage.setItem('activePath', '/GoodsDetail')
+      this.$router.push('/GoodsDetail/' + goodsId + '')
     },
     // 购买游戏按钮相关------------------------------------------------------------------------
     // 获取当前选择的购物车项的游戏信息
@@ -297,6 +301,7 @@ export default {
   margin-right: 10%;
 }
 .cart-cover {
+  cursor:pointer;
   height: 100px;
   width: 100px;
 }

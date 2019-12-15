@@ -313,8 +313,9 @@ export default {
     },
     // 修改订单信息并提交
     editOrderInfo () {
-      this.$axios.get('/api/alterOrder', { params: { order_id: this.editForm.orderid, price: this.editForm.price, address: this.editForm.address, contact_tel: this.editForm.contacttel } })
+      this.$axios.get('/api/alterOrder', { params: { order_id: this.editForm.orderid, status: this.editForm.status, price: this.editForm.price, address: this.editForm.address, contact_tel: this.editForm.contacttel } })
         .then(response => {
+          console.log('alter', response)
           // 刷新数据列表
           this.getOrderList()
           if (response.data.status === '200') {
@@ -332,8 +333,9 @@ export default {
     },
     deliver (orderid) {
       console.log(orderid)
-      this.$axios.get('/api/deliverOrder', { params: { order_id: orderid } })
+      this.$axios.get('/api/deliverOrder', { params: { orderId: orderid } })
         .then(response => {
+          console.log('delever', response)
           if (response.data.status === '200') {
             this.getOrderList()
             this.$message.success('Deliver order success')

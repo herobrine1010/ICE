@@ -70,26 +70,26 @@ export default {
           authName: '用户管理',
           icon: 'el-icon-s-custom',
           children: [
-            { id: 11, authName: '用户列表', path: 'users' },
+            // { id: 11, authName: '用户列表', path: 'users' },
             { id: 12, authName: '个人信息', path: 'infor' }]
         },
-        {
-          id: '2',
-          authName: '权限管理',
-          icon: 'el-icon-s-goods',
-          children: [
-            { id: 21, authName: '角色列表', path: 'roles' },
-            { id: 22, authName: '权限列表', path: 'rights' }
-          ]
-        },
+        // {
+        //   id: '2',
+        //   authName: '权限管理',
+        //   icon: 'el-icon-s-goods',
+        //   children: [
+        //     { id: 21, authName: '角色列表', path: 'roles' },
+        //     { id: 22, authName: '权限列表', path: 'rights' }
+        //   ]
+        // },
         {
           id: '3',
           authName: '商品管理',
           icon: 'el-icon-s-goods',
           children: [
             { id: 31, authName: '商品列表', path: 'goods' },
-            { id: 32, authName: '上架商品', path: 'add' },
-            { id: 33, authName: '标签管理', path: 'tags' }
+            { id: 32, authName: '上架商品', path: 'add' }
+            // { id: 33, authName: '标签管理', path: 'tags' }
           ]
         },
         {
@@ -97,13 +97,13 @@ export default {
           authName: '订单管理',
           icon: 'el-icon-s-order',
           children: [{ id: 31, authName: '订单列表', path: 'orders' }]
-        },
-        {
-          id: '5',
-          authName: '数据统计',
-          icon: 'el-icon-s-marketing',
-          children: [{ id: 41, authName: '数据报表', path: 'diagrams' }]
         }
+        // {
+        //   id: '5',
+        //   authName: '数据统计',
+        //   icon: 'el-icon-s-marketing',
+        //   children: [{ id: 41, authName: '数据报表', path: 'diagrams' }]
+        // }
       ],
       // 是否折叠
       isCollapse: false,

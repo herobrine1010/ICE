@@ -112,7 +112,7 @@ export default {
                 }
                 // 如果cover_path不存在，则替换成默认图片
                 if (response.data.result[index].cover_path === null) {
-                  gameInfo.imgSrc = 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190702171201495133.jpg'
+                  gameInfo.imgSrc = '/images/default/default_cover.jpg'
                 }
                 // 如果标签过多，截取前三个
                 if (response.data.result[index].tags_list.length > 2) {
@@ -152,7 +152,7 @@ export default {
                 }
                 // 如果cover_path不存在，则替换成默认图片
                 if (response.data.result[index].cover_path === null) {
-                  gameInfo.imgSrc = 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190702171201495133.jpg'
+                  gameInfo.imgSrc = '/images/default/default_cover.jpg'
                 }
                 // 如果标签过多，截取前三个
                 if (response.data.result[index].tags_list.length > 2) {

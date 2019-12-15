@@ -88,6 +88,16 @@ public class OrderController {
         return response;
     }
 
+    @RequestMapping(value = "/deliverOrder", method=RequestMethod.GET)
+    public Response deliverOrder(@RequestParam(value = "orderId") Integer orderId){
+        Response response=new Response();
+
+        Orders record=ordersMapper.selectByPrimaryKey(orderId);
+        record.setStatus(1);
+        ordersMapper.updateByPrimaryKeySelective(record);
+        response.setStatus("200");
+        return response;
+    }
 
     @RequestMapping(value = "/getOrderList", method = RequestMethod.GET)
     public Response getOrderList(@RequestParam(value = "status") Integer status,

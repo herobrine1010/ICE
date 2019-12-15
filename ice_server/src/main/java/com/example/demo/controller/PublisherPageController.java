@@ -610,7 +610,7 @@ public class PublisherPageController {
         return response;
     }
 
-    @RequestMapping(value = "/alterOrder", method = RequestMethod.PUT)
+    @RequestMapping(value = "/alterOrder", method = RequestMethod.GET)
     public Response alterOrder(@RequestParam(value = "order_id") Integer order_id,
                                @RequestParam(value = "status") Integer status,
                                @RequestParam(value = "price") Float price,

@@ -261,7 +261,7 @@ export default {
         this.star_button_type = ''
         this.$axios.get('/api/removeFromWishList', { params: { gameId: this.$router.currentRoute.params.id } })
           .then(() => {
-            this.$message.error('remove game from favorite')
+            this.$message.info('remove game from favorite')
           })
         console.log('取消收藏')
       }
@@ -374,8 +374,11 @@ export default {
           if (response.data.status === '200') {
             this.$message.success('Add game to shopping cart success')
           } else {
-            this.$message.error('Add game to shopping cart fail')
+            this.$message.info('This game is in your shopping cart')
           }
+        })
+        .catch(() => {
+          this.$message.error('Add game to shopping cart fail')
         })
       // 关闭对话框
       this.shopcartDialogVisible = false

@@ -182,10 +182,23 @@ export default {
     },
     // 修改游戏信息并提交
     register () {
+      let user = {
+        userName: this.registerForm.username,
+        pwd: this.registerForm.password
+      }
+      this.$axios.post('/api/register', user)
+        .then(response => {
+          if (response.data.status === '200') {
+            this.$message.success('Register success')
+          } else {
+            this.$message.error('Register fail')
+          }
+        })
+        .catch(() => {
+          this.$message.error('Register fail')
+        })
       // 关闭对话框
       this.registerDialogVisible = false
-      // 提示修改成功
-      this.$message.success('Register success')
     }
   }
 }

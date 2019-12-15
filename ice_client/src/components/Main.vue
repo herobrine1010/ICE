@@ -5,9 +5,14 @@
     <el-row >
       <el-col :span="1"><div class="grid-content"></div></el-col>
       <el-col :span="6"><div class="grid-content">
-        <img src="../assets/header/home_logo.jpg" width="374" height="120" alt/>
+        <img src="../assets/header/home_logo.jpg" width="374" height="120" class="img-logo" @click="enterMainIndex()" alt/>
+      </div>
+      </el-col>
+      <el-col :span="15"><div class="grid-content bg-purple">
       </div></el-col>
-      <el-col :span="17"><div class="grid-content bg-purple"></div></el-col>
+      <el-col :span="2"><div class="logout-button">
+        <el-button type="info" @click="logout">退出</el-button>
+      </div></el-col>
     </el-row>
   </el-header>
   <el-menu
@@ -267,11 +272,18 @@ export default {
               this.menuList[2].children.push(publisher)
             }
           } else {
-            this.$message.error('发行商信息加载失败')
+            this.$message.info('发行商列表加载失败，尝试刷新')
           }
         }).catch(() => {
-          this.$message.error('发行商信息加载失败')
+          this.$message.info('发行商列表加载失败，尝试刷新')
         })
+    },
+    logout () {
+      this.$router.push('/login')
+      this.$message.info('用户退出')
+    },
+    enterMainIndex () {
+      this.$router.push('/MainIndex')
     }
   },
   mounted () {
@@ -350,5 +362,11 @@ export default {
   }
   .search-button{
     height: 45px;
+  }
+  .logout-button{
+    margin-top: 40px;
+  }
+  .img-logo{
+    cursor:pointer;
   }
 </style>

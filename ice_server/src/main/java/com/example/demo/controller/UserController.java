@@ -51,9 +51,12 @@ public class UserController {
         try {
             Users result = usersMapper.selectByPrimaryKey(userId);
             String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "users" + System.getProperty("file.separator") + result.getUserId().toString() + System.getProperty("file.separator");
-            File file = new File(path);
-            File[] tempList = file.listFiles();
-            result.setAvatarPath("/images/users/"+result.getUserId().toString()+"/" + tempList[0].getName());
+            try {
+                File file = new File(path);
+                File[] tempList = file.listFiles();
+                result.setAvatarPath("/images/users/" + result.getUserId().toString() + "/" + tempList[0].getName());
+            }
+            catch (Exception e){ }
             if (result!=null) {
                 List<Users> resultList = Arrays.asList(result);
                 response.setStatus("200");

@@ -91,6 +91,9 @@
           <el-form-item label="Name" prop="username">
             <el-input v-model="editForm.username"></el-input>
           </el-form-item>
+          <el-form-item label="Password" prop="pwd">
+            <el-input v-model="editForm.pwd"></el-input>
+          </el-form-item>
           <el-form-item label="Tel" prop="tel">
             <el-input v-model="editForm.tel"></el-input>
           </el-form-item>
@@ -159,6 +162,7 @@ export default {
           username: '',
           avator_url: '',
           tel: '',
+          pwd: '',
           birthday: '',
           address: [] }
       ],
@@ -217,7 +221,7 @@ export default {
           console.log(response)
           let avatarPath = ''
           if (response.data.result[0].avatarPath === null) {
-            avatarPath = 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+            avatarPath = '/images/default/default_avatar.gif'
           } else {
             avatarPath = response.data.result[0].avatarPath
           }
@@ -225,6 +229,7 @@ export default {
             user_id: response.data.result[0].userId,
             username: response.data.result[0].userName,
             avator_url: avatarPath,
+            pwd: response.data.result[0].pwd,
             tel: response.data.result[0].tel,
             birthday: response.data.result[0].birthday,
             address: []
@@ -260,6 +265,7 @@ export default {
       let editData = {
         userName: this.editForm.username,
         avatarPath: this.editForm.avator_url,
+        pwd: this.editForm.pwd,
         tel: this.editForm.tel
         // birthday: this.editForm.birthday,
         // userId: this.editForm.user_id
@@ -424,6 +430,7 @@ export default {
       this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
     handleSuccess (response, file, fileList) {
+      console.log('edit avatar')
       let fileFormData = new FormData()
       fileFormData.append('img', file.raw)
       this.$axios.post('/api/uploadAvatar', fileFormData)

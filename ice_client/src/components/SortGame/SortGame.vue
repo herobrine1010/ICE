@@ -68,7 +68,7 @@ export default {
                 }
                 // 如果cover_path不存在，则替换成默认图片
                 if (response.data.result[index].cover_path === null) {
-                  gameInfo.imgSrc = 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190702171201495133.jpg'
+                  gameInfo.imgSrc = '/images/default/default_cover.jpg'
                 }
                 // 如果标签过多，截取前三个
                 if (response.data.result[index].tags_list.length > 2) {
@@ -91,7 +91,7 @@ export default {
           console.log('getSortGames')
           this.$axios.get('/api/sortGames', { params: { flag: this.$router.currentRoute.params.sortInfo } })
             .then(response => {
-              // console.log('getCateGames response', response)
+              console.log('getSortGames response', response)
               if (response.data.status === '200') {
                 // console.log('response.data.result', response.data.result)
                 if (response.data.result.length === 0) {
@@ -111,7 +111,7 @@ export default {
                     }
                     // 如果cover_path不存在，则替换成默认图片
                     if (response.data.result[index].cover_path === null) {
-                      gameInfo.imgSrc = 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190702171201495133.jpg'
+                      gameInfo.imgSrc = '/images/default/default_cover.jpg'
                     }
                     // 如果标签过多，截取前三个
                     if (response.data.result[index].tags_list.length > 2) {
