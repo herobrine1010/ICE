@@ -1,14 +1,14 @@
 <template>
   <el-dropdown size="small" trigger="click" @command="handleCommand">
   <el-button size="mini" type="info" plain>
-    排序<i class="el-icon-arrow-down el-icon--right"></i>
+    Sort<i class="el-icon-arrow-down el-icon--right"></i>
   </el-button>
     <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item :command=1>默认排序</el-dropdown-item>
-      <el-dropdown-item :command=2>按价格降序</el-dropdown-item>
-      <el-dropdown-item :command=3>按价格升序</el-dropdown-item>
-      <el-dropdown-item :command=4>按评分降序</el-dropdown-item>
-      <el-dropdown-item :command=5>按评分升序</el-dropdown-item>
+      <el-dropdown-item :command=1>Default</el-dropdown-item>
+      <el-dropdown-item :command=2>Price Descending</el-dropdown-item>
+      <el-dropdown-item :command=3>Price Ascending</el-dropdown-item>
+      <el-dropdown-item :command=4>Rate Descending</el-dropdown-item>
+      <el-dropdown-item :command=5>Rate Ascending</el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
@@ -28,8 +28,9 @@ export default {
 
 <style scoped>
   .el-button{
-    margin-top: 5px;
-    margin-left: 25px;
+    /*margin-top: 5px;*/
+    margin-bottom: 10px;
+    margin-left: 125px;
     padding-left: 25px;
     padding-right: 25px;
   }

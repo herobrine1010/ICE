@@ -2,23 +2,23 @@
   <div>
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-      <el-breadcrumb-item>添加商品</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/home' }">Home</el-breadcrumb-item>
+      <el-breadcrumb-item>Game Management</el-breadcrumb-item>
+      <el-breadcrumb-item>Add Games</el-breadcrumb-item>
     </el-breadcrumb>
 
     <!-- 卡片视图区域 -->
     <el-card>
       <!-- 提示区域 -->
-      <el-alert title="添加商品信息" type="info" center show-icon :closable="false"></el-alert>
+      <el-alert title="Add Game Information" type="info" center show-icon :closable="false"></el-alert>
       <!-- 步骤条区域 -->
       <el-steps :space="200" :active="activeIndex-0" finish-status="success" align-center>
-        <el-step title="基本信息"></el-step>
-        <el-step title="商品参数"></el-step>
-        <el-step title="商品属性"></el-step>
-        <el-step title="商品图片"></el-step>
-        <el-step title="商品内容"></el-step>
-        <el-step title="完成"></el-step>
+        <el-step title="Information"></el-step>
+        <el-step title="Parameter"></el-step>
+        <el-step title="Attributes"></el-step>
+        <el-step title="Pictures"></el-step>
+        <el-step title="Contend"></el-step>
+        <el-step title="Finished"></el-step>
       </el-steps>
 
       <!-- tab栏区域 -->
@@ -35,24 +35,24 @@
           :before-leave="beforeTabLeave"
           @tab-click="tabClicked"
         >
-          <el-tab-pane label="基本信息" name="0">
-            <el-form-item label="游戏名称" prop="game_name">
+          <el-tab-pane label="Information" name="0">
+            <el-form-item label="Title" prop="game_name">
               <el-input v-model="addForm.game_name" placeholder></el-input>
             </el-form-item>
-            <el-form-item label="游戏价格" prop="price">
+            <el-form-item label="Price" prop="price">
               <el-input v-model="addForm.price" placeholder></el-input>
             </el-form-item>
-            <el-form-item label="发行日期">
+            <el-form-item label="Release Date">
               <el-date-picker
                 v-model="addForm.release_date"
                 align="right"
                 type="date"
-                placeholder="选择日期"
+                placeholder="Choose Date"
                 :picker-options="pickerOptions"
               ></el-date-picker>
             </el-form-item>
-            <el-form-item label="游戏分类" prop="category">
-              <el-select v-model="addForm.category" clearable placeholder="请选择">
+            <el-form-item label="Category" prop="category">
+              <el-select v-model="addForm.category" clearable placeholder="Choose">
                 <el-option
                   v-for="(item, index) in catelist"
                   :key="index"
@@ -62,7 +62,7 @@
               </el-select>
             </el-form-item>
           </el-tab-pane>
-          <el-tab-pane label="商品参数" name="1">
+          <el-tab-pane label="Parameter" name="1">
             <!-- 渲染表单的Item项 -->
             <!-- <el-form-item :label="item.attr_name" v-for="item in manyTableData" :key="item.attr_id"> -->
             <!-- 复选框组 -->
@@ -70,34 +70,34 @@
             <!-- <el-checkbox :label="cb" v-for="(cb, i) in item.attr_vals" :key="i" border></el-checkbox> -->
             <!-- </el-checkbox-group> -->
             <!-- </el-form-item> -->
-            <el-form-item label="游戏平台">
+            <el-form-item label="Consoles">
               <el-checkbox-group v-model="addForm.consoles">
                 <el-checkbox-button v-for="con in consoleOptions" :label="con" :key="con">{{con}}</el-checkbox-button>
               </el-checkbox-group>
             </el-form-item>
-            <el-form-item label="游戏标签">
+            <el-form-item label="Tags">
               <el-checkbox-group v-model="addForm.tags">
                 <el-checkbox-button v-for="(tag, index) in tagOptions" :label="tag.tagId" :key="index">{{tag.tagName}}</el-checkbox-button>
               </el-checkbox-group>
             </el-form-item>
           </el-tab-pane>
-          <el-tab-pane label="商品属性" name="2">
-            <el-form-item label="是否打折">
+          <el-tab-pane label="Attributes" name="2">
+            <el-form-item label="Discount">
               <el-radio-group v-model="addForm.discount" size="small">
                 <el-radio-button label="On"></el-radio-button>
                 <el-radio-button label="Off"></el-radio-button>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="是否预售">
+            <el-form-item label="Pre-Order">
               <el-radio-group v-model="addForm.pre_order" size="small">
                 <el-radio-button label="On"></el-radio-button>
                 <el-radio-button label="Off"></el-radio-button>
               </el-radio-group>
             </el-form-item>
           </el-tab-pane>
-          <el-tab-pane label="商品图片" name="3">
+          <el-tab-pane label="Pictures" name="3">
             <!-- 选择一张图片作为游戏的封面上传 -->
-            <el-form-item label="封面图片（只能上传一张）">
+            <el-form-item label="Cover(One Pic Only!)">
             <!-- action表示图片要上传到的后台API地址 -->
             <el-upload
               :action="uploadURL"
@@ -107,11 +107,11 @@
               :on-success="handleCoverSuccess"
               :limit="1"
             >
-              <el-button size="small" type="primary">点击上传</el-button>
+              <el-button size="small" type="primary">Upload</el-button>
             </el-upload>
             </el-form-item>
             <!-- 选择一张或多张图片作为游戏的详情图片上传 -->
-            <el-form-item label="详情图片（最多上传5张）">
+            <el-form-item label="Derailed(5 Pics Most)">
             <!-- action表示图片要上传到的后台API地址 -->
             <el-upload
               :action="uploadURL"
@@ -121,22 +121,22 @@
               :on-success="handleDetailSuccess"
               :limit="5"
             >
-              <el-button size="small" type="primary">点击上传</el-button>
+              <el-button size="small" type="primary">Upload</el-button>
             </el-upload>
             </el-form-item>
           </el-tab-pane>
-          <el-tab-pane label="商品内容" name="4">
+          <el-tab-pane label="Contend" name="4">
             <!-- 富文本编辑器组件 -->
             <quill-editor v-model="addForm.goods_introduce"></quill-editor>
             <!-- 添加商品的按钮 -->
-            <el-button type="primary" class="btnAdd" @click="add">添加商品</el-button>
+            <el-button type="primary" class="btnAdd" @click="add">Add Game</el-button>
           </el-tab-pane>
         </el-tabs>
       </el-form>
     </el-card>
 
     <!-- 图片预览 -->
-    <el-dialog title="图片预览" :visible.sync="previewVisible" width="40%">
+    <el-dialog title="Preview" :visible.sync="previewVisible" width="40%">
       <img :src="previewPath" alt class="previewImg" />
     </el-dialog>
   </div>
@@ -186,10 +186,10 @@ export default {
       },
       addFormRules: {
         game_name: [
-          { required: true, message: '请输入商品名称', trigger: 'blur' }
+          { required: true, message: 'Please enter game name', trigger: 'blur' }
         ],
         price: [
-          { required: true, message: '请输入商品价格', trigger: 'blur' },
+          { required: true, message: 'Please enter game price', trigger: 'blur' },
           { validator: checkPrice, trigger: 'blur' }
         ]
       },
@@ -199,19 +199,19 @@ export default {
         //   return time.getTime() > Date.now()
         // },
         shortcuts: [{
-          text: '今天',
+          text: 'Today',
           onClick (picker) {
             picker.$emit('pick', new Date())
           }
         }, {
-          text: '昨天',
+          text: 'Yesterday',
           onClick (picker) {
             const date = new Date()
             date.setTime(date.getTime() - 3600 * 1000 * 24)
             picker.$emit('pick', date)
           }
         }, {
-          text: '一周前',
+          text: 'One week before',
           onClick (picker) {
             const date = new Date()
             date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
@@ -290,11 +290,11 @@ export default {
       // console.log('即将进入的标签页名字是:' + activeName)
       // return false
       if (oldActiveName === '0' && this.addForm.category === '') {
-        this.$message.error('请先选择商品分类')
+        this.$message.error('Please choose game category first')
         return false
       }
       if (oldActiveName === '0' && this.addForm.release_date === '') {
-        this.$message.error('请先选择发行日期')
+        this.$message.error('Please choose release date first')
         return false
       }
     },
@@ -353,6 +353,7 @@ export default {
       // console.log(file)
       // console.log(fileList)
       // 将图片放入表单对象中
+      this.addForm.coverFormData = new FormData()
       this.addForm.coverFormData.append('type', 'cover')
       for (let index in fileList) {
         this.addForm.coverFormData.append('img', fileList[index].raw)
@@ -394,6 +395,7 @@ export default {
       // console.log('file')
       // console.log(file)
       // console.log(fileList)
+      this.addForm.detailImgFormData = new FormData()
       this.addForm.detailImgFormData.append('type', 'detail')
       for (let index in fileList) {
         this.addForm.detailImgFormData.append('img', fileList[index].raw)
@@ -409,7 +411,7 @@ export default {
     add () {
       this.$refs.addFormRef.validate(async valid => {
         if (!valid) {
-          return this.$message.error('请填写必要的表单项')
+          return this.$message.error('Please enter necessary form item.')
         }
         // 得到分类ID
         let cateID = null
@@ -495,27 +497,27 @@ export default {
                       .then(response => {
                         console.log(response)
                         if (response.data.status === '200') {
-                          this.$message.success('上架游戏成功')
+                          this.$message.success('Upload game success')
                         } else {
-                          this.$message.error('详情图片上传失败')
+                          this.$message.error('Upload detail image failed')
                         }
                       })
                       .catch(() => {
-                        this.$message.error('详情图片上传失败')
+                        this.$message.error('Upload detail image failed')
                       })
                   } else {
-                    this.$message.error('封面图片上传失败')
+                    this.$message.error('Upload cover image failed')
                   }
                 })
                 .catch(() => {
-                  this.$message.error('封面图片上传失败')
+                  this.$message.error('Upload cover image failed')
                 })
             } else {
-              this.$message.error('上架游戏失败')
+              this.$message.error('Upload game failed')
             }
           })
           .catch(() => {
-            this.$message.error('上架游戏失败')
+            this.$message.error('Upload game failed')
           })
         // 执行添加的业务逻辑
         // lodash cloneDeep(obj)

@@ -104,7 +104,7 @@ public class UserController {
     public class MyPicConfig implements WebMvcConfigurer {
         @Override
         public void addResourceHandlers(ResourceHandlerRegistry registry) {
-            registry.addResourceHandler("/images/**").addResourceLocations("file:E:/java project/ICE/ice_server/images/");
+            registry.addResourceHandler("/images/**").addResourceLocations("file:E:/Schooling/大三上/J2E软工项目/ICE/ice_server/images/");
         }
     }
 

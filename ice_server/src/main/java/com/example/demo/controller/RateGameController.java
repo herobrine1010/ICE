@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dao.*;
+import com.example.demo.entity.Games;
 import com.example.demo.entity.RateGame;
 import com.example.demo.entity.Response;
 import com.example.demo.entity.Reviews;
@@ -28,6 +29,8 @@ public class RateGameController {
     private SessionService sessionService;
     @Autowired
     private RateGameMapper rateGameMapper;
+    @Autowired
+    private GamesMapper gamesMapper;
 
     @RequestMapping(value = "/submitRate",method =RequestMethod.GET)
     public Response submitRate(@RequestParam("gameId") int gameId, @RequestParam("rate") int rate, HttpSession session) {
@@ -39,6 +42,12 @@ public class RateGameController {
         int thisUserId=Integer.parseInt(session.getAttribute("id").toString());
         try{
             rateGameMapper.submitRate(thisUserId,gameId,rate);
+//            RateGameController rateGameController=new RateGameController();
+            Response r=getRate(gameId,session);
+            float rates= Float.parseFloat(r.getError());
+            Games game=gamesMapper.selectByPrimaryKey(gameId);
+            game.setAverageRate(rates);
+            gamesMapper.updateByPrimaryKeySelective(game);
             response.setError("Rating successfully submitted!");
             response.setStatus("200");
         }

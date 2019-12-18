@@ -52,7 +52,7 @@ export default {
   .el-card{
     width: 100%;
     cursor:pointer;
-    height: 380px;
+    height: 420px;
   }
   .el-card:hover{
       background-color:#e0e0e0;

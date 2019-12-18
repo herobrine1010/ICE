@@ -2,9 +2,9 @@
   <div>
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-      <el-breadcrumb-item>商品列表</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/home' }">Home</el-breadcrumb-item>
+      <el-breadcrumb-item>Game Manage</el-breadcrumb-item>
+      <el-breadcrumb-item>Game List</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片视图区域 -->
     <el-card>
@@ -242,7 +242,7 @@ export default {
           this.gamelist[item].discount = 'On'
         }
         if (response.data.result[item].average_rate === -1) {
-          this.gamelist[item].average_rate = '无评分'
+          this.gamelist[item].average_rate = 'Not rated'
         } else {
           this.gamelist[item].average_rate = response.data.result[item].average_rate
         }

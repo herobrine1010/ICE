@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
-      <el-breadcrumb-item :to="{ path: '/MainIndex' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>搜索</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/MainIndex' }">Home</el-breadcrumb-item>
+      <el-breadcrumb-item>Search</el-breadcrumb-item>
       <el-breadcrumb-item>{{this.$router.currentRoute.params.queryInfo}}</el-breadcrumb-item>
     </el-breadcrumb>
     <Goods v-for="(i,index) in rowNumber" :goodsInfo="getGoodsInfo(index)"  :key="i" class="list-item"/>

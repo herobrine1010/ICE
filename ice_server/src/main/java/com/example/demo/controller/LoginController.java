@@ -261,7 +261,7 @@ public class LoginController {
             Users u=new Users();
             u.setUserId(thisUserId);
             u.setAddress(w);
-            updateInfo(u,session);
+            usersMapper.updateByPrimaryKeySelective(u);
             response.setError("修改地址成功，测试地址:"+w);
             response.setStatus("200");
         }catch(Exception e){

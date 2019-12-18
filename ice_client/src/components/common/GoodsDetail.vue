@@ -2,8 +2,8 @@
   <div>
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
-      <el-breadcrumb-item :to="{ path: '/MainIndex' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>商品详情</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/MainIndex' }">Home</el-breadcrumb-item>
+      <el-breadcrumb-item>Game Detail</el-breadcrumb-item>
     </el-breadcrumb>
     <el-row>
       <el-col :span="14" class="goods-image">
@@ -12,9 +12,9 @@
       <el-col :span="10">
         <el-row>
           <p class="name">{{goodsInfo.name}}</p>
-          <el-row class="value">￥{{goodsInfo.value}}</el-row>
+          <el-row class="value">＄{{goodsInfo.value}}</el-row>
           <el-row>
-            <el-col class="platform grey-font" :span="2">平台：</el-col>
+            <el-col class="platform grey-font" :span="2">Console：</el-col>
             <el-col
               class="platform grey-font"
               :span="2"
@@ -23,7 +23,7 @@
             >{{item}}</el-col>
           </el-row>
           <el-row>
-            <el-col class="publisher grey-font">发行商: {{goodsInfo.publisher}}</el-col>
+            <el-col class="publisher grey-font">Publisher: {{goodsInfo.publisher}}</el-col>
           </el-row>
         </el-row>
         <el-row>
@@ -31,12 +31,12 @@
         </el-row>
         <el-row>
           <el-col :span="6">
-            <el-button class="buy-now" type="danger" @click="showBuyDialog()">立即购买</el-button>
+            <el-button class="buy-now" type="danger" @click="showBuyDialog()">Buy Now</el-button>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="6">
-            <el-button class="input-car" type="warning" @click="showShopcartDialog()">加入购物车</el-button>
+            <el-button class="input-car" type="warning" @click="showShopcartDialog()">Add to Cart</el-button>
           </el-col>
           <el-col :span="6">
             <el-button
@@ -53,15 +53,15 @@
     </el-row>
     <div class="body-down">
       <el-row>
-        <el-divider content-position="left">商品详情</el-divider>
-        <el-row class="grey-font">发布日期：{{goodsInfo.release_date}}</el-row>
+        <el-divider content-position="left">Game Detail</el-divider>
+        <el-row class="grey-font">Release Date：{{goodsInfo.release_date}}</el-row>
         <el-row>
           <p class="grey-font description">{{goodsInfo.description}}</p>
         </el-row>
       </el-row>
       <el-row>
         <el-card class="rate">
-          <el-row>评分</el-row>
+          <el-row>Rate</el-row>
           <el-rate v-model="rate" disabled show-score text-color="#ff9900" score-template="{value}"></el-rate>
         </el-card>
       </el-row>
@@ -86,11 +86,11 @@
       <el-form :model="buyForm" ref="buyFormRef" label-width="100px">
         <el-form-item label="Title">
           <!-- <el-input v-model="buyForm.title" disabled></el-input> -->
-          {{ buyForm.title }}
+          {{ goodsInfo.name }}
         </el-form-item>
         <el-form-item label="Price">
           <!-- <el-input v-model="buyForm.price" disabled></el-input> -->
-          ¥ {{ buyForm.price }}
+          ¥ {{ goodsInfo.value }}
         </el-form-item>
         <el-form-item label="Tel">
           <el-input v-model="userForm.tel"></el-input>
@@ -543,7 +543,7 @@ export default {
   margin-right: 10%;
 }
 .goods-image {
-  padding-top: 5%;
+  padding-top: 2%;
   padding-left: 20%;
   padding-right: 8%;
 }

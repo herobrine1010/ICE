@@ -10,9 +10,10 @@
     <result column="STATUS" jdbcType="INTEGER" property="status" />
     <result column="USER_ID" jdbcType="INTEGER" property="userId" />
     <result column="GAME_ID" jdbcType="INTEGER" property="gameId" />
+    <result column="price" jdbcType="REAL" property="price" />
   </resultMap>
   <sql id="Base_Column_List">
-    ORDER_ID, DATE, ADDRESS, CONSOLE_ID, CONTACT_TEL, STATUS, USER_ID, GAME_ID
+    ORDER_ID, DATE, ADDRESS, CONSOLE_ID, CONTACT_TEL, STATUS, USER_ID, GAME_ID, price
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -27,10 +28,10 @@
   <insert id="insert" parameterType="com.example.demo.entity.Orders">
     insert into orders (ORDER_ID, DATE, ADDRESS, 
       CONSOLE_ID, CONTACT_TEL, STATUS, 
-      USER_ID, GAME_ID)
+      USER_ID, GAME_ID, price)
     values (#{orderId,jdbcType=INTEGER}, #{date,jdbcType=DATE}, #{address,jdbcType=VARCHAR}, 
       #{consoleId,jdbcType=INTEGER}, #{contactTel,jdbcType=CHAR}, #{status,jdbcType=INTEGER}, 
-      #{userId,jdbcType=INTEGER}, #{gameId,jdbcType=INTEGER})
+      #{userId,jdbcType=INTEGER}, #{gameId,jdbcType=INTEGER}, #{price,jdbcType=REAL})
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.entity.Orders">
     insert into orders
@@ -59,6 +60,9 @@
       <if test="gameId != null">
         GAME_ID,
       </if>
+      <if test="price != null">
+        price,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="orderId != null">
@@ -84,6 +88,9 @@
       </if>
       <if test="gameId != null">
         #{gameId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=REAL},
       </if>
     </trim>
   </insert>
@@ -111,6 +118,9 @@
       <if test="gameId != null">
         GAME_ID = #{gameId,jdbcType=INTEGER},
       </if>
+      <if test="price != null">
+        price = #{price,jdbcType=REAL},
+      </if>
     </set>
     where ORDER_ID = #{orderId,jdbcType=INTEGER}
   </update>
@@ -122,7 +132,8 @@
       CONTACT_TEL = #{contactTel,jdbcType=CHAR},
       STATUS = #{status,jdbcType=INTEGER},
       USER_ID = #{userId,jdbcType=INTEGER},
-      GAME_ID = #{gameId,jdbcType=INTEGER}
+      GAME_ID = #{gameId,jdbcType=INTEGER},
+      price = #{price,jdbcType=REAL}
     where ORDER_ID = #{orderId,jdbcType=INTEGER}
   </update>
   <select id="orderNumOf" parameterType="java.lang.Integer" resultType="java.lang.Integer">

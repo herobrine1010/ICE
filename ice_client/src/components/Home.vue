@@ -4,9 +4,9 @@
     <el-header>
       <div>
         <img src="../assets/heima.png" alt />
-        <span>ICE商家管理系统</span>
+        <span>ICE Publisher Manage System</span>
       </div>
-      <el-button type="info" @click="logout">退出</el-button>
+      <el-button type="info" @click="logout">Exit</el-button>
     </el-header>
     <!-- 页面主题区域 -->
     <el-container>
@@ -67,11 +67,11 @@ export default {
       menulist: [
         {
           id: '1',
-          authName: '用户管理',
+          authName: 'Use Manage',
           icon: 'el-icon-s-custom',
           children: [
             // { id: 11, authName: '用户列表', path: 'users' },
-            { id: 12, authName: '个人信息', path: 'infor' }]
+            { id: 12, authName: 'Person Infor', path: 'infor' }]
         },
         // {
         //   id: '2',
@@ -84,19 +84,19 @@ export default {
         // },
         {
           id: '3',
-          authName: '商品管理',
+          authName: 'Game Manage',
           icon: 'el-icon-s-goods',
           children: [
-            { id: 31, authName: '商品列表', path: 'goods' },
-            { id: 32, authName: '上架商品', path: 'add' }
+            { id: 31, authName: 'Game List', path: 'goods' },
+            { id: 32, authName: 'Add Game', path: 'add' }
             // { id: 33, authName: '标签管理', path: 'tags' }
           ]
         },
         {
           id: '4',
-          authName: '订单管理',
+          authName: 'Order Manage',
           icon: 'el-icon-s-order',
-          children: [{ id: 31, authName: '订单列表', path: 'orders' }]
+          children: [{ id: 31, authName: 'Order List', path: 'orders' }]
         }
         // {
         //   id: '5',
@@ -117,7 +117,7 @@ export default {
   methods: {
     logout () {
       this.$router.push('/login')
-      this.$message.info('用户退出')
+      this.$message.info('User Exit')
     },
     // 点击按钮，切换菜单的折叠与展开
     toggleCollapse () {

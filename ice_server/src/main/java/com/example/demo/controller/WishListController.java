@@ -125,7 +125,7 @@ public class WishListController {
                 File[] tempList = file.listFiles();
                 for (int j = 0; j < tempList.length; j++) {
                     if(tempList[j].getName().contains("cover")){
-                        temp_info.setCover_path("/images/users/games/" + l.get(i).getGameId().toString() + "/" + tempList[j].getName());
+                        temp_info.setCover_path("/images/games/" + l.get(i).getGameId().toString() + "/" + tempList[j].getName());
                     }
                 }
                 result.add(temp_info);

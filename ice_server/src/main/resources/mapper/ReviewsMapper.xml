@@ -3,12 +3,13 @@
 <mapper namespace="com.example.demo.dao.ReviewsMapper">
   <resultMap id="BaseResultMap" type="com.example.demo.entity.Reviews">
     <id column="REVIEW_ID" jdbcType="INTEGER" property="reviewId" />
+    <result column="REVIEW_DATE" jdbcType="DATE" property="reviewDate" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.demo.entity.Reviews">
     <result column="CONTENT" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Base_Column_List">
-    REVIEW_ID
+    REVIEW_ID, REVIEW_DATE
   </sql>
   <sql id="Blob_Column_List">
     CONTENT
@@ -26,14 +27,19 @@
     where REVIEW_ID = #{reviewId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.example.demo.entity.Reviews">
-    insert into reviews (REVIEW_ID, CONTENT)
-    values (#{reviewId,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
+    insert into reviews (REVIEW_ID, REVIEW_DATE, CONTENT
+      )
+    values (#{reviewId,jdbcType=INTEGER}, #{reviewDate,jdbcType=DATE}, #{content,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.entity.Reviews">
     insert into reviews
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="reviewId != null">
         REVIEW_ID,
+      </if>
+      <if test="reviewDate != null">
+        REVIEW_DATE,
       </if>
       <if test="content != null">
         CONTENT,
@@ -43,17 +49,20 @@
       <if test="reviewId != null">
         #{reviewId,jdbcType=INTEGER},
       </if>
+      <if test="reviewDate != null">
+        #{reviewDate,jdbcType=DATE},
+      </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="getLastInsertReviewId" resultType="Integer">
-    select MAX(REVIEW_ID) FROM REVIEWS;
-  </select>
   <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.entity.Reviews">
     update reviews
     <set>
+      <if test="reviewDate != null">
+        REVIEW_DATE = #{reviewDate,jdbcType=DATE},
+      </if>
       <if test="content != null">
         CONTENT = #{content,jdbcType=LONGVARCHAR},
       </if>
@@ -62,7 +71,16 @@
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.demo.entity.Reviews">
     update reviews
-    set CONTENT = #{content,jdbcType=LONGVARCHAR}
+    set REVIEW_DATE = #{reviewDate,jdbcType=DATE},
+      CONTENT = #{content,jdbcType=LONGVARCHAR}
     where REVIEW_ID = #{reviewId,jdbcType=INTEGER}
   </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.Reviews">
+    update reviews
+    set REVIEW_DATE = #{reviewDate,jdbcType=DATE}
+    where REVIEW_ID = #{reviewId,jdbcType=INTEGER}
+  </update>
+  <select id="getLastInsertReviewId" resultType="Integer">
+    select MAX(REVIEW_ID) FROM REVIEWS;
+  </select>
 </mapper>

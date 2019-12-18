@@ -144,7 +144,7 @@ public class GameContoller {
         try{
             List<SaleGame> b=saleGameMapper.selectByGameId(gameId);
             List<Publishers> resultList=new ArrayList<>();
-            Publishers c= publishersMapper.selectByPrimaryKey(b.get(0).getGameId());
+            Publishers c= publishersMapper.selectByPrimaryKey(b.get(0).getPublisherId());
             resultList.add(c);
             response.setResult(resultList);
             response.setStatus("200");

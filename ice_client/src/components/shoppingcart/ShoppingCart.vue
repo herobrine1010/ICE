@@ -2,8 +2,8 @@
   <div class="main">
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/MainIndex' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>我的购物车</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/MainIndex' }">Home</el-breadcrumb-item>
+      <el-breadcrumb-item>Shopcart</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
       <el-table :data="shoppingCartList" tooltip-effect="dark" style="width: 100%">

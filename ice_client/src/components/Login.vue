@@ -23,9 +23,9 @@
         </el-form-item>
         <!-- 按钮区域 -->
         <el-form-item class="btns">
-          <el-button type="warning" plain @click="showRegisterDialog()">注册</el-button>
-          <el-button type="primary" plain @click="userLogin()">用户登录</el-button>
-          <el-button type="success" plain @click="publisherLogin()">商家登录</el-button>
+          <el-button type="warning" plain @click="showRegisterDialog()">Register</el-button>
+          <el-button type="primary" plain @click="userLogin()">User Login</el-button>
+          <el-button type="success" plain @click="publisherLogin()">Publisher Login</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -69,7 +69,8 @@ export default {
     return {
       //
       login_container: {
-        backgroundImage: 'url(' + require('../assets/wallhaven-457511.jpg') + ')'
+        backgroundImage: 'url(' + require('../assets/P4.jpg') + ')',
+        backgroundSize: 'cover'
       },
       // 这是登录表单的数据绑定对象
       loginForm: {
@@ -80,13 +81,13 @@ export default {
       loginFormRules: {
         // 验证用户名是否合法
         publisherName: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+          { required: true, message: 'Please enter publisher name', trigger: 'blur' },
+          { min: 3, max: 10, message: 'length limited from 3 to 10 characters', trigger: 'blur' }
         ],
         // 验证密码是否合法
         pwd: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
+          { required: true, message: 'Please enter password', trigger: 'blur' },
+          { min: 6, max: 15, message: 'length limited from 6 to 15 characters', trigger: 'blur' }
         ]
       },
       // 控制注册对话框的显示与隐藏
@@ -100,11 +101,11 @@ export default {
       registerFormRules: {
         username: [
           { required: true, message: 'Please enter username', trigger: 'blur' },
-          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+          { min: 3, max: 10, message: 'length limited from 3 to 10 characters', trigger: 'blur' }
         ],
         password: [
           { required: true, message: 'Please enter password', trigger: 'blur' },
-          { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
+          { min: 6, max: 15, message: 'length limited from 6 to 15 characters', trigger: 'blur' }
         ]
       }
     }
@@ -113,32 +114,32 @@ export default {
     publisherLogin () {
       console.log('publisherLogin')
       this.$refs.loginFormRef.validate(valid => {
-        if (!valid) return this.$message.error('登录失败')
+        if (!valid) return this.$message.error('Login failed')
         this.$axios.post('/api/publisherLogin', this.loginForm)
           .then(response => {
             console.log('publisherLogin response', response)
             switch (response.data.status) {
               case '200':
-                this.$message.success('登录成功')
+                this.$message.success('Login success')
                 this.$router.push('/home')
                 break
               case '404':
-                this.$message.error('用户不存在')
+                this.$message.error('User doesn\'t exit')
                 break
               default:
-                this.$message.error('密码错误')
+                this.$message.error('Password Incorrect')
                 break
             }
           })
           .catch(response => {
-            this.$message.error('登陆失败')
+            this.$message.error('Login failed')
           })
       })
     },
     userLogin () {
       console.log('userLogin')
       this.$refs.loginFormRef.validate(valid => {
-        if (!valid) return this.$message.error('登录失败')
+        if (!valid) return this.$message.error('Login failed')
         let userInfo = {
           userName: this.loginForm.publisherName,
           pwd: this.loginForm.pwd
@@ -148,20 +149,20 @@ export default {
             console.log('userLogin response', response)
             switch (response.data.status) {
               case '200':
-                this.$message.success('登录成功')
+                this.$message.success('Login success')
                 this.$store.commit('setUserId', response.data.result[0])
                 this.$router.push('/main')
                 break
               case '404':
-                this.$message.error('用户不存在')
+                this.$message.error('User doesn\'t exit')
                 break
               default:
-                this.$message.error('密码错误')
+                this.$message.error('Password Incorrect')
                 break
             }
           })
           .catch(response => {
-            this.$message.error('登陆失败')
+            this.$message.error('Login failed')
           })
       })
     },

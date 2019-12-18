@@ -1,6 +1,8 @@
 <template>
   <div>
-    <Carousel :carouselImgUrl="this.$store.state.carouselImgUrl"/>
+    <div class="carouse-img">
+    <Carousel :carouselImgUrl="carouselImgUrl"/>
+    </div>
     <SortMenu/>
     <Goods v-for="(i,index) in rowNumber" :goodsInfo="getGoodsInfo(index)"  :key="i" class="list-item"/>
   </div>
@@ -20,7 +22,12 @@ export default {
       goodsList: [],
       // 每次传给Goods组件的信息
       // 判断是否加载完所有游戏
-      isAllGames: false
+      isAllGames: false,
+      carouselImgUrl: [
+        'http://localhost:8021/images/main_page/1.jpg',
+        'http://localhost:8021/images/main_page/2.jpg',
+        'http://localhost:8021/images/main_page/3.jpg'
+      ]
     }
   },
   mounted () {
@@ -174,5 +181,8 @@ export default {
 }
 </script>
 <style scoped>
-
+  .carouse-img{
+    padding-left: 8%;
+    padding-right: 12%;
+  }
 </style>

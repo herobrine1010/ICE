@@ -2,25 +2,25 @@
   <div>
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-      <el-breadcrumb-item>个人信息</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/home' }">Home</el-breadcrumb-item>
+      <el-breadcrumb-item>User Manage</el-breadcrumb-item>
+      <el-breadcrumb-item>Person Infor</el-breadcrumb-item>
     </el-breadcrumb>
 
     <!-- 卡片视图区域 -->
     <el-card>
       <!-- 个人信息区域 -->
       <el-table :data="publisherInfo" stripe>
-        <el-table-column label="账号ID" prop="publisher_id"></el-table-column>
+        <el-table-column label="Account ID" prop="publisher_id"></el-table-column>
       </el-table>
       <el-table :data="publisherInfo" stripe>
-        <el-table-column label="名称" prop="publisher_name"></el-table-column>
+        <el-table-column label="Name" prop="publisher_name"></el-table-column>
       </el-table>
       <el-table :data="publisherInfo" stripe>
-        <el-table-column label="密码" prop="pwd"></el-table-column>
+        <el-table-column label="Password" prop="pwd"></el-table-column>
       </el-table>
       <el-table :data="publisherInfo" stripe>
-        <el-table-column label="简介" prop="description"></el-table-column>
+        <el-table-column label="Description" prop="description"></el-table-column>
       </el-table>
 
       <!-- 编辑区域 -->
@@ -98,10 +98,10 @@ export default {
       // 修改表单的验证规则对象
       editFormRules: {
         publisherName: [
-          { required: true, message: '请输入商家名称', trigger: 'blur' }
+          { required: true, message: 'Please enter publisher name', trigger: 'blur' }
         ],
         pwd: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
+          { required: true, message: 'Please enter password', trigger: 'blur' }
         ],
         description: [
           { validator: checkDiscription, trigger: 'blur' }

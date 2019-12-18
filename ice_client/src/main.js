@@ -16,6 +16,9 @@ import 'quill/dist/quill.bubble.css'
 import VDistpicker from 'v-distpicker'
 // 导入国际化语言切换 vue-i18n
 import VueI18n from 'vue-i18n'
+// ElementUI 国际化
+import ElementUI from 'element-ui'
+import locale from 'element-ui/lib/locale/lang/en'
 
 import axios from 'axios'
 // 配置请求的根路径
@@ -48,6 +51,9 @@ Vue.use(VueI18n)
 //    'en-US': require('./common/lang/en')
 //  }
 // })
+
+// ElementUI 国际化
+Vue.use(ElementUI, { locale })
 
 Vue.filter('dateFormat', function (originVal) {
   const dt = new Date(originVal)

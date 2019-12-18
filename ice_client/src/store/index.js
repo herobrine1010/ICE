@@ -40,10 +40,9 @@ const store = new Vuex.Store({
     loginIn: false, // 是否登录
     userId: 0, // 搜索关键词
     carouselImgUrl: [
-      'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190710183805263591.jpg',
-      'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20181213104603310708.jpg',
-      'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190315115404560713.jpg',
-      'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190516105901911866.jpg'
+      'http://localhost:8021/images/main_page/1.jpg',
+      'http://localhost:8021/images/main_page/2.jpg',
+      'http://localhost:8021/images/main_page/3.jpg'
     ]
   },
   // getters: {
@@ -64,7 +63,8 @@ const store = new Vuex.Store({
   // },
   mutations: {
     setLoginIn: (state, loginIn) => { state.loginIn = loginIn },
-    setUserId: (state, userId) => { state.userId = userId }
+    setUserId: (state, userId) => { state.userId = userId },
+    setCarouselImgUrl: (state, CarouselImgUrl) => { state.carouselImgUrl = CarouselImgUrl }
   }
   // actions: {}
 })

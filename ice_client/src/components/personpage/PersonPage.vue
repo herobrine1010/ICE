@@ -3,13 +3,13 @@
     <div class="main">
       <!-- 面包屑导航区域 -->
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/MainIndex' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>个人主页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/MainIndex' }">Home</el-breadcrumb-item>
+        <el-breadcrumb-item>PersonPage</el-breadcrumb-item>
       </el-breadcrumb>
 
     <!-- 卡片视图区域 -->
     <el-card>
-      <el-row>个人信息</el-row>
+      <el-row>PersonInfor</el-row>
       <!-- 头像区域 -->
       <el-row class="userinfo" :gutter="20">
         <div v-if="userInfo[0].avator_url">
@@ -20,10 +20,10 @@
         <el-col :span="4" class="el-col-gap">
           <!-- 个人信息区域 -->
           <el-table :data="userInfo" stripe>
-            <el-table-column label="用户昵称" prop="username"></el-table-column>
+            <el-table-column label="Username" prop="username"></el-table-column>
           </el-table>
           <el-table :data="userInfo" stripe>
-            <el-table-column label="联系方式" prop="tel"></el-table-column>
+            <el-table-column label="Contact" prop="tel"></el-table-column>
           </el-table>
         </el-col>
         <div v-if="userInfo[0].address[0]">
@@ -64,18 +64,18 @@
               :limit="1"
               :on-exceed="handleExceed"
             >
-              <el-button  type="warning">修改个人头像</el-button>
+              <el-button  type="warning">Edit avator</el-button>
             </el-upload>
           </el-col>
           <el-col :span="4">
-            <el-button type="primary" @click="editDialogVisible = true">编辑个人信息</el-button>
+            <el-button type="primary" @click="editDialogVisible = true">Edit information</el-button>
           </el-col>
           <el-col :span="4">
-            <el-button type="success" @click="addDialogVisible = true">添加收货地址</el-button>
+            <el-button type="success" @click="addDialogVisible = true">Add address</el-button>
           </el-col>
         </el-row>
       </el-card>
-      <el-card class="wish_list">愿望清单</el-card>
+      <el-card class="wish_list">Wishlist</el-card>
       <!-- 修改个人信息的对话框 -->
       <el-dialog
         title="Edit User Information"
@@ -154,7 +154,7 @@ export default {
         return callback()
       }
 
-      callback(new Error('请输入合法的手机号'))
+      callback(new Error('Please enter valid telephone'))
     }
     return {
       userInfo: [
@@ -179,10 +179,10 @@ export default {
       // 修改表单的验证规则对象
       editFormRules: {
         username: [
-          { required: true, message: '请输入用户昵称', trigger: 'blur' }
+          { required: true, message: 'Please enter user name', trigger: 'blur' }
         ],
         tel: [
-          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { required: true, message: 'Please enter telephone', trigger: 'blur' },
           { validator: checkTelephone, trigger: 'blur' }
         ]
       },
@@ -196,7 +196,7 @@ export default {
       // 修改表单的验证规则对象
       addFormRules: {
         address2: [
-          { required: true, message: '请输入详细地址', trigger: 'blur' }
+          { required: true, message: 'Please enter address', trigger: 'blur' }
         ]
       },
       // 每次加载的行数
@@ -262,6 +262,7 @@ export default {
     // 修改个人信息并提交
     editUserInfo () {
       // 调用 API 接口，发起修改游戏信息的请求，根据返回的 response 进行对应的操作
+      console.log(this.editForm)
       let editData = {
         userName: this.editForm.username,
         avatarPath: this.editForm.avator_url,
@@ -302,10 +303,10 @@ export default {
     addAddress () {
       // 调用 API 接口，发起修改收货地址的请求，根据返回的 response 进行对应的操作
       // this.$refs.editFormRef.validate(async valid => {
-      if (this.editForm.tel.length !== 11) {
-        this.$message.error('telephone number is invalid!')
-        return
-      }
+      // if (this.editForm.tel.length !== 11) {
+      //   this.$message.error('telephone number is invalid!')
+      //   return
+      // }
       let addressData = []
       addressData = this.userInfo[0].address
       addressData.push(this.addForm.address1.province.value.toString() + this.addForm.address1.city.value.toString() + this.addForm.address1.area.value.toString() + this.addForm.address2)
@@ -369,7 +370,7 @@ export default {
                 }
                 // 如果cover_path不存在，则替换成默认图片
                 if (response.data.result[index].cover_path === null) {
-                  gameInfo.imgSrc = 'http://datafanthfuloss.oss-cn-shanghai.aliyuncs.com/cpsupload/pic/20190702171201495133.jpg'
+                  gameInfo.imgSrc = '/images/default/default_cover.jpg'
                 }
                 // 如果标签过多，截取前两个
                 if (response.data.result[index].tags_list.length > 2) {
@@ -398,6 +399,7 @@ export default {
           this.userInfo[0].address.splice(this.userInfo[0].address.indexOf(item), 1)
         }
         let addressData = this.userInfo[0].address
+        console.log('deleteAddress', addressData)
         this.$axios.post('/api/updateAddress', addressData)
           .then(response => {
             console.log(response)
@@ -405,7 +407,7 @@ export default {
             if (response.data.status === '200') {
               this.getUserList()
               // 提示修改成功
-              this.$message.success('Add address success')
+              this.$message.success('Delete address success')
             } else {
               if (deleteIndex !== -1) {
                 this.userInfo[0].address.splice(deleteIndex, 0, item)
@@ -427,7 +429,7 @@ export default {
       })
     },
     handleExceed (files, fileList) {
-      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+      this.$message.warning(`Current limited to choose 1 file，this time choose ${files.length} file，total choose ${files.length + fileList.length} file`)
     },
     handleSuccess (response, file, fileList) {
       console.log('edit avatar')

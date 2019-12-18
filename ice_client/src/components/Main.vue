@@ -11,7 +11,7 @@
       <el-col :span="15"><div class="grid-content bg-purple">
       </div></el-col>
       <el-col :span="2"><div class="logout-button">
-        <el-button type="info" @click="logout">退出</el-button>
+        <el-button type="info" @click="logout">Exit</el-button>
       </div></el-col>
     </el-row>
   </el-header>
@@ -42,13 +42,13 @@
       </el-menu-item>
     </el-submenu>
     <el-menu-item class="search-menu" index="4" >
-    <el-input class="search-input" v-model="queryInfo" placeholder="请输入内容">
+    <el-input class="search-input" v-model="queryInfo" placeholder="Input Here">
       <el-button  @click="search" class="search-button" slot="append" icon="el-icon-search"></el-button>
     </el-input>
     </el-menu-item>
-    <el-menu-item index="5" >用户</el-menu-item>
-    <el-menu-item index="6">订单</el-menu-item>
-    <el-menu-item index="7">购物车</el-menu-item>
+    <el-menu-item index="5" >My Page</el-menu-item>
+    <el-menu-item index="6">My Orders</el-menu-item>
+    <el-menu-item index="7">Cart</el-menu-item>
   </el-menu>
     <el-row  :class="[{'after-menu':!headerFixed}, {'full-menu':headerFixed}]"></el-row>
   <!-- 内容主体 -->
@@ -73,7 +73,7 @@ export default {
       menuList: [
         {
           id: '1',
-          authName: '游戏分类',
+          authName: 'Category',
           // TODO 获取分类列表
           children: [
             { menuId: '1-1', authName: 'Action', path: 'action' },
@@ -90,7 +90,7 @@ export default {
         },
         {
           id: '2',
-          authName: '游戏平台',
+          authName: 'Console',
           // TODO 获取平台列表
           children: [
             { menuId: '2-1', authName: 'PS3', path: '/PlatForm/ps3' },
@@ -105,7 +105,7 @@ export default {
         },
         {
           id: '3',
-          authName: '发行商',
+          authName: 'Publisher',
           // TODO 获取发行商列表
           children: [
             // { menuId: '3-1', authName: '发行商1', path: '' },
@@ -272,15 +272,15 @@ export default {
               this.menuList[2].children.push(publisher)
             }
           } else {
-            this.$message.info('发行商列表加载失败，尝试刷新')
+            this.$message.info('Publisher list loading failed, retrying')
           }
         }).catch(() => {
-          this.$message.info('发行商列表加载失败，尝试刷新')
+          this.$message.info('Publisher list loading failed, retrying')
         })
     },
     logout () {
       this.$router.push('/login')
-      this.$message.info('用户退出')
+      this.$message.info('User exit')
     },
     enterMainIndex () {
       this.$router.push('/MainIndex')

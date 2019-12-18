@@ -2,13 +2,13 @@
   <div class="main">
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/MainIndex' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>我的订单</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/MainIndex' }">Home</el-breadcrumb-item>
+      <el-breadcrumb-item>My Order</el-breadcrumb-item>
     </el-breadcrumb>
 
     <!-- 卡片化的标签页 -->
     <el-tabs type="border-card">
-      <el-tab-pane label="待发货">
+      <el-tab-pane label="To be delivered">
         <!-- 订单列表数据 -->
         <el-table :data="orderList0" stripe>
           <el-table-column type="index"></el-table-column>
@@ -46,7 +46,7 @@
           :total="total0"
         ></el-pagination>
       </el-tab-pane>
-      <el-tab-pane label="待收货">
+      <el-tab-pane label="To be received">
         <!-- 订单列表数据 -->
         <el-table :data="orderList1" stripe>
           <el-table-column type="index"></el-table-column>
@@ -83,7 +83,7 @@
           :total="total1"
         ></el-pagination>
       </el-tab-pane>
-      <el-tab-pane label="待评价">
+      <el-tab-pane label="To be commented">
         <!-- 订单列表数据 -->
         <el-table :data="orderList2" stripe>
           <el-table-column type="index"></el-table-column>
@@ -120,7 +120,7 @@
           :total="total2"
         ></el-pagination>
       </el-tab-pane>
-      <el-tab-pane label="已完成">
+      <el-tab-pane label="Finished">
         <!-- 订单列表数据 -->
         <el-table :data="orderList3" stripe>
           <el-table-column type="index"></el-table-column>
