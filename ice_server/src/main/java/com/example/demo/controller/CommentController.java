@@ -134,7 +134,9 @@ public class CommentController {
                     String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "users" + System.getProperty("file.separator") + u.getUserId().toString() + System.getProperty("file.separator");
                     File file = new File(path);
                     File[] tempList = file.listFiles();
-                    reviewWithUser.setAvatarPath("/images/users/"+u.getUserId().toString()+"/" + tempList[0].getName());
+                    if(tempList!=null){
+                        reviewWithUser.setAvatarPath("/images/users/"+u.getUserId().toString()+"/" + tempList[0].getName());
+                    }
                     reviewWithUser.setUserId(uid);
                     reviewWithUser.setUsername(u.getUserName());
                     reviewWithUser.setContent(commentList.get(i).getContent());

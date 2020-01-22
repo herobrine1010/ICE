@@ -43,10 +43,13 @@ public class RateGameController {
         try{
             rateGameMapper.submitRate(thisUserId,gameId,rate);
 //            RateGameController rateGameController=new RateGameController();
-            Response r=getRate(gameId,session);
-            float rates= Float.parseFloat(r.getError());
-            Games game=gamesMapper.selectByPrimaryKey(gameId);
+//            Response r=getRate(gameId,session);
+//            float rates= Float.parseFloat(r.getError());
+//            Games game=gamesMapper.selectByPrimaryKey(gameId);
+            Games game = gamesMapper.selectByPrimaryKey(gameId);
+            float rates = (game.getAverageRate()*game.getRateCount()+rate)/(game.getRateCount()+1);
             game.setAverageRate(rates);
+            game.setRateCount(game.getRateCount()+1);
             gamesMapper.updateByPrimaryKeySelective(game);
             response.setError("Rating successfully submitted!");
             response.setStatus("200");
@@ -65,17 +68,13 @@ public class RateGameController {
             return sessionService.auth(session);
         }
         try{
-            if(rateGameMapper.whetherRated(gameId)==0){
-                //先ず評価人数は０かどうかをチェックする。
-                response.setError("This game has not been rated yet!");
-                response.setStatus("404");
-            }
-            else{
-                //だってある状況について，評価してしまったユーザーがあるけど、提出したスコアはすべてゼロだ。
-                double r=rateGameMapper.getAverage(gameId);
-                response.setStatus("200");
-                response.setError(String.valueOf(r));
-            }
+
+            //だってある状況について，評価してしまったユーザーがあるけど、提出したスコアはすべてゼロだ。
+            //double r=rateGameMapper.getAverage(gameId);
+            double r = gamesMapper.selectByPrimaryKey(gameId).getAverageRate();
+            response.setStatus("200");
+            response.setError(String.valueOf(r));
+
 
         }
         catch (Exception e){

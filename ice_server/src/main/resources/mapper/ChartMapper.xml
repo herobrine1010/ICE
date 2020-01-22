@@ -79,10 +79,6 @@
         on chart.game_id=games.game_id and chart.game_id=played_on.game_id and chart.CONSOLE_ID=consoles.CONSOLE_ID
            and belong.GAME_ID=chart.GAME_ID and categories.CATE_ID=belong.CATE_ID
     where user_id=#{userId}
-    order by games.GAME_ID
-    <if test="reverse&gt;0">desc</if>
-    <if test="!reverse&gt;0">asc</if>
-    limit #{startWith},#{endWith};
   </select>
 
   <insert id="addToCart" >

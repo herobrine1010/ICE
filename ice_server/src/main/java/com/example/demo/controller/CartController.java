@@ -34,30 +34,52 @@ public class CartController {
             @RequestParam(value="to",required=false,defaultValue = "100") int to,
             @RequestParam(value="reverse",required = false,defaultValue = "1") int reversed,
             HttpSession session){
+//        Response<CartItem> response = new Response<>();
+//        if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
+//            return sessionService.auth(session);
+//        }
+//        int thisUserId=Integer.parseInt(session.getAttribute("id").toString());
+//        try{
+//            List<CartItem> resultList=chartMapper.getMyCart(thisUserId,from,to-from,reversed);
+//
+//            for (int i = 0; i < resultList.size(); i++) {
+//                String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "games" + System.getProperty("file.separator") + resultList.get(i).getGameId().toString() + System.getProperty("file.separator");
+//                File file = new File(path);
+//                File[] tempList = file.listFiles();
+//                for (int j = 0; j < tempList.length; j++) {
+//                    if(tempList[j].getName().contains("cover")){
+//                        resultList.get(i).setCoverPath("/images/games/" + resultList.get(i).getGameId().toString() + "/" + tempList[j].getName());
+//                    }
+//                } }
+//            response.setResult(resultList);
+//            response.setStatus("200");
+//            if(resultList.isEmpty()){response.setError("No record in database!");}
+//        }catch(Exception e){
+//            response.setStatus("403");
+//            response.setError("SQL Error!");
+//        }
+//        return response;
         Response<CartItem> response = new Response<>();
         if(!Objects.equals(sessionService.auth(session).getStatus(), "200")) {
             return sessionService.auth(session);
         }
         int thisUserId=Integer.parseInt(session.getAttribute("id").toString());
-        try{
-            List<CartItem> resultList=chartMapper.getMyCart(thisUserId,from,to-from,reversed);
 
-            for (int i = 0; i < resultList.size(); i++) {
-                String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "games" + System.getProperty("file.separator") + resultList.get(i).getGameId().toString() + System.getProperty("file.separator");
-                File file = new File(path);
-                File[] tempList = file.listFiles();
-                for (int j = 0; j < tempList.length; j++) {
-                    if(tempList[j].getName().contains("cover")){
-                        resultList.get(i).setCoverPath("/images/games/" + resultList.get(i).getGameId().toString() + "/" + tempList[j].getName());
-                    }
-                } }
-            response.setResult(resultList);
-            response.setStatus("200");
-            if(resultList.isEmpty()){response.setError("No record in database!");}
-        }catch(Exception e){
-            response.setStatus("403");
-            response.setError("SQL Error!");
-        }
+        List<CartItem> resultList=chartMapper.getMyCart(thisUserId,from,to-from,reversed);
+
+        for (int i = 0; i < resultList.size(); i++) {
+            String path = System.getProperty("user.dir") + System.getProperty("file.separator") + "images" + System.getProperty("file.separator") + "games" + System.getProperty("file.separator") + resultList.get(i).getGameId().toString() + System.getProperty("file.separator");
+            File file = new File(path);
+            File[] tempList = file.listFiles();
+            for (int j = 0; j < tempList.length; j++) {
+                if(tempList[j].getName().contains("cover")){
+                    resultList.get(i).setCoverPath("/images/games/" + resultList.get(i).getGameId().toString() + "/" + tempList[j].getName());
+                }
+            } }
+        response.setResult(resultList);
+        response.setStatus("200");
+        if(resultList.isEmpty()){response.setError("No record in database!");}
+
         return response;
     }
 
